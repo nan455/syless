@@ -1,0 +1,31 @@
+# dependencies
+node_modules/
+
+# environment variables
+.env
+backend/.env
+frontend/.env
+
+# build folders
+dist/
+build/
+
+# logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# vscode settings
+.vscode/
+
+# coverage
+coverage/
+
+# cache
+.cache/
+
+# python
+__pycache__/
+*.pyc
