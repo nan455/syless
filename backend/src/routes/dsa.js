@@ -4,7 +4,7 @@ const express = require('express');
 const router  = express.Router();
 const { Op }  = require('sequelize');
 const { Problem, User, Submission } = require('../models/index');
-const { protect } = require('../middleware/auth');
+const { protect, recalcLevel } = require('../middleware/auth');
 const { compile }       = require('../compiler/index');
 const { executePython } = require('../compiler/executor');
 
@@ -95,6 +95,7 @@ router.post('/submit', protect, async (req, res) => {
       { stats_problems_solved: 1, stats_total_runs: 1, stats_xp: xpGain },
       { where: { id: req.user.id } }
     );
+    await recalcLevel(req.user.id); // increment() skips beforeSave hook
   } else {
     await User.increment({ stats_total_runs: 1 }, { where: { id: req.user.id } });
   }

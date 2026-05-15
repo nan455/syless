@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import {
   Code2, Zap, BookOpen, BarChart2, Shield, Star, ChevronRight,
-  Play, Check, ArrowRight, Users, Award, TrendingUp, Brain,
+  Play, ArrowRight, Users, Award, TrendingUp, Brain,
   Terminal, Cpu, Globe, Lock, Rocket
 } from 'lucide-react';
 import Navbar from '@components/Nav/Navbar';
@@ -183,61 +183,14 @@ const STATS = [
   { value: '4.9★', label: 'Rating', icon: Star },
 ];
 
-// ─── Pricing ───────────────────────────────────────────────────────────────────
-const PLANS = [
-  {
-    name: 'Free',
-    price: '₹0',
-    period: '/month',
-    desc: 'Perfect for getting started',
-    color: 'border-white/10',
-    features: [
-      'Full SYLESS language',
-      '20 AI queries/day',
-      '50 DSA problems',
-      'Basic visualizations',
-      'Community support',
-    ],
-    cta: 'Start Free',
-    variant: 'secondary',
-  },
-  {
-    name: 'Pro',
-    price: '₹499',
-    period: '/month',
-    desc: 'For serious learners',
-    color: 'border-syless-500/50',
-    featured: true,
-    features: [
-      'Everything in Free',
-      'Unlimited AI queries',
-      'All 200+ DSA problems',
-      'AI Auto-fix code',
-      'AI Mock interviews',
-      'Priority support',
-      'Code collaboration',
-    ],
-    cta: 'Go Pro',
-    variant: 'primary',
-  },
-  {
-    name: 'Enterprise',
-    price: '₹1,999',
-    period: '/month',
-    desc: 'For teams & institutions',
-    color: 'border-cyber-400/30',
-    features: [
-      'Everything in Pro',
-      'Team management',
-      'Custom problem sets',
-      'Analytics dashboard',
-      'API access',
-      'Dedicated support',
-      'Custom branding',
-    ],
-    cta: 'Contact Us',
-    variant: 'cyber',
-  },
+// ─── Donate ────────────────────────────────────────────────────────────────────
+const DONATE_PERKS = [
+  { icon: '🚀', label: 'Faster new features' },
+  { icon: '🤖', label: 'Better AI responses' },
+  { icon: '📚', label: 'More DSA problems' },
+  { icon: '🌍', label: 'Keep it free for everyone' },
+  { icon: '🛠️', label: 'Bug fixes & improvements' },
+  { icon: '💬', label: 'Community Discord access' },
 ];
 
 // ─── Testimonials ──────────────────────────────────────────────────────────────
@@ -566,56 +519,54 @@ export default function Landing() {
         </div>
       </Section>
 
-      {/* ── Pricing ────────────────────────────────────────────────────────── */}
-      <Section className="py-24 bg-dark-400/20" id="pricing">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <span className="badge-purple mb-4 inline-block">Pricing</span>
-            <h2 className="text-4xl font-black font-display mb-4">
-              Simple, <span className="gradient-text">Transparent</span> Pricing
-            </h2>
-            <p className="text-gray-400">Start free, upgrade when you're ready</p>
-          </div>
+      {/* ── Support / Donate ───────────────────────────────────────────────── */}
+      <Section className="py-24 bg-dark-400/20" id="support">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <span className="badge-purple mb-4 inline-block">100% Free</span>
+          <h2 className="text-4xl font-black font-display mb-4">
+            SYLESS is <span className="gradient-text">Free Forever</span>
+          </h2>
+          <p className="text-gray-400 mb-4 text-lg">
+            Every feature — AI tutor, DSA problems, compiler, visualizations — is completely free for everyone.
+          </p>
+          <p className="text-gray-500 mb-12 text-sm">
+            If SYLESS helped you learn or you just love what we're building, consider buying us a coffee ☕
+          </p>
 
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {PLANS.map(({ name, price, period, desc, color, featured, features, cta, variant }) => (
-              <div
-                key={name}
-                className={`relative rounded-2xl p-8 border ${color} glass-dark ${featured ? 'border-glow scale-105' : ''}`}
-              >
-                {featured && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 badge-purple px-4 py-1 text-sm font-semibold whitespace-nowrap">
-                    Most Popular
-                  </div>
-                )}
-                <div className="mb-6">
-                  <h3 className="text-xl font-bold mb-1">{name}</h3>
-                  <p className="text-gray-400 text-sm mb-4">{desc}</p>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-black gradient-text">{price}</span>
-                    <span className="text-gray-400 text-sm">{period}</span>
-                  </div>
-                </div>
-                <ul className="space-y-3 mb-8">
-                  {features.map((f) => (
-                    <li key={f} className="flex items-center gap-3 text-sm text-gray-300">
-                      <Check size={14} className="text-green-400 shrink-0" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  to="/auth?mode=register"
-                  className={`w-full text-center block py-3 px-6 rounded-xl font-semibold transition-all ${
-                    variant === 'primary' ? 'btn-primary' :
-                    variant === 'cyber' ? 'btn-cyber' :
-                    'btn-secondary'
-                  }`}
-                >
-                  {cta}
-                </Link>
+          {/* Perks grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-12">
+            {DONATE_PERKS.map(({ icon, label }) => (
+              <div key={label} className="glass-dark border border-white/5 rounded-xl px-4 py-3 flex items-center gap-3">
+                <span className="text-xl">{icon}</span>
+                <span className="text-sm text-gray-300">{label}</span>
               </div>
             ))}
+          </div>
+
+          {/* Donate card */}
+          <div className="glass-dark border border-syless-500/30 rounded-2xl p-8 border-glow">
+            <div className="text-5xl mb-4">❤️</div>
+            <h3 className="text-2xl font-bold mb-2">Support SYLESS</h3>
+            <p className="text-gray-400 text-sm mb-8">
+              Your support directly funds server costs, AI API usage, and keeps new features coming.
+              No pressure — the platform is always free.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <a
+                href="https://www.buymeacoffee.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary px-8 py-3 text-base font-bold"
+              >
+                ☕ Buy Me a Coffee
+              </a>
+              <Link to="/auth?mode=register" className="btn-secondary px-8 py-3 text-base font-semibold">
+                Start Coding Free →
+              </Link>
+            </div>
+            <p className="text-gray-600 text-xs mt-6">
+              No account needed to donate · One-time or monthly · Cancel anytime
+            </p>
           </div>
         </div>
       </Section>

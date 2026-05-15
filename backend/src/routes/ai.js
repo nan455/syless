@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const { protect, requirePro } = require('../middleware/auth');
+const { protect } = require('../middleware/auth');
 const { compile } = require('../compiler/index');
 const { askAI, LOCAL_FALLBACKS } = require('../services/ai');
 
@@ -124,7 +124,7 @@ Keep it encouraging and fun!`;
 });
 
 // POST /api/ai/fix  — Auto-fix code (Pro feature)
-router.post('/fix', protect, requirePro, async (req, res) => {
+router.post('/fix', protect, async (req, res) => {
   const { code, error } = req.body;
   if (!code) return res.status(400).json({ success: false, error: 'Code required' });
 
@@ -145,7 +145,7 @@ Return ONLY the corrected SYLESS code in a code block, then briefly explain what
 });
 
 // POST /api/ai/interview  — AI mock interview (Pro feature)
-router.post('/interview', protect, requirePro, async (req, res) => {
+router.post('/interview', protect, async (req, res) => {
   const { topic, difficulty = 'easy', userAnswer } = req.body;
 
   const prompt = userAnswer

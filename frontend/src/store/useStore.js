@@ -14,6 +14,8 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
+const DEFAULT_CODE = `# Welcome to SYLESS!\n# Code Like You Think\n\nsay -> "Hello, World!"\n\nmake name = "SYLESS"\nsay -> name\n\nmake nums = [5, 3, 8, 1, 9, 2]\nsort nums ascending\nsay -> nums\n\nloop 3 times {\n    say -> "Learning is fun!"\n}\n`;
+
 const useStore = create(
   persist(
     (set, get) => ({
@@ -38,6 +40,8 @@ const useStore = create(
         set({ user: null, token: null, isAuthenticated: false });
       },
 
+      setUser: (user) => set({ user }),
+
       updateProfile: async (updates) => {
         const { data } = await API.put('/auth/profile', updates);
         set({ user: data.user });
@@ -45,22 +49,9 @@ const useStore = create(
       },
 
       // ─── Editor ───────────────────────────────────────────────────────────
-      editorCode: `# Welcome to SYLESS!
-# Code Like You Think
-
-say -> "Hello, World!"
-
-make name = "SYLESS"
-say -> name
-
-make nums = [5, 3, 8, 1, 9, 2]
-sort nums ascending
-say -> nums
-
-loop 3 times {
-    say -> "Learning is fun!"
-}
-`,
+      editorCode: DEFAULT_CODE,
+      tabs: [{ id: 'tab-1', name: 'main.sy', code: DEFAULT_CODE }],
+      activeTabId: 'tab-1',
       pythonCode: '',
       editorTheme: 'syless-dark',
       fontSize: 14,
@@ -69,9 +60,51 @@ loop 3 times {
       runError: null,
       executionTime: null,
 
-      setEditorCode: (code) => set({ editorCode: code }),
+      setEditorCode: (code) => {
+        const { activeTabId, tabs } = get();
+        set({ editorCode: code, tabs: tabs.map(t => t.id === activeTabId ? { ...t, code } : t) });
+      },
+
+      addTab: () => {
+        const { tabs, activeTabId, editorCode } = get();
+        const saved = tabs.map(t => t.id === activeTabId ? { ...t, code: editorCode } : t);
+        const id = `tab-${Date.now()}`;
+        const newTab = { id, name: `file${saved.length + 1}.sy`, code: '# New file\nsay -> "Hello!"\n' };
+        set({ tabs: [...saved, newTab], activeTabId: id, editorCode: newTab.code });
+      },
+
+      closeTab: (id) => {
+        const { tabs, activeTabId, editorCode } = get();
+        if (tabs.length === 1) return;
+        const saved = tabs.map(t => t.id === activeTabId ? { ...t, code: editorCode } : t);
+        const idx = saved.findIndex(t => t.id === id);
+        const newTabs = saved.filter(t => t.id !== id);
+        const newActiveId = activeTabId === id ? newTabs[Math.max(0, idx - 1)].id : activeTabId;
+        const newCode = newTabs.find(t => t.id === newActiveId).code;
+        set({ tabs: newTabs, activeTabId: newActiveId, editorCode: newCode });
+      },
+
+      switchTab: (id) => {
+        const { tabs, activeTabId, editorCode } = get();
+        if (id === activeTabId) return;
+        const saved = tabs.map(t => t.id === activeTabId ? { ...t, code: editorCode } : t);
+        const newCode = saved.find(t => t.id === id)?.code || '';
+        set({ tabs: saved, activeTabId: id, editorCode: newCode });
+      },
+
+      renameTab: (id, name) => {
+        const { tabs } = get();
+        set({ tabs: tabs.map(t => t.id === id ? { ...t, name } : t) });
+      },
       setPythonCode: (code) => set({ pythonCode: code }),
       setFontSize: (size) => set({ fontSize: size }),
+
+      fetchMe: async () => {
+        try {
+          const { data } = await API.get('/auth/me');
+          if (data.success) set({ user: data.user });
+        } catch { /* not logged in or offline — ignore */ }
+      },
 
       runCode: async (stdin = '') => {
         const { editorCode } = get();
@@ -85,6 +118,8 @@ loop 3 times {
             pythonCode: data.pythonCode || '',
             executionTime: data.executionTime,
           });
+          // Refresh user stats (XP / total runs updated on backend)
+          get().fetchMe();
           return data;
         } catch (err) {
           const error = err.response?.data?.error || 'Connection error — is the backend running?';
@@ -179,6 +214,8 @@ loop 3 times {
 
       submitProblem: async (problemSlug, code) => {
         const { data } = await API.post('/dsa/submit', { problemSlug, code });
+        // Refresh stats so dashboard shows updated XP/level immediately
+        get().fetchMe();
         return data;
       },
 
@@ -207,6 +244,8 @@ loop 3 times {
         user: state.user,
         isAuthenticated: state.isAuthenticated,
         editorCode: state.editorCode,
+        tabs: state.tabs,
+        activeTabId: state.activeTabId,
         fontSize: state.fontSize,
         sidebarCollapsed: state.sidebarCollapsed,
         aiPanelOpen: state.aiPanelOpen,

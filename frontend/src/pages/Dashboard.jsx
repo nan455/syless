@@ -6,7 +6,7 @@ import Sidebar from '@components/Sidebar/Sidebar';
 import { API } from '@store/useStore';
 import {
   Code2, Zap, BarChart2, Star, TrendingUp, Clock,
-  Award, Target, Crown, ArrowRight, Flame, BookOpen
+  Award, Target, ArrowRight, Flame, BookOpen, Crown
 } from 'lucide-react';
 
 const LEVEL_TITLES = [
@@ -39,11 +39,13 @@ function StatCard({ icon: Icon, label, value, sub, color = 'syless' }) {
 }
 
 export default function Dashboard() {
-  const { user } = useStore();
+  const { user, fetchMe } = useStore();
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Always load fresh stats when dashboard opens
+    fetchMe();
     (async () => {
       try {
         const { data } = await API.get('/dsa/leaderboard');
@@ -218,28 +220,31 @@ export default function Dashboard() {
             </motion.div>
           </div>
 
-          {/* Subscription upgrade banner */}
-          {user?.subscription_plan === 'free' && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="mt-6 card bg-gradient-to-r from-syless-500/10 via-cyber-400/5 to-syless-500/10 border-syless-500/20"
-            >
-              <div className="flex items-center justify-between gap-6">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <Crown size={16} className="text-yellow-400" />
-                    <span className="font-bold">Upgrade to Pro</span>
-                  </div>
-                  <p className="text-sm text-gray-400">Unlock unlimited AI queries, all DSA problems, and AI mock interviews</p>
+          {/* Support banner */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="mt-6 card bg-gradient-to-r from-syless-500/10 via-cyber-400/5 to-syless-500/10 border-syless-500/20"
+          >
+            <div className="flex items-center justify-between gap-6">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-base">❤️</span>
+                  <span className="font-bold">SYLESS is free forever</span>
                 </div>
-                <Link to="/#pricing" className="btn-primary whitespace-nowrap px-5 py-2.5 text-sm shrink-0">
-                  Go Pro — ₹499/mo
-                </Link>
+                <p className="text-sm text-gray-400">Enjoying SYLESS? Consider supporting us to keep the servers running and new features coming.</p>
               </div>
-            </motion.div>
-          )}
+              <a
+                href="https://www.buymeacoffee.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary whitespace-nowrap px-5 py-2.5 text-sm shrink-0"
+              >
+                ☕ Support Us
+              </a>
+            </div>
+          </motion.div>
         </div>
       </div>
     </div>

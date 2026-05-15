@@ -12,6 +12,8 @@ const Dashboard = lazy(() => import('@pages/Dashboard'));
 const Admin = lazy(() => import('@pages/Admin'));
 const Auth = lazy(() => import('@pages/Auth'));
 const NotFound = lazy(() => import('@pages/NotFound'));
+const Learn = lazy(() => import('@pages/Learn'));
+const ModuleView = lazy(() => import('@pages/ModuleView'));
 
 function ProtectedRoute({ children, adminOnly = false }) {
   const { isAuthenticated, user } = useStore();
@@ -56,6 +58,22 @@ export default function App() {
           element={
             <ProtectedRoute adminOnly>
               <Admin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/learn"
+          element={
+            <ProtectedRoute>
+              <Learn />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/learn/:slug"
+          element={
+            <ProtectedRoute>
+              <ModuleView />
             </ProtectedRoute>
           }
         />

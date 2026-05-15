@@ -4,6 +4,8 @@ const express = require('express');
 const router = express.Router();
 const { compile } = require('../compiler/index');
 const { executePython } = require('../compiler/executor');
+const { optionalAuth, recalcLevel } = require('../middleware/auth');
+const { User } = require('../models/index');
 
 // POST /api/compile
 // Compile SYLESS source to Python
@@ -44,7 +46,7 @@ router.post('/', async (req, res) => {
 
 // POST /api/compile/run
 // Compile + Execute SYLESS code
-router.post('/run', async (req, res) => {
+router.post('/run', optionalAuth, async (req, res) => {
   const { code, stdin = '' } = req.body;
 
   if (!code || typeof code !== 'string') {
@@ -76,12 +78,23 @@ router.post('/run', async (req, res) => {
   // Step 2: Execute
   const execResult = await executePython(compileResult.pythonCode, stdin);
 
+  // Step 3: Track stats if user is logged in
+  let xpEarned = 0;
+  if (req.user) {
+    xpEarned = execResult.success ? 2 : 0;
+    const inc = { stats_total_runs: 1 };
+    if (xpEarned) inc.stats_xp = xpEarned;
+    await User.increment(inc, { where: { id: req.user.id } });
+    if (xpEarned) await recalcLevel(req.user.id);
+  }
+
   res.json({
     success: execResult.success,
     output: execResult.output,
     error: execResult.error,
     pythonCode: compileResult.pythonCode,
     executionTime: execResult.executionTime,
+    xpEarned,
   });
 });
 

@@ -21,6 +21,7 @@ const compileRoutes = require('./routes/compile');
 const aiRoutes      = require('./routes/ai');
 const dsaRoutes     = require('./routes/dsa');
 const adminRoutes   = require('./routes/admin');
+const learnRoutes   = require('./routes/learn');
 
 const app    = express();
 const server = http.createServer(app);
@@ -73,6 +74,7 @@ app.use('/api/compile', compileRoutes);
 app.use('/api/ai',      aiRoutes);
 app.use('/api/dsa',     dsaRoutes);
 app.use('/api/admin',   adminRoutes);
+app.use('/api/learn',   learnRoutes);
 
 // Health check
 app.get('/api/health', (_req, res) => {

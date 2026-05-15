@@ -65,9 +65,32 @@ const requirePro = (req, res, next) => {
   next();
 };
 
+// Attach user if token is present — does NOT block unauthenticated requests
+const optionalAuth = async (req, _res, next) => {
+  try {
+    const header = req.headers.authorization;
+    if (header && header.startsWith('Bearer ')) {
+      const decoded = jwt.verify(header.split(' ')[1], process.env.JWT_SECRET);
+      const user = await User.findByPk(decoded.id);
+      if (user && user.is_active) req.user = user;
+    }
+  } catch { /* silent — unauthenticated requests are allowed */ }
+  next();
+};
+
 const generateToken = (userId) =>
   jwt.sign({ id: userId }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
   });
 
-module.exports = { protect, requireRole, requirePro, generateToken };
+// Recalculate stats_level from XP (User.increment bypasses beforeSave hook)
+async function recalcLevel(userId) {
+  const u = await User.findByPk(userId, { attributes: ['stats_xp', 'stats_level'] });
+  if (!u) return;
+  const newLevel = Math.floor(Math.sqrt(u.stats_xp / 100)) + 1;
+  if (newLevel !== u.stats_level) {
+    await User.update({ stats_level: newLevel }, { where: { id: userId } });
+  }
+}
+
+module.exports = { protect, optionalAuth, requireRole, requirePro, generateToken, recalcLevel };

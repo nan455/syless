@@ -78,6 +78,16 @@ export default function SylessEditor({ onRun }) {
     }
   }, [fontSize]);
 
+  // Sync external code changes into the editor (e.g. loading an example)
+  useEffect(() => {
+    if (editorRef.current) {
+      const current = editorRef.current.getValue();
+      if (current !== editorCode) {
+        editorRef.current.setValue(editorCode);
+      }
+    }
+  }, [editorCode]);
+
   return (
     <div className="h-full w-full relative">
       <Editor

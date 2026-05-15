@@ -3,17 +3,23 @@ import { motion, AnimatePresence } from 'framer-motion';
 import useStore from '@store/useStore';
 import Sidebar from '@components/Sidebar/Sidebar';
 import StackVisualizer from '@components/DSA/StackVisualizer';
+import QueueVisualizer from '@components/DSA/QueueVisualizer';
+import LinkedListVisualizer from '@components/DSA/LinkedListVisualizer';
 import SortVisualizer from '@components/DSA/SortVisualizer';
 import TreeVisualizer from '@components/DSA/TreeVisualizer';
+import GraphVisualizer from '@components/DSA/GraphVisualizer';
 import {
   BookOpen, Play, CheckCircle2, XCircle, Clock, Filter,
   ChevronRight, Trophy, Zap, BarChart2, Search
 } from 'lucide-react';
 
 const VISUALIZERS = [
-  { id: 'stack', label: 'Stack', icon: '📚', component: StackVisualizer },
-  { id: 'sort', label: 'Sorting', icon: '📊', component: SortVisualizer },
-  { id: 'tree', label: 'BST', icon: '🌳', component: TreeVisualizer },
+  { id: 'stack',      label: 'Stack',       icon: '📚', component: StackVisualizer,      desc: 'LIFO — push & pop' },
+  { id: 'queue',      label: 'Queue',       icon: '🚶', component: QueueVisualizer,      desc: 'FIFO — enqueue & dequeue' },
+  { id: 'linkedlist', label: 'Linked List', icon: '🔗', component: LinkedListVisualizer, desc: 'Node chain with pointers' },
+  { id: 'sort',       label: 'Sorting',     icon: '📊', component: SortVisualizer,       desc: 'Bubble sort animation' },
+  { id: 'tree',       label: 'BST',         icon: '🌳', component: TreeVisualizer,       desc: 'Binary search tree' },
+  { id: 'graph',      label: 'Graph',       icon: '🕸️', component: GraphVisualizer,      desc: 'BFS & DFS traversal' },
 ];
 
 const DIFFICULTY_COLORS = {
@@ -203,7 +209,7 @@ export default function DSAPlayground() {
             /* Visualizer selector */
             <div className="flex-1 p-3 space-y-2 overflow-y-auto">
               <p className="text-xs text-gray-500 mb-3">Interactive DSA visualizations</p>
-              {VISUALIZERS.map(({ id, label, icon }) => (
+              {VISUALIZERS.map(({ id, label, icon, desc }) => (
                 <button
                   key={id}
                   onClick={() => setActiveViz(id)}
@@ -214,8 +220,11 @@ export default function DSAPlayground() {
                   }`}
                 >
                   <span className="text-lg">{icon}</span>
-                  {label}
-                  <ChevronRight size={14} className="ml-auto" />
+                  <div className="flex flex-col items-start">
+                    <span>{label}</span>
+                    <span className="text-[10px] text-gray-600">{desc}</span>
+                  </div>
+                  <ChevronRight size={14} className="ml-auto shrink-0" />
                 </button>
               ))}
             </div>
@@ -299,11 +308,11 @@ export default function DSAPlayground() {
           ) : activeTab === 'visualizers' ? (
             <div className="flex-1 overflow-y-auto p-8">
               <div className="max-w-2xl mx-auto">
-                <h2 className="text-2xl font-bold mb-2">
+                <h2 className="text-2xl font-bold mb-1">
                   {VISUALIZERS.find(v => v.id === activeViz)?.icon}{' '}
                   {VISUALIZERS.find(v => v.id === activeViz)?.label} Visualizer
                 </h2>
-                <p className="text-gray-400 text-sm mb-8">Interact with the visualizer to understand how this data structure works.</p>
+                <p className="text-gray-400 text-sm mb-6">{VISUALIZERS.find(v => v.id === activeViz)?.desc} — interact to learn how it works.</p>
                 {ActiveViz && <ActiveViz />}
               </div>
             </div>

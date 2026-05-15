@@ -10,6 +10,7 @@ import {
 const NAV_ITEMS = [
   { icon: Home, label: 'Home', href: '/' },
   { icon: Code2, label: 'IDE', href: '/ide' },
+  { icon: BookOpen, label: 'Learn', href: '/learn' },
   { icon: BarChart2, label: 'DSA', href: '/dsa' },
   { icon: Zap, label: 'AI Tutor', href: '/ai-tutor' },
   { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },

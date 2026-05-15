@@ -17,11 +17,11 @@ const axios = require('axios');
 
 // ─── Model config ─────────────────────────────────────────────────────────────
 const GROQ_MODELS = {
-  fast:     'llama-3.1-8b-instant',   // fastest, good for explain/debug
-  powerful: 'llama3-70b-8192',         // smarter, good for chat/interview
+  fast:     'llama-3.1-8b-instant',     // fastest, good for explain/debug
+  powerful: 'llama-3.3-70b-versatile',  // smarter, good for chat/interview
 };
 
-const GEMINI_MODEL = 'gemini-1.5-flash';
+const GEMINI_MODEL = 'gemini-2.0-flash';
 const GEMINI_URL   = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 const GROQ_URL     = 'https://api.groq.com/openai/v1/chat/completions';
 
@@ -160,14 +160,16 @@ async function askAI(messages, options = {}) {
     const groqModel = model === 'powerful' ? GROQ_MODELS.powerful : GROQ_MODELS.fast;
     return { text: await callGroq(messages, groqModel, maxTokens), provider: 'groq' };
   } catch (groqErr) {
-    console.warn('[AI] Groq failed:', groqErr.message);
+    const detail = groqErr.response?.data?.error?.message || groqErr.message;
+    console.warn('[AI] Groq failed:', detail);
   }
 
   // 2. Try Gemini
   try {
     return { text: await callGemini(messages, maxTokens), provider: 'gemini' };
   } catch (gemErr) {
-    console.warn('[AI] Gemini failed:', gemErr.message);
+    const detail = gemErr.response?.data?.error?.message || gemErr.message;
+    console.warn('[AI] Gemini failed:', detail);
   }
 
   // 3. Local fallback
