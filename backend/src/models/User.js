@@ -49,8 +49,9 @@ User.init(
       validate: { len: { args: [6, 255], msg: 'Password must be at least 6 characters' } },
     },
     role: {
-      type: DataTypes.ENUM('user', 'pro', 'enterprise', 'admin'),
+      type: DataTypes.STRING(20),
       defaultValue: 'user',
+      validate: { isIn: [['user', 'pro', 'enterprise', 'admin']] },
     },
     avatar: {
       type: DataTypes.TEXT,
@@ -70,8 +71,9 @@ User.init(
 
     // Subscription
     subscription_plan: {
-      type: DataTypes.ENUM('free', 'pro', 'enterprise'),
+      type: DataTypes.STRING(20),
       defaultValue: 'free',
+      validate: { isIn: [['free', 'pro', 'enterprise']] },
     },
     subscription_expires_at: {
       type: DataTypes.DATE,

@@ -35,16 +35,14 @@ Problem.init(
       allowNull: false,
     },
     difficulty: {
-      type: DataTypes.ENUM('beginner', 'easy', 'medium', 'hard', 'expert'),
+      type: DataTypes.STRING(20),
       defaultValue: 'easy',
+      validate: { isIn: [['beginner', 'easy', 'medium', 'hard', 'expert']] },
     },
     category: {
-      type: DataTypes.ENUM(
-        'arrays', 'strings', 'stack', 'queue', 'linkedlist',
-        'tree', 'graph', 'sorting', 'searching', 'recursion',
-        'dp', 'math', 'basics'
-      ),
+      type: DataTypes.STRING(50),
       allowNull: false,
+      validate: { isIn: [['arrays', 'strings', 'stack', 'queue', 'linkedlist', 'tree', 'graph', 'sorting', 'searching', 'recursion', 'dp', 'math', 'basics']] },
     },
     tags: {
       type: DataTypes.JSON,
