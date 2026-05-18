@@ -339,24 +339,26 @@ export default function Landing() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="flex flex-col sm:flex-row gap-4 mb-10"
+                className="flex flex-col gap-4 mb-10"
               >
-                <Link to="/ide" className="btn-primary text-base px-8 py-4 justify-center">
+                <Link to="/ide" className="btn-primary text-base px-8 py-4 justify-center w-fit">
                   <Play size={18} />
                   Start Coding Free
                 </Link>
-                <Link to="/syntax" className="btn-secondary text-base px-8 py-4 justify-center">
-                  <FileText size={18} />
-                  Learn Syntax
-                </Link>
-                <Link to="/community" className="btn-secondary text-base px-8 py-4 justify-center">
-                  <MessageSquare size={18} />
-                  Community
-                </Link>
-                <Link to="/dsa" className="btn-secondary text-base px-8 py-4 justify-center">
-                  <BarChart2 size={18} />
-                  Explore DSA
-                </Link>
+                <div className="flex flex-wrap gap-3">
+                  <Link to="/syntax" className="btn-secondary text-sm px-5 py-2.5 justify-center">
+                    <FileText size={15} />
+                    Learn Syntax
+                  </Link>
+                  <Link to="/community" className="btn-secondary text-sm px-5 py-2.5 justify-center">
+                    <MessageSquare size={15} />
+                    Community
+                  </Link>
+                  <Link to="/dsa" className="btn-secondary text-sm px-5 py-2.5 justify-center">
+                    <BarChart2 size={15} />
+                    Explore DSA
+                  </Link>
+                </div>
               </motion.div>
 
               {/* Social proof */}

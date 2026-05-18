@@ -72,10 +72,11 @@ function PostCard({ post, onLike, onDelete, onTry, currentUserId, index }) {
         {currentUserId === post.user_id && (
           <button
             onClick={() => onDelete(post.id)}
-            className="text-gray-600 hover:text-red-400 transition-colors p-1 opacity-0 group-hover:opacity-100"
-            title="Delete post"
+            className="flex items-center gap-1.5 text-xs text-red-400/60 hover:text-red-400 hover:bg-red-500/10 border border-red-500/20 hover:border-red-500/40 px-2.5 py-1 rounded-lg transition-all"
+            title="Delete your post"
           >
-            <Trash2 size={14} />
+            <Trash2 size={12} />
+            Delete
           </button>
         )}
       </div>
