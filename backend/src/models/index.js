@@ -1,11 +1,13 @@
 'use strict';
 
-const User         = require('./User');
-const Problem      = require('./Problem');
-const Snippet      = require('./Snippet');
-const Submission   = require('./Submission');
-const UserProgress = require('./UserProgress');
-const Analytics    = require('./Analytics');
+const User           = require('./User');
+const Problem        = require('./Problem');
+const Snippet        = require('./Snippet');
+const Submission     = require('./Submission');
+const UserProgress   = require('./UserProgress');
+const Analytics      = require('./Analytics');
+const CommunityPost  = require('./CommunityPost');
+const PostLike       = require('./PostLike');
 
 // ─── Associations ─────────────────────────────────────────────────────────────
 User.hasMany(Snippet,       { foreignKey: 'user_id', onDelete: 'CASCADE' });
@@ -22,4 +24,10 @@ Problem.belongsTo(User, { foreignKey: 'created_by', as: 'creator', constraints: 
 User.hasMany(UserProgress,       { foreignKey: 'user_id', onDelete: 'CASCADE' });
 UserProgress.belongsTo(User,     { foreignKey: 'user_id' });
 
-module.exports = { User, Problem, Snippet, Submission, UserProgress, Analytics };
+User.hasMany(CommunityPost,      { foreignKey: 'user_id', onDelete: 'CASCADE' });
+CommunityPost.belongsTo(User,    { foreignKey: 'user_id', as: 'author' });
+
+CommunityPost.hasMany(PostLike,  { foreignKey: 'post_id', onDelete: 'CASCADE' });
+PostLike.belongsTo(CommunityPost,{ foreignKey: 'post_id' });
+
+module.exports = { User, Problem, Snippet, Submission, UserProgress, Analytics, CommunityPost, PostLike };

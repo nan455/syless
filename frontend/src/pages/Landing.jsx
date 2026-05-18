@@ -4,7 +4,7 @@ import { motion, useInView, AnimatePresence } from 'framer-motion';
 import {
   Code2, Zap, BookOpen, BarChart2, Shield, Star, ChevronRight,
   Play, ArrowRight, Users, Award, TrendingUp, Brain,
-  Terminal, Cpu, Globe, Lock, Rocket, FileText
+  Terminal, Cpu, Globe, Lock, Rocket, FileText, MessageSquare
 } from 'lucide-react';
 import Navbar from '@components/Nav/Navbar';
 
@@ -348,6 +348,10 @@ export default function Landing() {
                 <Link to="/syntax" className="btn-secondary text-base px-8 py-4 justify-center">
                   <FileText size={18} />
                   Learn Syntax
+                </Link>
+                <Link to="/community" className="btn-secondary text-base px-8 py-4 justify-center">
+                  <MessageSquare size={18} />
+                  Community
                 </Link>
                 <Link to="/dsa" className="btn-secondary text-base px-8 py-4 justify-center">
                   <BarChart2 size={18} />

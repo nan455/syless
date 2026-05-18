@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import useStore from '@store/useStore';
-import { Code2, Menu, X, ChevronDown, Zap, BookOpen, BarChart2, Shield, LogOut, User, FileText } from 'lucide-react';
+import { Code2, Menu, X, ChevronDown, Zap, BookOpen, BarChart2, Shield, LogOut, User, FileText, Users } from 'lucide-react';
 
 const NAV_LINKS = [
-  { label: 'IDE', href: '/ide', icon: Code2 },
-  { label: 'Syntax', href: '/syntax', icon: FileText },
-  { label: 'DSA', href: '/dsa', icon: BarChart2 },
-  { label: 'AI Tutor', href: '/ai-tutor', icon: Zap },
+  { label: 'IDE',       href: '/ide',       icon: Code2 },
+  { label: 'Syntax',    href: '/syntax',    icon: FileText },
+  { label: 'Community', href: '/community', icon: Users },
+  { label: 'DSA',       href: '/dsa',       icon: BarChart2 },
+  { label: 'AI Tutor',  href: '/ai-tutor',  icon: Zap },
 ];
 
 export default function Navbar() {
