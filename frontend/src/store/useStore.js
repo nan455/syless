@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api`,
+  baseURL: `${import.meta.env.VITE_API_URL || 'http://localhost:5173'}/api`,
   timeout: 30000,
 });
 
@@ -118,13 +118,12 @@ const useStore = create(
             pythonCode: data.pythonCode || '',
             executionTime: data.executionTime,
           });
-          // Refresh user stats (XP / total runs updated on backend)
-          get().fetchMe();
+          if (data.success) get().fetchMe();
           return data;
         } catch (err) {
           const error = err.response?.data?.error || 'Connection error — is the backend running?';
           set({ isRunning: false, runError: error });
-          throw err;
+          return { success: false, error };
         }
       },
 

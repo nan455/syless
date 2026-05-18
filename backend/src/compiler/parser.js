@@ -144,7 +144,11 @@ class Parser {
   // say -> <expr>
   parseSay() {
     this.expect(TokenType.SAY, "'say'");
-    this.expect(TokenType.ARROW, "'->' after 'say'");
+    if (!this.check(TokenType.ARROW)) {
+      const next = this.peek();
+      this.error(`Missing '->' after 'say'. Write it like this:\n  say -> "your message"\n  say -> myVariable`, next);
+    }
+    this.advance();
     const value = this.parseExpression();
     return Node.Print(value);
   }
@@ -152,21 +156,20 @@ class Parser {
   // make <name> = <expr>  OR  make <name> (DSA type detection)
   parseMake() {
     this.expect(TokenType.MAKE, "'make'");
-    const name = this.expect(TokenType.IDENTIFIER, "a variable name").value;
+    const name = this.expect(TokenType.IDENTIFIER, "a variable name after 'make'").value;
 
-    // DSA: make stack / make queue etc (no =)
     if (!this.check(TokenType.ASSIGN)) {
-      const dsaType = DSA_TYPES.find(t => t === name.toLowerCase());
-      if (dsaType) {
-        return Node.DSAMake(name, dsaType);
-      }
-      // Identifier after make that is a DSA type keyword used as name
-      if (this.check(TokenType.EOF) || this.isAtEnd()) {
+      const DSA_KEYWORDS = ['stack', 'queue', 'linked', 'tree', 'graph'];
+      if (DSA_KEYWORDS.some(kw => name.toLowerCase().includes(kw))) {
         return Node.DSAMake(name, 'generic');
       }
+      this.error(
+        `Missing '=' after '${name}'. Did you mean:\n  make ${name} = 10\nTo create a data structure, include 'stack', 'queue', 'tree', 'graph', or 'linked' in the name:\n  make myStack`,
+        this.peek()
+      );
     }
 
-    this.expect(TokenType.ASSIGN, "'=' after variable name");
+    this.expect(TokenType.ASSIGN, "'='");
     const value = this.parseExpression();
     return Node.VarDecl(name, value);
   }
@@ -174,8 +177,11 @@ class Parser {
   // ask <name> -> <prompt>
   parseAsk() {
     this.expect(TokenType.ASK, "'ask'");
-    const name = this.expect(TokenType.IDENTIFIER, "a variable name").value;
-    this.expect(TokenType.ARROW, "'->'");
+    const name = this.expect(TokenType.IDENTIFIER, "a variable name after 'ask'").value;
+    if (!this.check(TokenType.ARROW)) {
+      this.error(`Missing '->' after '${name}'. Write it like this:\n  ask ${name} -> "Enter a value: "`, this.peek());
+    }
+    this.advance();
     const prompt = this.parseExpression();
     return Node.Input(name, prompt);
   }
@@ -184,9 +190,12 @@ class Parser {
   parseCheck() {
     this.expect(TokenType.CHECK, "'check'");
     const condition = this.parseCondition();
+    if (!this.check(TokenType.LBRACE)) {
+      this.error(`Missing '{' after condition. Write it like this:\n  check condition {\n    say -> "yes"\n  }`, this.peek());
+    }
     const body = this.parseBlock();
     let elseBody = null;
-    if (this.check(TokenType.OTHERWISE)) {
+    if (this.check(TokenType.OTHERWISE) || this.check(TokenType.ELSE)) {
       this.advance();
       elseBody = this.parseBlock();
     }
@@ -203,7 +212,10 @@ class Parser {
   parseLoop() {
     this.expect(TokenType.LOOP, "'loop'");
     const count = this.parseExpression();
-    this.expect(TokenType.TIMES, "'times' after the count");
+    if (!this.check(TokenType.TIMES)) {
+      this.error(`Missing 'times' after the count. Write it like this:\n  loop 3 times {\n    say -> "hello"\n  }`, this.peek());
+    }
+    this.advance();
     const body = this.parseBlock();
     return Node.ForLoop(count, body);
   }
@@ -211,7 +223,10 @@ class Parser {
   // repeat while <condition> { ... }
   parseRepeat() {
     this.expect(TokenType.REPEAT, "'repeat'");
-    this.expect(TokenType.WHILE, "'while' after 'repeat'");
+    if (!this.check(TokenType.WHILE)) {
+      this.error(`Missing 'while' after 'repeat'. Write it like this:\n  repeat while x < 10 {\n    x = x + 1\n  }`, this.peek());
+    }
+    this.advance();
     const condition = this.parseCondition();
     const body = this.parseBlock();
     return Node.WhileLoop(condition, body);

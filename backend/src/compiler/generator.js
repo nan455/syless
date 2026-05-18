@@ -23,6 +23,15 @@ const DSA_INIT_CODE = {
   generic: (name) => `${name} = []`,
 };
 
+const INPUT_HELPER = `
+def _syless_input(prompt=""):
+    s = input(prompt)
+    try: return int(s)
+    except ValueError: pass
+    try: return float(s)
+    except ValueError: return s
+`;
+
 const DSA_HELPERS = `
 # === SYLESS DSA Helper Functions ===
 def _syless_bst_insert(root_ref, val):
@@ -58,8 +67,9 @@ class Generator {
   constructor() {
     this.indentLevel = 0;
     this.output = [];
-    this.dsaTypes = {};     // name -> DSA type
+    this.dsaTypes = {};
     this.needsDSAHelpers = false;
+    this.needsInputHelper = false;
     this.graphNodes = new Set();
     this.graphInited = false;
   }
@@ -89,9 +99,8 @@ class Generator {
     }
 
     const finalLines = [];
-    if (this.needsDSAHelpers) {
-      finalLines.push(DSA_HELPERS);
-    }
+    if (this.needsInputHelper) finalLines.push(INPUT_HELPER);
+    if (this.needsDSAHelpers) finalLines.push(DSA_HELPERS);
     finalLines.push(...bodyLines);
 
     return finalLines.join('\n');
@@ -147,10 +156,12 @@ class Generator {
     this.emit(`${node.name} = ${this.genExpr(node.value)}`);
   }
 
-  // ask name -> "prompt"  →  name = input()
-  // Prompt is discarded — input() avoids polluting stdout during automated grading
+  // ask name -> "prompt"  →  name = _syless_input("prompt")
+  // Auto-converts to int or float if possible, otherwise keeps as string
   genInput(node) {
-    this.emit(`${node.name} = input()`);
+    this.needsInputHelper = true;
+    const prompt = node.prompt ? this.genExpr(node.prompt) : '""';
+    this.emit(`${node.name} = _syless_input(${prompt})`);
   }
 
   // check cond { } otherwise { }  →  if / else

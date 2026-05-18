@@ -4,7 +4,7 @@ import { motion, useInView, AnimatePresence } from 'framer-motion';
 import {
   Code2, Zap, BookOpen, BarChart2, Shield, Star, ChevronRight,
   Play, ArrowRight, Users, Award, TrendingUp, Brain,
-  Terminal, Cpu, Globe, Lock, Rocket
+  Terminal, Cpu, Globe, Lock, Rocket, FileText
 } from 'lucide-react';
 import Navbar from '@components/Nav/Navbar';
 
@@ -177,8 +177,8 @@ const FEATURES = [
 
 // ─── Stats ─────────────────────────────────────────────────────────────────────
 const STATS = [
-  { value: '50K+', label: 'Learners', icon: Users },
-  { value: '200+', label: 'DSA Problems', icon: BarChart2 },
+  { value: 'AI', label: 'Powered Learning', icon: Users },,
+  { value: '200+', label: 'DSA Problems coming soon', icon: BarChart2 },
   { value: '99.9%', label: 'Uptime', icon: TrendingUp },
   { value: '4.9★', label: 'Rating', icon: Star },
 ];
@@ -262,6 +262,26 @@ function Section({ children, className = '' }) {
 // ─── Main Landing ───────────────────────────────────────────────────────────────
 export default function Landing() {
   const [openFaq, setOpenFaq] = useState(null);
+  const [pageViews, setPageViews] = useState(0);
+
+  useEffect(() => {
+    const trackPageView = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5173'}/api/analytics/track-view`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ page: 'landing' }),
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setPageViews(data.totalViews);
+        }
+      } catch (err) {
+        console.error('Failed to track page view:', err);
+      }
+    };
+    trackPageView();
+  }, []);
 
   return (
     <div className="min-h-screen bg-dark-500 text-white overflow-x-hidden">
@@ -325,6 +345,10 @@ export default function Landing() {
                   <Play size={18} />
                   Start Coding Free
                 </Link>
+                <Link to="/syntax" className="btn-secondary text-base px-8 py-4 justify-center">
+                  <FileText size={18} />
+                  Learn Syntax
+                </Link>
                 <Link to="/dsa" className="btn-secondary text-base px-8 py-4 justify-center">
                   <BarChart2 size={18} />
                   Explore DSA
@@ -338,7 +362,7 @@ export default function Landing() {
                 transition={{ delay: 0.7 }}
                 className="flex items-center gap-4"
               >
-                <div className="flex -space-x-2">
+                {/* <div className="flex -space-x-2">
                   {['A', 'B', 'C', 'D', 'E'].map((l, i) => (
                     <div
                       key={i}
@@ -348,10 +372,10 @@ export default function Landing() {
                       {l}
                     </div>
                   ))}
-                </div>
-                <p className="text-sm text-gray-400">
+                </div> */}
+                {/* <p className="text-sm text-gray-400">
                   <span className="text-white font-semibold">50,000+</span> learners already coding
-                </p>
+                </p> */}
               </motion.div>
             </div>
 
@@ -620,7 +644,7 @@ export default function Landing() {
                 Ready to <span className="gradient-text">Code Like You Think?</span>
               </h2>
               <p className="text-xl text-gray-400 mb-8">
-                Join 50,000+ learners who are mastering programming the SYLESS way.
+                Join learners who are mastering programming the SYLESS way.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/ide" className="btn-primary text-lg px-10 py-4">
@@ -652,7 +676,14 @@ export default function Landing() {
               <a href="#" className="hover:text-white transition-colors">Blog</a>
               <a href="#" className="hover:text-white transition-colors">GitHub</a>
             </div>
-            <p className="text-sm text-gray-600">© 2025 SYLESS. All rights reserved.</p>
+            <div className="flex items-center gap-4">
+              <p className="text-sm text-gray-600">© 2026 SYLESS. All rights reserved.</p>
+              {pageViews > 0 && (
+                <div className="text-sm text-gray-500 px-3 py-1 rounded-full bg-white/5 border border-white/10">
+                  👁️ {pageViews.toLocaleString()} views
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </footer>

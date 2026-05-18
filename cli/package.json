@@ -1,0 +1,15 @@
+{
+  "name": "syless",
+  "version": "1.0.0",
+  "description": "SYLESS — an English-like programming language. Write code like you think.",
+  "main": "src/compiler/index.js",
+  "bin": {
+    "syless": "./bin/syless.js"
+  },
+  "keywords": ["syless", "programming-language", "english-like", "beginner", "educational"],
+  "author": "SYLESS",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14"
+  }
+}

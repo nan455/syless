@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
   const compileResult = compile(code);
 
   if (!compileResult.success) {
-    return res.status(400).json({
+    return res.json({
       success: false,
       phase: compileResult.phase,
       error: compileResult.error,
@@ -66,7 +66,7 @@ router.post('/run', optionalAuth, async (req, res) => {
   // Step 1: Compile
   const compileResult = compile(code);
   if (!compileResult.success) {
-    return res.status(400).json({
+    return res.json({
       success: false,
       phase: compileResult.phase,
       error: compileResult.error,
@@ -106,7 +106,7 @@ router.post('/ast', async (req, res) => {
 
   const result = compile(code);
   if (!result.success) {
-    return res.status(400).json({ success: false, error: result.error });
+    return res.json({ success: false, error: result.error });
   }
 
   res.json({ success: true, ast: result.ast, tokens: result.tokens });

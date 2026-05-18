@@ -5,6 +5,7 @@ const Problem      = require('./Problem');
 const Snippet      = require('./Snippet');
 const Submission   = require('./Submission');
 const UserProgress = require('./UserProgress');
+const Analytics    = require('./Analytics');
 
 // ─── Associations ─────────────────────────────────────────────────────────────
 User.hasMany(Snippet,       { foreignKey: 'user_id', onDelete: 'CASCADE' });
@@ -21,4 +22,4 @@ Problem.belongsTo(User, { foreignKey: 'created_by', as: 'creator', constraints: 
 User.hasMany(UserProgress,       { foreignKey: 'user_id', onDelete: 'CASCADE' });
 UserProgress.belongsTo(User,     { foreignKey: 'user_id' });
 
-module.exports = { User, Problem, Snippet, Submission, UserProgress };
+module.exports = { User, Problem, Snippet, Submission, UserProgress, Analytics };

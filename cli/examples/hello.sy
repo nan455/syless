@@ -1,0 +1,20 @@
+# My first SYLESS program
+say -> "Hello from SYLESS!"
+
+make name = "World"
+say -> name
+
+make score = 95
+check score >= 90 {
+    say -> "A Grade!"
+}
+
+loop 3 times {
+    say -> "SYLESS is awesome!"
+}
+
+task greet(person) {
+    say -> "Hey, " + person + "!"
+}
+
+greet("friend")
