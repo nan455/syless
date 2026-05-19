@@ -52,6 +52,12 @@ const Node = {
   BinarySearch: (value, arr) => ({ type: 'BinarySearch', value, arr }),
   OtherwiseStmt: (body) => ({ type: 'OtherwiseStmt', body }),
   MemberAccess: (object, property) => ({ type: 'MemberAccess', object, property }),
+  DotAccess:    (object, property) => ({ type: 'DotAccess', object, property }),
+  // ML nodes
+  MLLoad:     (name, dataset)                      => ({ type: 'MLLoad', name, dataset }),
+  MLTrain:    (modelType, data, labels, modelName) => ({ type: 'MLTrain', modelType, data, labels, modelName }),
+  MLPredict:  (modelName, input)                   => ({ type: 'MLPredict', modelName, input }),
+  MLEvaluate: (modelName, data, labels)            => ({ type: 'MLEvaluate', modelName, data, labels }),
 };
 
 const DSA_TYPES = ['stack', 'queue', 'linkedlist', 'tree', 'graph'];
@@ -134,6 +140,10 @@ class Parser {
       case TokenType.SORT:     return this.parseSort();
       case TokenType.BINARY:   return this.parseBinarySearch();
       case TokenType.CONNECT:  return this.parseConnect();
+      case TokenType.TRAIN:    return this.parseMLTrain();
+      case TokenType.PREDICT:  return this.parseMLPredict();
+      case TokenType.EVALUATE: return this.parseMLEvaluate();
+      case TokenType.LOAD:     return this.parseMLLoad();
       case TokenType.IDENTIFIER: return this.parseIdentifierStatement();
       default:
         this.advance();
@@ -344,6 +354,41 @@ class Parser {
     return Node.GraphConnect(nodeA, nodeB);
   }
 
+  parseMLLoad() {
+    this.expect(TokenType.LOAD, "'load'");
+    const dataset = this.expect(TokenType.STRING, "a dataset name like \"iris\"").value;
+    this.expect(TokenType.AS, "'as'");
+    const name = this.expect(TokenType.IDENTIFIER, "a variable name").value;
+    return Node.MLLoad(name, dataset);
+  }
+  parseMLTrain() {
+    this.expect(TokenType.TRAIN, "'train'");
+    const modelType = this.expect(TokenType.STRING, "a model type like \"knn\"").value;
+    this.expect(TokenType.ON, "'on'");
+    const data = this.parseExpression();
+    this.expect(TokenType.WITH, "'with'");
+    const labels = this.parseExpression();
+    this.expect(TokenType.AS, "'as'");
+    const modelName = this.expect(TokenType.IDENTIFIER, "a model variable name").value;
+    return Node.MLTrain(modelType, data, labels, modelName);
+  }
+  parseMLPredict() {
+    this.expect(TokenType.PREDICT, "'predict'");
+    const modelName = this.expect(TokenType.IDENTIFIER, "a model variable name").value;
+    this.expect(TokenType.ARROW, "'->'");
+    const input = this.parseExpression();
+    return Node.MLPredict(modelName, input);
+  }
+  parseMLEvaluate() {
+    this.expect(TokenType.EVALUATE, "'evaluate'");
+    const modelName = this.expect(TokenType.IDENTIFIER, "a model variable name").value;
+    this.expect(TokenType.ON, "'on'");
+    const data = this.parseExpression();
+    this.expect(TokenType.WITH, "'with'");
+    const labels = this.parseExpression();
+    return Node.MLEvaluate(modelName, data, labels);
+  }
+
   // Identifier statement: either assignment or function call
   parseIdentifierStatement() {
     const name = this.advance().value;
@@ -507,6 +552,12 @@ class Parser {
         const index = this.parseExpression();
         this.expect(TokenType.RBRACKET, "']'");
         return Node.MemberAccess(Node.Identifier(tok.value), index);
+      }
+      // Dot/attribute access (e.g. dataset.data, dataset.target)
+      if (this.check(TokenType.DOT)) {
+        this.advance();
+        const prop = this.expect(TokenType.IDENTIFIER, "a property name after '.'").value;
+        return Node.DotAccess(Node.Identifier(tok.value), prop);
       }
       return Node.Identifier(tok.value);
     }

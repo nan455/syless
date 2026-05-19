@@ -42,6 +42,9 @@ const TokenType = {
   TRUE: 'TRUE',
   FALSE: 'FALSE',
   NULL: 'NULL',
+  // ML keywords
+  TRAIN: 'TRAIN', PREDICT: 'PREDICT', EVALUATE: 'EVALUATE', LOAD: 'LOAD',
+  ON: 'ON', WITH: 'WITH', AS: 'AS',
 
   // Operators
   ARROW: 'ARROW',           // ->
@@ -118,6 +121,9 @@ const KEYWORDS = {
   true: TokenType.TRUE,
   false: TokenType.FALSE,
   null: TokenType.NULL,
+  // ML keywords
+  train: TokenType.TRAIN, predict: TokenType.PREDICT, evaluate: TokenType.EVALUATE,
+  load: TokenType.LOAD, on: TokenType.ON, with: TokenType.WITH, as: TokenType.AS,
 };
 
 class Token {

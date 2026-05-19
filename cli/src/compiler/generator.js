@@ -64,6 +64,7 @@ class Generator {
     this.needsDSAHelpers = false;
     this.needsInputHelper = false;
     this.graphInited = false;
+    this.mlImports = new Set();
   }
 
   indent()       { return '    '.repeat(this.indentLevel); }
@@ -76,6 +77,7 @@ class Generator {
     this.output = body;
     for (const node of ast.body) this.genStatement(node);
     const final = [];
+    if (this.mlImports.size > 0) final.push([...this.mlImports].join('\n'));
     if (this.needsInputHelper) final.push(INPUT_HELPER);
     if (this.needsDSAHelpers) final.push(DSA_HELPERS);
     final.push(...body);
@@ -106,6 +108,10 @@ class Generator {
       case 'GraphConnect':  return this.genGraphConnect(node);
       case 'Sort':          return this.emit(`${node.arr}.sort(reverse=${node.order === 'descending' ? 'True' : 'False'})`);
       case 'BinarySearch':  return this.genBinarySearch(node);
+      case 'MLLoad':        return this.genMLLoad(node);
+      case 'MLTrain':       return this.genMLTrain(node);
+      case 'MLPredict':     return this.genMLPredict(node);
+      case 'MLEvaluate':    return this.genMLEvaluate(node);
       case 'Identifier':    return;
       default: throw new GeneratorError(`Unknown AST node: ${node.type}`, node);
     }
@@ -215,6 +221,49 @@ class Generator {
     this.indentLevel--;
   }
 
+  genMLLoad(node) {
+    const DATASETS = {
+      iris: 'load_iris', digits: 'load_digits', wine: 'load_wine', cancer: 'load_breast_cancer',
+    };
+    const fn = DATASETS[node.dataset.toLowerCase()] || 'load_iris';
+    this.mlImports.add(`from sklearn.datasets import ${fn}`);
+    this.emit(`${node.name} = ${fn}()`);
+  }
+
+  genMLTrain(node) {
+    const MODELS = {
+      knn:      ['sklearn.neighbors',    'KNeighborsClassifier'],
+      tree:     ['sklearn.tree',         'DecisionTreeClassifier'],
+      forest:   ['sklearn.ensemble',     'RandomForestClassifier'],
+      linear:   ['sklearn.linear_model', 'LinearRegression'],
+      logistic: ['sklearn.linear_model', 'LogisticRegression'],
+      bayes:    ['sklearn.naive_bayes',  'GaussianNB'],
+      svm:      ['sklearn.svm',          'SVC'],
+    };
+    const [module, cls] = MODELS[node.modelType.toLowerCase()] || MODELS.knn;
+    this.mlImports.add(`from ${module} import ${cls}`);
+    const data = this.genExpr(node.data);
+    const labels = this.genExpr(node.labels);
+    this.emit(`${node.modelName} = ${cls}()`);
+    this.emit(`${node.modelName}.fit(${data}, ${labels})`);
+    this.emit(`print("Model '${node.modelType}' trained successfully!")`);
+  }
+
+  genMLPredict(node) {
+    const input = this.genExpr(node.input);
+    const wrapped = node.input.type === 'ArrayLiteral' ? `[${input}]` : input;
+    this.emit(`_pred = ${node.modelName}.predict(${wrapped})`);
+    this.emit(`print("Prediction:", _pred)`);
+  }
+
+  genMLEvaluate(node) {
+    this.mlImports.add('from sklearn.metrics import accuracy_score');
+    const data = this.genExpr(node.data);
+    const labels = this.genExpr(node.labels);
+    this.emit(`_score = accuracy_score(${labels}, ${node.modelName}.predict(${data}))`);
+    this.emit(`print("Accuracy:", str(round(_score * 100, 2)) + "%")`);
+  }
+
   genExpr(node) {
     if (!node) return 'None';
     switch (node.type) {
@@ -235,6 +284,7 @@ class Generator {
       case 'ArrayLiteral': return `[${node.elements.map(e => this.genExpr(e)).join(', ')}]`;
       case 'FuncCall':     return `${node.name}(${node.args.map(a => this.genExpr(a)).join(', ')})`;
       case 'MemberAccess': return `${this.genExpr(node.object)}[${this.genExpr(node.property)}]`;
+      case 'DotAccess':    return `${this.genExpr(node.object)}.${node.property}`;
       default: throw new GeneratorError(`Cannot generate expression for: ${node.type}`, node);
     }
   }

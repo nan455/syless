@@ -14,8 +14,9 @@ const Auth = lazy(() => import('@pages/Auth'));
 const NotFound = lazy(() => import('@pages/NotFound'));
 const Learn = lazy(() => import('@pages/Learn'));
 const ModuleView = lazy(() => import('@pages/ModuleView'));
-const Syntax    = lazy(() => import('@pages/Syntax'));
-const Community = lazy(() => import('@pages/Community'));
+const Syntax       = lazy(() => import('@pages/Syntax'));
+const Community    = lazy(() => import('@pages/Community'));
+const MLPlayground = lazy(() => import('@pages/MLPlayground'));
 
 function ProtectedRoute({ children, adminOnly = false }) {
   const { isAuthenticated, user } = useStore();
@@ -81,6 +82,7 @@ export default function App() {
         />
         <Route path="/syntax" element={<Syntax />} />
         <Route path="/community" element={<Community />} />
+        <Route path="/ml" element={<MLPlayground />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

@@ -9,6 +9,9 @@ const TokenType = {
   BINARY: 'BINARY', SEARCH: 'SEARCH', CONNECT: 'CONNECT', TO: 'TO',
   ELSE: 'ELSE', AND: 'AND', OR: 'OR', NOT: 'NOT',
   TRUE: 'TRUE', FALSE: 'FALSE', NULL: 'NULL',
+  // ML keywords
+  TRAIN: 'TRAIN', PREDICT: 'PREDICT', EVALUATE: 'EVALUATE', LOAD: 'LOAD',
+  ON: 'ON', WITH: 'WITH', AS: 'AS',
   ARROW: 'ARROW', ASSIGN: 'ASSIGN', PLUS: 'PLUS', MINUS: 'MINUS',
   MULTIPLY: 'MULTIPLY', DIVIDE: 'DIVIDE', MODULO: 'MODULO', POWER: 'POWER',
   EQ: 'EQ', NEQ: 'NEQ', LT: 'LT', GT: 'GT', LTE: 'LTE', GTE: 'GTE',
@@ -30,6 +33,9 @@ const KEYWORDS = {
   binary: TokenType.BINARY, search: TokenType.SEARCH, connect: TokenType.CONNECT,
   to: TokenType.TO, else: TokenType.ELSE, and: TokenType.AND, or: TokenType.OR,
   not: TokenType.NOT, true: TokenType.TRUE, false: TokenType.FALSE, null: TokenType.NULL,
+  // ML keywords
+  train: TokenType.TRAIN, predict: TokenType.PREDICT, evaluate: TokenType.EVALUATE,
+  load: TokenType.LOAD, on: TokenType.ON, with: TokenType.WITH, as: TokenType.AS,
 };
 
 class Token {
