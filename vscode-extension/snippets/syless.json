@@ -4,6 +4,11 @@
     "body": ["say -> $1"],
     "description": "Print a value to output"
   },
+  "Show (no arrow)": {
+    "prefix": "show",
+    "body": ["show $1"],
+    "description": "Print a value — no arrow needed"
+  },
   "Variable": {
     "prefix": "make",
     "body": ["make ${1:name} = $2"],
@@ -34,6 +39,19 @@
     ],
     "description": "If-else statement"
   },
+  "If-ElseIf-Else": {
+    "prefix": "checkalso",
+    "body": [
+      "check ${1:condition1} {",
+      "\t$2",
+      "} also check ${3:condition2} {",
+      "\t$4",
+      "} otherwise {",
+      "\t$5",
+      "}"
+    ],
+    "description": "If / else-if / else chain"
+  },
   "Loop N Times": {
     "prefix": "loop",
     "body": [
@@ -43,8 +61,17 @@
     ],
     "description": "Repeat a block N times"
   },
-  "Repeat While": {
+  "Repeat N Times": {
     "prefix": "repeat",
+    "body": [
+      "repeat ${1:3} times {",
+      "\t$2",
+      "}"
+    ],
+    "description": "Repeat a block N times (alias for loop)"
+  },
+  "Repeat While": {
+    "prefix": "repeatwhile",
     "body": [
       "repeat while ${1:condition} {",
       "\t$2",

@@ -45,6 +45,8 @@ const TokenType = {
   // ML keywords
   TRAIN: 'TRAIN', PREDICT: 'PREDICT', EVALUATE: 'EVALUATE', LOAD: 'LOAD',
   ON: 'ON', WITH: 'WITH', AS: 'AS',
+  // New keywords
+  ALSO: 'ALSO',
 
   // Operators
   ARROW: 'ARROW',           // ->
@@ -55,6 +57,10 @@ const TokenType = {
   DIVIDE: 'DIVIDE',         // /
   MODULO: 'MODULO',         // %
   POWER: 'POWER',           // **
+  PLUS_ASSIGN: 'PLUS_ASSIGN',   // +=
+  MINUS_ASSIGN: 'MINUS_ASSIGN', // -=
+  MULT_ASSIGN: 'MULT_ASSIGN',   // *=
+  DIV_ASSIGN: 'DIV_ASSIGN',     // /=
   EQ: 'EQ',                 // ==
   NEQ: 'NEQ',               // !=
   LT: 'LT',                 // <
@@ -124,6 +130,10 @@ const KEYWORDS = {
   // ML keywords
   train: TokenType.TRAIN, predict: TokenType.PREDICT, evaluate: TokenType.EVALUATE,
   load: TokenType.LOAD, on: TokenType.ON, with: TokenType.WITH, as: TokenType.AS,
+  // Aliases & new keywords
+  nothing: TokenType.NULL,   // "nothing" = null
+  show: TokenType.SAY,       // "show expr" = "say -> expr" (no arrow needed)
+  also: TokenType.ALSO,      // "also check" = else-if
 };
 
 class Token {
@@ -262,7 +272,9 @@ class Lexer {
       // Strings
       if (ch === '"' || ch === "'") {
         const str = this.readString(ch);
-        this.addToken(TokenType.STRING, str);
+        const tok = new Token(TokenType.STRING, str, this.line, this.column);
+        if (/\{[a-zA-Z_]\w*\}/.test(str)) tok.isTemplate = true;
+        this.tokens.push(tok);
         continue;
       }
 
@@ -296,6 +308,7 @@ class Lexer {
       switch (ch) {
         case '-':
           if (this.match('>')) { this.addToken(TokenType.ARROW, '->'); }
+          else if (this.match('=')) { this.addToken(TokenType.MINUS_ASSIGN, '-='); }
           else { this.addToken(TokenType.MINUS, '-'); }
           break;
         case '=':
@@ -316,10 +329,17 @@ class Lexer {
           break;
         case '*':
           if (this.match('*')) { this.addToken(TokenType.POWER, '**'); }
+          else if (this.match('=')) { this.addToken(TokenType.MULT_ASSIGN, '*='); }
           else { this.addToken(TokenType.MULTIPLY, '*'); }
           break;
-        case '+': this.addToken(TokenType.PLUS, '+'); break;
-        case '/': this.addToken(TokenType.DIVIDE, '/'); break;
+        case '+':
+          if (this.match('=')) { this.addToken(TokenType.PLUS_ASSIGN, '+='); }
+          else { this.addToken(TokenType.PLUS, '+'); }
+          break;
+        case '/':
+          if (this.match('=')) { this.addToken(TokenType.DIV_ASSIGN, '/='); }
+          else { this.addToken(TokenType.DIVIDE, '/'); }
+          break;
         case '%': this.addToken(TokenType.MODULO, '%'); break;
         case '{': this.addToken(TokenType.LBRACE, '{'); break;
         case '}': this.addToken(TokenType.RBRACE, '}'); break;

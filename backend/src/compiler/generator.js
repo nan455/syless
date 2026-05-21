@@ -170,18 +170,32 @@ class Generator {
     this.emit(`${node.name} = _syless_input(${prompt})`);
   }
 
-  // check cond { } otherwise { }  →  if / else
+  // check cond { } [also check ...] [otherwise { }]  →  if / elif / else
   genIf(node) {
     this.emit(`if ${this.genExpr(node.condition)}:`);
     this.indentLevel++;
     if (node.body.length === 0) this.emit('pass');
     for (const stmt of node.body) this.genStatement(stmt);
     this.indentLevel--;
-    if (node.elseBody) {
+    this._genElseBody(node.elseBody);
+  }
+
+  _genElseBody(elseBody) {
+    if (!elseBody) return;
+    // Single IfStmt in elseBody = "also check" chain → emit elif
+    if (elseBody.length === 1 && elseBody[0].type === 'IfStmt') {
+      const elif = elseBody[0];
+      this.emit(`elif ${this.genExpr(elif.condition)}:`);
+      this.indentLevel++;
+      if (elif.body.length === 0) this.emit('pass');
+      for (const stmt of elif.body) this.genStatement(stmt);
+      this.indentLevel--;
+      this._genElseBody(elif.elseBody);
+    } else {
       this.emit('else:');
       this.indentLevel++;
-      if (node.elseBody.length === 0) this.emit('pass');
-      for (const stmt of node.elseBody) this.genStatement(stmt);
+      if (elseBody.length === 0) this.emit('pass');
+      for (const stmt of elseBody) this.genStatement(stmt);
       this.indentLevel--;
     }
   }
@@ -363,6 +377,9 @@ class Generator {
     if (!node) return 'None';
 
     switch (node.type) {
+      case 'TemplateLiteral':
+        // "Hello {name}!" → f"Hello {name}!"
+        return 'f' + JSON.stringify(node.raw);
       case 'Literal': {
         const val = node.value;
         if (val === null) return 'None';

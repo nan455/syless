@@ -148,6 +148,12 @@ Practice SYLESS in your browser — no installation needed:
 
 ---
 
-## License
 
-MIT
+
+
+
+
+
+Copy-Item "d:\SYLESS\cli\src\compiler\*" "d:\SYLESS\vscode-extension\cli\src\compiler\" -Force
+# bump version in package.json, then:
+cd d:\SYLESS\vscode-extension; vsce package --allow-missing-repository

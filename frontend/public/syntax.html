@@ -88,7 +88,26 @@ tr:last-child td{border-bottom:none}
     <span class="cover-pill">Compiles to Python</span>
     <span class="cover-pill">Built-in DSA Support</span>
     <span class="cover-pill">AI-Powered IDE</span>
-    <span class="cover-pill">v1.0.0</span>
+    <span class="cover-pill">v1.1.0</span>
+  </div>
+</div>
+
+<!-- NEW IN v1.1 -->
+<div class="section">
+  <div class="section-header"><span class="icon">🆕</span><h2>What's New in v1.1</h2><span class="num">6 improvements</span></div>
+  <div class="section-body">
+    <table>
+      <thead><tr><th>Feature</th><th>Before</th><th>Now (also works)</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag tag-green">New</span> String interpolation</td><td><code>say -> "Hi " + name</code></td><td><code>say -> "Hi {name}"</code></td></tr>
+        <tr><td><span class="tag tag-green">New</span> <code>show</code> keyword</td><td><code>say -> "Hello"</code></td><td><code>show "Hello"</code> (no arrow!)</td></tr>
+        <tr><td><span class="tag tag-green">New</span> Optional arrow in <code>say</code></td><td><code>say -> value</code> required</td><td><code>say value</code> also works</td></tr>
+        <tr><td><span class="tag tag-green">New</span> <code>also check</code> (else-if)</td><td>No else-if support</td><td><code>} also check score >= 80 {</code></td></tr>
+        <tr><td><span class="tag tag-green">New</span> Compound assignment</td><td><code>score = score + 10</code></td><td><code>score += 10</code></td></tr>
+        <tr><td><span class="tag tag-green">New</span> <code>repeat N times</code></td><td>Only <code>loop N times</code></td><td><code>repeat 5 times { }</code></td></tr>
+        <tr><td><span class="tag tag-green">New</span> <code>nothing</code> keyword</td><td><code>null</code></td><td><code>nothing</code> (reads more naturally)</td></tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
@@ -110,23 +129,28 @@ tr:last-child td{border-bottom:none}
     </div>
     <div class="syntax-item">
       <div><div class="syntax-label">Data Types</div><div class="syntax-desc">Four built-in types — no declarations needed. SYLESS figures out the type automatically.</div></div>
-      <div class="code-block"><span class="number">42</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># number (integer or decimal)</span><br><span class="string">"Hello"</span>&nbsp;&nbsp;&nbsp;<span class="comment"># string (single or double quotes)</span><br><span class="keyword">true</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># boolean</span><br><span class="keyword">false</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># boolean</span><br><span class="keyword">null</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># null / no value</span></div>
+      <div class="code-block"><span class="number">42</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># number (integer or decimal)</span><br><span class="string">"Hello"</span>&nbsp;&nbsp;&nbsp;<span class="comment"># string (single or double quotes)</span><br><span class="keyword">true</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># boolean</span><br><span class="keyword">false</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># boolean</span><br><span class="keyword">null</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># null / no value</span><br><span class="keyword">nothing</span>&nbsp;&nbsp;&nbsp;<span class="comment"># same as null (more readable)</span></div>
     </div>
   </div>
 </div>
 
 <!-- 2. OUTPUT -->
 <div class="section">
-  <div class="section-header"><span class="icon">📢</span><h2>2 — Output</h2><span class="num">say -&gt;</span></div>
+  <div class="section-header"><span class="icon">📢</span><h2>2 — Output</h2><span class="num">say / show</span></div>
   <div class="section-body">
     <div class="syntax-item">
-      <div><div class="syntax-label">Print any value</div><div class="syntax-desc">Use <code>say -&gt;</code> followed by any value, variable, or expression to print it.</div></div>
-      <div class="code-block"><span class="keyword">say</span> <span class="op">-&gt;</span> <span class="string">"Hello, World!"</span><br><span class="keyword">say</span> <span class="op">-&gt;</span> <span class="number">42</span><br><span class="keyword">say</span> <span class="op">-&gt;</span> <span class="var">myVar</span><br><span class="keyword">say</span> <span class="op">-&gt;</span> <span class="number">3</span> <span class="op">+</span> <span class="number">4</span></div>
+      <div><div class="syntax-label">Print any value</div><div class="syntax-desc">Use <code>say -&gt;</code> to print. The arrow <code>-&gt;</code> is optional. <code>show</code> is a friendlier alias that needs no arrow at all.</div></div>
+      <div class="code-block"><span class="keyword">say</span> <span class="op">-&gt;</span> <span class="string">"Hello, World!"</span>&nbsp;&nbsp;<span class="comment"># classic style</span><br><span class="keyword">say</span> <span class="string">"Hello, World!"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># arrow is optional</span><br><span class="keyword">show</span> <span class="string">"Hello, World!"</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># show = no arrow needed</span><br><span class="keyword">show</span> <span class="number">42</span><br><span class="keyword">show</span> <span class="var">myVar</span></div>
     </div>
     <div class="syntax-item">
-      <div><div class="syntax-label">Print expressions</div><div class="syntax-desc">Math, function calls, and combined values work directly inside <code>say -&gt;</code>.</div></div>
-      <div class="code-block"><span class="keyword">make</span> <span class="var">name</span> <span class="op">=</span> <span class="string">"SYLESS"</span><br><span class="keyword">say</span> <span class="op">-&gt;</span> <span class="string">"Welcome to "</span> <span class="op">+</span> <span class="var">name</span><br><span class="keyword">say</span> <span class="op">-&gt;</span> <span class="var">x</span> <span class="op">*</span> <span class="number">2</span> <span class="op">+</span> <span class="number">1</span><br><span class="keyword">say</span> <span class="op">-&gt;</span> <span class="fn">len</span>(<span class="var">name</span>)</div>
+      <div><div class="syntax-label">String interpolation <span class="tag tag-green">NEW</span></div><div class="syntax-desc">Embed variable names directly inside a string using <code>{variableName}</code>. No more manual concatenation with <code>+</code>.</div></div>
+      <div class="code-block"><span class="keyword">make</span> <span class="var">name</span> <span class="op">=</span> <span class="string">"Alice"</span><br><span class="keyword">make</span> <span class="var">score</span> <span class="op">=</span> <span class="number">95</span><br><br><span class="comment"># Old way:</span><br><span class="keyword">say</span> <span class="op">-&gt;</span> <span class="string">"Hello, "</span> <span class="op">+</span> <span class="var">name</span> <span class="op">+</span> <span class="string">"! Score: "</span> <span class="op">+</span> <span class="var">score</span><br><br><span class="comment"># New way (much easier!):</span><br><span class="keyword">say</span> <span class="op">-&gt;</span> <span class="string">"Hello, {name}! Score: {score}"</span></div>
     </div>
+    <div class="syntax-item">
+      <div><div class="syntax-label">Print expressions</div><div class="syntax-desc">Math, function calls, and combined values work directly.</div></div>
+      <div class="code-block"><span class="keyword">show</span> <span class="var">x</span> <span class="op">*</span> <span class="number">2</span> <span class="op">+</span> <span class="number">1</span><br><span class="keyword">show</span> <span class="fn">len</span>(<span class="var">name</span>)<br><span class="keyword">show</span> <span class="string">"Result: {x * 2}"</span>&nbsp;&nbsp;<span class="comment"># expressions in {}</span></div>
+    </div>
+    <div class="tip"><strong>Tip:</strong> Use <code>show</code> when you're just learning — it reads the most naturally. Use <code>say -&gt;</code> if you prefer the original style. Both do exactly the same thing.</div>
   </div>
 </div>
 
@@ -140,7 +164,11 @@ tr:last-child td{border-bottom:none}
     </div>
     <div class="syntax-item">
       <div><div class="syntax-label">Reassign a variable</div><div class="syntax-desc">After the first declaration, update a variable without <code>make</code>.</div></div>
-      <div class="code-block"><span class="keyword">make</span> <span class="var">score</span> <span class="op">=</span> <span class="number">0</span><br><span class="var">score</span> <span class="op">=</span> <span class="number">100</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># update value</span><br><span class="var">score</span> <span class="op">=</span> <span class="var">score</span> <span class="op">+</span> <span class="number">5</span></div>
+      <div class="code-block"><span class="keyword">make</span> <span class="var">score</span> <span class="op">=</span> <span class="number">0</span><br><span class="var">score</span> <span class="op">=</span> <span class="number">100</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># update value</span><br><span class="var">score</span> <span class="op">=</span> <span class="var">score</span> <span class="op">+</span> <span class="number">5</span>&nbsp;<span class="comment"># old way</span></div>
+    </div>
+    <div class="syntax-item">
+      <div><div class="syntax-label">Compound assignment <span class="tag tag-green">NEW</span></div><div class="syntax-desc">Shorthand for updating a variable. <code>+=</code> adds, <code>-=</code> subtracts, <code>*=</code> multiplies, <code>/=</code> divides. Much shorter than writing <code>x = x + 5</code>.</div></div>
+      <div class="code-block"><span class="keyword">make</span> <span class="var">score</span> <span class="op">=</span> <span class="number">0</span><br><span class="var">score</span> <span class="op">+=</span> <span class="number">10</span>&nbsp;&nbsp;&nbsp;<span class="comment"># score is now 10</span><br><span class="var">score</span> <span class="op">+=</span> <span class="number">5</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># score is now 15</span><br><span class="var">score</span> <span class="op">-=</span> <span class="number">3</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># score is now 12</span><br><span class="var">score</span> <span class="op">*=</span> <span class="number">2</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># score is now 24</span><br><span class="var">score</span> <span class="op">/=</span> <span class="number">4</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># score is now 6</span></div>
     </div>
   </div>
 </div>
@@ -178,6 +206,10 @@ tr:last-child td{border-bottom:none}
         <tr><td><span class="tag tag-yellow">Logic</span></td><td><code>and</code></td><td>Both conditions must be true</td><td><code>x &gt; 0 and x &lt; 10</code></td></tr>
         <tr><td><span class="tag tag-yellow">Logic</span></td><td><code>or</code></td><td>At least one must be true</td><td><code>x == 0 or y == 0</code></td></tr>
         <tr><td><span class="tag tag-yellow">Logic</span></td><td><code>not</code></td><td>Flip true/false</td><td><code>not flag</code></td></tr>
+        <tr><td><span class="tag tag-green">Compound</span></td><td><code>+=</code></td><td>Add and assign</td><td><code>score += 10</code></td></tr>
+        <tr><td><span class="tag tag-green">Compound</span></td><td><code>-=</code></td><td>Subtract and assign</td><td><code>lives -= 1</code></td></tr>
+        <tr><td><span class="tag tag-green">Compound</span></td><td><code>*=</code></td><td>Multiply and assign</td><td><code>price *= 2</code></td></tr>
+        <tr><td><span class="tag tag-green">Compound</span></td><td><code>/=</code></td><td>Divide and assign</td><td><code>total /= 4</code></td></tr>
       </tbody>
     </table>
   </div>
@@ -185,38 +217,42 @@ tr:last-child td{border-bottom:none}
 
 <!-- 6. CONDITIONALS -->
 <div class="section">
-  <div class="section-header"><span class="icon">🔀</span><h2>6 — Conditionals</h2><span class="num">check / otherwise</span></div>
+  <div class="section-header"><span class="icon">🔀</span><h2>6 — Conditionals</h2><span class="num">check / also check / otherwise</span></div>
   <div class="section-body">
     <div class="syntax-item">
       <div><div class="syntax-label">If statement</div><div class="syntax-desc">Run a block only when the condition is true.</div></div>
-      <div class="code-block"><span class="keyword">make</span> <span class="var">age</span> <span class="op">=</span> <span class="number">18</span><br><span class="keyword">check</span> <span class="var">age</span> <span class="op">&gt;=</span> <span class="number">18</span> {<br>&nbsp;&nbsp;<span class="keyword">say</span> <span class="op">-&gt;</span> <span class="string">"You can vote"</span><br>}</div>
+      <div class="code-block"><span class="keyword">make</span> <span class="var">age</span> <span class="op">=</span> <span class="number">18</span><br><span class="keyword">check</span> <span class="var">age</span> <span class="op">&gt;=</span> <span class="number">18</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"You can vote"</span><br>}</div>
     </div>
     <div class="syntax-item">
       <div><div class="syntax-label">If / else</div><div class="syntax-desc">Add <code>otherwise { }</code> to handle when the condition is false. (<code>else</code> also works.)</div></div>
-      <div class="code-block"><span class="keyword">check</span> <span class="var">score</span> <span class="op">&gt;=</span> <span class="number">50</span> {<br>&nbsp;&nbsp;<span class="keyword">say</span> <span class="op">-&gt;</span> <span class="string">"Pass"</span><br>} <span class="keyword">otherwise</span> {<br>&nbsp;&nbsp;<span class="keyword">say</span> <span class="op">-&gt;</span> <span class="string">"Fail"</span><br>}</div>
+      <div class="code-block"><span class="keyword">check</span> <span class="var">score</span> <span class="op">&gt;=</span> <span class="number">50</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"Pass"</span><br>} <span class="keyword">otherwise</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"Fail"</span><br>}</div>
+    </div>
+    <div class="syntax-item">
+      <div><div class="syntax-label">Else-if chain with <code>also check</code> <span class="tag tag-green">NEW</span></div><div class="syntax-desc">Chain multiple conditions using <code>also check</code>. Only the first matching branch runs. Great for letter grades, menus, and multi-case logic.</div></div>
+      <div class="code-block"><span class="keyword">make</span> <span class="var">score</span> <span class="op">=</span> <span class="number">75</span><br><br><span class="keyword">check</span> <span class="var">score</span> <span class="op">&gt;=</span> <span class="number">90</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"Grade: A"</span><br>} <span class="keyword">also check</span> <span class="var">score</span> <span class="op">&gt;=</span> <span class="number">80</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"Grade: B"</span><br>} <span class="keyword">also check</span> <span class="var">score</span> <span class="op">&gt;=</span> <span class="number">70</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"Grade: C"</span><br>} <span class="keyword">otherwise</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"Grade: F"</span><br>}</div>
     </div>
     <div class="syntax-item">
       <div><div class="syntax-label">Compound conditions</div><div class="syntax-desc">Combine multiple conditions with <code>and</code> / <code>or</code> / <code>not</code>.</div></div>
-      <div class="code-block"><span class="keyword">check</span> <span class="var">x</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="keyword">and</span> <span class="var">x</span> <span class="op">&lt;</span> <span class="number">100</span> {<br>&nbsp;&nbsp;<span class="keyword">say</span> <span class="op">-&gt;</span> <span class="string">"valid range"</span><br>}<br><br><span class="keyword">check</span> <span class="keyword">not</span> <span class="var">flag</span> {<br>&nbsp;&nbsp;<span class="keyword">say</span> <span class="op">-&gt;</span> <span class="string">"flag is false"</span><br>}</div>
+      <div class="code-block"><span class="keyword">check</span> <span class="var">x</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="keyword">and</span> <span class="var">x</span> <span class="op">&lt;</span> <span class="number">100</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"valid range"</span><br>}<br><br><span class="keyword">check</span> <span class="keyword">not</span> <span class="var">flag</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"flag is false"</span><br>}</div>
     </div>
   </div>
 </div>
 
 <!-- 7. LOOPS -->
 <div class="section">
-  <div class="section-header"><span class="icon">🔄</span><h2>7 — Loops</h2><span class="num">loop / repeat while / for each</span></div>
+  <div class="section-header"><span class="icon">🔄</span><h2>7 — Loops</h2><span class="num">loop / repeat / for each</span></div>
   <div class="section-body">
     <div class="syntax-item">
-      <div><div class="syntax-label">Repeat N times</div><div class="syntax-desc">Run a block an exact number of times.</div></div>
-      <div class="code-block"><span class="keyword">loop</span> <span class="number">5</span> <span class="keyword">times</span> {<br>&nbsp;&nbsp;<span class="keyword">say</span> <span class="op">-&gt;</span> <span class="string">"Hello!"</span><br>}</div>
+      <div><div class="syntax-label">Repeat N times</div><div class="syntax-desc">Run a block an exact number of times. Both <code>loop</code> and <code>repeat</code> work.</div></div>
+      <div class="code-block"><span class="keyword">loop</span> <span class="number">5</span> <span class="keyword">times</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"Hello!"</span><br>}<br><br><span class="comment"># repeat is an alias — pick whichever reads better</span><br><span class="keyword">repeat</span> <span class="number">5</span> <span class="keyword">times</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"Hello!"</span><br>}</div>
     </div>
     <div class="syntax-item">
-      <div><div class="syntax-label">While loop</div><div class="syntax-desc">Keep running while a condition stays true. Careful — make sure the condition eventually becomes false!</div></div>
-      <div class="code-block"><span class="keyword">make</span> <span class="var">count</span> <span class="op">=</span> <span class="number">0</span><br><span class="keyword">repeat while</span> <span class="var">count</span> <span class="op">&lt;</span> <span class="number">5</span> {<br>&nbsp;&nbsp;<span class="keyword">say</span> <span class="op">-&gt;</span> <span class="var">count</span><br>&nbsp;&nbsp;<span class="var">count</span> <span class="op">=</span> <span class="var">count</span> <span class="op">+</span> <span class="number">1</span><br>}</div>
+      <div><div class="syntax-label">While loop</div><div class="syntax-desc">Keep running while a condition stays true. Now you can use compound assignment to update the counter cleanly.</div></div>
+      <div class="code-block"><span class="keyword">make</span> <span class="var">count</span> <span class="op">=</span> <span class="number">0</span><br><span class="keyword">repeat while</span> <span class="var">count</span> <span class="op">&lt;</span> <span class="number">5</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"Count: {count}"</span><br>&nbsp;&nbsp;<span class="var">count</span> <span class="op">+=</span> <span class="number">1</span>&nbsp;&nbsp;<span class="comment"># compound assignment</span><br>}</div>
     </div>
     <div class="syntax-item">
       <div><div class="syntax-label">For each (iterate)</div><div class="syntax-desc">Loop through every item in an array or collection, one at a time.</div></div>
-      <div class="code-block"><span class="keyword">make</span> <span class="var">fruits</span> <span class="op">=</span> [<span class="string">"apple"</span>, <span class="string">"mango"</span>, <span class="string">"banana"</span>]<br><span class="keyword">for each</span> <span class="var">fruit</span> <span class="keyword">in</span> <span class="var">fruits</span> {<br>&nbsp;&nbsp;<span class="keyword">say</span> <span class="op">-&gt;</span> <span class="var">fruit</span><br>}</div>
+      <div class="code-block"><span class="keyword">make</span> <span class="var">fruits</span> <span class="op">=</span> [<span class="string">"apple"</span>, <span class="string">"mango"</span>, <span class="string">"banana"</span>]<br><span class="keyword">for each</span> <span class="var">fruit</span> <span class="keyword">in</span> <span class="var">fruits</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"Fruit: {fruit}"</span><br>}</div>
     </div>
   </div>
 </div>
@@ -314,50 +350,54 @@ tr:last-child td{border-bottom:none}
 
 <!-- 12. COMPLETE EXAMPLE -->
 <div class="section">
-  <div class="section-header"><span class="icon">🚀</span><h2>12 — Complete Example Program</h2></div>
+  <div class="section-header"><span class="icon">🚀</span><h2>12 — Complete Example Program</h2><span class="num">uses all new features</span></div>
   <div class="section-body">
     <div class="example-block">
-      <span class="line"><span class="comment"># ── SYLESS Demo Program ───────────────────────────────</span></span>
+      <span class="line"><span class="comment"># ── SYLESS v1.1 Demo ──────────────────────────────────</span></span>
       <span class="line">&nbsp;</span>
-      <span class="line"><span class="comment"># 1. Variables and output</span></span>
-      <span class="line"><span class="keyword">make</span> <span class="var">name</span> <span class="op">=</span> <span class="string">"SYLESS"</span></span>
-      <span class="line"><span class="keyword">say</span> <span class="op">-&gt;</span> <span class="string">"Welcome to "</span> <span class="op">+</span> <span class="var">name</span></span>
+      <span class="line"><span class="comment"># 1. Variables + string interpolation</span></span>
+      <span class="line"><span class="keyword">make</span> <span class="var">name</span> <span class="op">=</span> <span class="string">"Alice"</span></span>
+      <span class="line"><span class="keyword">make</span> <span class="var">age</span> <span class="op">=</span> <span class="number">20</span></span>
+      <span class="line"><span class="keyword">show</span> <span class="string">"Welcome, {name}! You are {age} years old."</span></span>
       <span class="line">&nbsp;</span>
-      <span class="line"><span class="comment"># 2. Conditional logic</span></span>
-      <span class="line"><span class="keyword">make</span> <span class="var">score</span> <span class="op">=</span> <span class="number">75</span></span>
+      <span class="line"><span class="comment"># 2. Compound assignment</span></span>
+      <span class="line"><span class="keyword">make</span> <span class="var">score</span> <span class="op">=</span> <span class="number">0</span></span>
+      <span class="line"><span class="var">score</span> <span class="op">+=</span> <span class="number">50</span></span>
+      <span class="line"><span class="var">score</span> <span class="op">+=</span> <span class="number">25</span></span>
+      <span class="line"><span class="keyword">show</span> <span class="string">"Your score: {score}"</span></span>
+      <span class="line">&nbsp;</span>
+      <span class="line"><span class="comment"># 3. also check (else-if) chain</span></span>
       <span class="line"><span class="keyword">check</span> <span class="var">score</span> <span class="op">&gt;=</span> <span class="number">90</span> {</span>
-      <span class="line i1"><span class="keyword">say</span> <span class="op">-&gt;</span> <span class="string">"Grade: A"</span></span>
+      <span class="line i1"><span class="keyword">show</span> <span class="string">"Grade: A"</span></span>
+      <span class="line">} <span class="keyword">also check</span> <span class="var">score</span> <span class="op">&gt;=</span> <span class="number">70</span> {</span>
+      <span class="line i1"><span class="keyword">show</span> <span class="string">"Grade: B"</span></span>
       <span class="line">} <span class="keyword">otherwise</span> {</span>
-      <span class="line i1"><span class="keyword">say</span> <span class="op">-&gt;</span> <span class="string">"Grade: B or lower"</span></span>
+      <span class="line i1"><span class="keyword">show</span> <span class="string">"Grade: C or lower"</span></span>
       <span class="line">}</span>
       <span class="line">&nbsp;</span>
-      <span class="line"><span class="comment"># 3. Function with return value</span></span>
-      <span class="line"><span class="keyword">task</span> <span class="fn">square</span>(<span class="var">n</span>) {</span>
-      <span class="line i1"><span class="keyword">give</span> <span class="var">n</span> <span class="op">**</span> <span class="number">2</span></span>
+      <span class="line"><span class="comment"># 4. repeat N times (new loop alias)</span></span>
+      <span class="line"><span class="keyword">repeat</span> <span class="number">3</span> <span class="keyword">times</span> {</span>
+      <span class="line i1"><span class="keyword">show</span> <span class="string">"SYLESS is awesome!"</span></span>
       <span class="line">}</span>
-      <span class="line"><span class="keyword">say</span> <span class="op">-&gt;</span> <span class="fn">square</span>(<span class="number">9</span>)&nbsp;&nbsp;<span class="comment"># 81</span></span>
       <span class="line">&nbsp;</span>
-      <span class="line"><span class="comment"># 4. Arrays and sorting</span></span>
+      <span class="line"><span class="comment"># 5. nothing keyword</span></span>
+      <span class="line"><span class="keyword">make</span> <span class="var">result</span> <span class="op">=</span> <span class="keyword">nothing</span></span>
+      <span class="line"><span class="keyword">check</span> <span class="var">result</span> <span class="op">==</span> <span class="keyword">nothing</span> {</span>
+      <span class="line i1"><span class="keyword">show</span> <span class="string">"result has no value yet"</span></span>
+      <span class="line">}</span>
+      <span class="line">&nbsp;</span>
+      <span class="line"><span class="comment"># 6. Function with return value</span></span>
+      <span class="line"><span class="keyword">task</span> <span class="fn">greet</span>(<span class="var">person</span>) {</span>
+      <span class="line i1"><span class="keyword">give</span> <span class="string">"Hello, {person}!"</span></span>
+      <span class="line">}</span>
+      <span class="line"><span class="keyword">show</span> <span class="fn">greet</span>(<span class="var">name</span>)</span>
+      <span class="line">&nbsp;</span>
+      <span class="line"><span class="comment"># 7. Arrays and for each</span></span>
       <span class="line"><span class="keyword">make</span> <span class="var">nums</span> <span class="op">=</span> [<span class="number">5</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">1</span>, <span class="number">9</span>]</span>
       <span class="line"><span class="keyword">sort</span> <span class="var">nums</span> <span class="keyword">ascending</span></span>
       <span class="line"><span class="keyword">for each</span> <span class="var">n</span> <span class="keyword">in</span> <span class="var">nums</span> {</span>
-      <span class="line i1"><span class="keyword">say</span> <span class="op">-&gt;</span> <span class="var">n</span></span>
+      <span class="line i1"><span class="keyword">show</span> <span class="string">"Item: {n}"</span></span>
       <span class="line">}</span>
-      <span class="line">&nbsp;</span>
-      <span class="line"><span class="comment"># 5. Stack operations</span></span>
-      <span class="line"><span class="keyword">make</span> <span class="var">myStack</span></span>
-      <span class="line"><span class="keyword">push</span> <span class="number">10</span> <span class="keyword">into</span> <span class="var">myStack</span></span>
-      <span class="line"><span class="keyword">push</span> <span class="number">20</span> <span class="keyword">into</span> <span class="var">myStack</span></span>
-      <span class="line"><span class="keyword">push</span> <span class="number">30</span> <span class="keyword">into</span> <span class="var">myStack</span></span>
-      <span class="line"><span class="keyword">pop from</span> <span class="var">myStack</span>&nbsp;&nbsp;<span class="comment"># removes 30</span></span>
-      <span class="line"><span class="keyword">say</span> <span class="op">-&gt;</span> <span class="var">myStack</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># [10, 20]</span></span>
-      <span class="line">&nbsp;</span>
-      <span class="line"><span class="comment"># 6. Recursive fibonacci</span></span>
-      <span class="line"><span class="keyword">task</span> <span class="fn">fib</span>(<span class="var">n</span>) {</span>
-      <span class="line i1"><span class="keyword">check</span> <span class="var">n</span> <span class="op">&lt;=</span> <span class="number">1</span> { <span class="keyword">give</span> <span class="var">n</span> }</span>
-      <span class="line i1"><span class="keyword">give</span> <span class="fn">fib</span>(<span class="var">n</span> <span class="op">-</span> <span class="number">1</span>) <span class="op">+</span> <span class="fn">fib</span>(<span class="var">n</span> <span class="op">-</span> <span class="number">2</span>)</span>
-      <span class="line">}</span>
-      <span class="line"><span class="keyword">say</span> <span class="op">-&gt;</span> <span class="fn">fib</span>(<span class="number">10</span>)&nbsp;&nbsp;<span class="comment"># 55</span></span>
     </div>
   </div>
 </div>
@@ -369,16 +409,21 @@ tr:last-child td{border-bottom:none}
     <table>
       <thead><tr><th>Keyword</th><th>Purpose</th><th>Quick Example</th></tr></thead>
       <tbody>
-        <tr><td><code>say -&gt;</code></td><td>Print / output a value</td><td><code>say -&gt; "Hello"</code></td></tr>
+        <tr><td><code>say -&gt;</code> / <code>say</code></td><td>Print / output a value (arrow optional)</td><td><code>say "Hello"</code></td></tr>
+        <tr><td><code>show</code> <span class="tag tag-green">NEW</span></td><td>Print without arrow — friendlier alias for <code>say</code></td><td><code>show "Hello"</code></td></tr>
         <tr><td><code>make</code></td><td>Declare variable or data structure</td><td><code>make x = 10</code></td></tr>
         <tr><td><code>ask</code></td><td>Read user input</td><td><code>ask name -&gt; "Your name: "</code></td></tr>
         <tr><td><code>check</code></td><td>If condition</td><td><code>check x &gt; 0 { }</code></td></tr>
-        <tr><td><code>otherwise</code> / <code>else</code></td><td>Else / else-if branch</td><td><code>} otherwise { }</code></td></tr>
+        <tr><td><code>also check</code> <span class="tag tag-green">NEW</span></td><td>Else-if branch (chained after <code>check</code>)</td><td><code>} also check x &gt; 5 { }</code></td></tr>
+        <tr><td><code>otherwise</code> / <code>else</code></td><td>Else branch</td><td><code>} otherwise { }</code></td></tr>
         <tr><td><code>loop N times</code></td><td>Repeat exactly N times</td><td><code>loop 5 times { }</code></td></tr>
+        <tr><td><code>repeat N times</code> <span class="tag tag-green">NEW</span></td><td>Same as <code>loop N times</code> — alternate phrasing</td><td><code>repeat 5 times { }</code></td></tr>
         <tr><td><code>repeat while</code></td><td>While loop</td><td><code>repeat while x &lt; 10 { }</code></td></tr>
         <tr><td><code>for each … in</code></td><td>Iterate over array</td><td><code>for each item in arr { }</code></td></tr>
         <tr><td><code>task</code></td><td>Define a function</td><td><code>task add(a, b) { }</code></td></tr>
         <tr><td><code>give</code></td><td>Return a value from function</td><td><code>give result</code></td></tr>
+        <tr><td><code>+=</code> / <code>-=</code> / <code>*=</code> / <code>/=</code> <span class="tag tag-green">NEW</span></td><td>Compound assignment operators</td><td><code>score += 10</code></td></tr>
+        <tr><td><code>"Hello {name}"</code> <span class="tag tag-green">NEW</span></td><td>String interpolation — embed variable in string</td><td><code>show "Hi {name}!"</code></td></tr>
         <tr><td><code>push … into</code></td><td>Add to stack or array (end)</td><td><code>push 5 into stack</code></td></tr>
         <tr><td><code>pop from</code></td><td>Remove from top of stack</td><td><code>pop from stack</code></td></tr>
         <tr><td><code>insert … into</code></td><td>Add to queue or BST</td><td><code>insert 5 into queue</code></td></tr>
@@ -390,15 +435,15 @@ tr:last-child td{border-bottom:none}
         <tr><td><code>binary search … in</code></td><td>Find index in sorted array</td><td><code>binary search 15 in arr</code></td></tr>
         <tr><td><code>and</code> / <code>or</code> / <code>not</code></td><td>Logical operators</td><td><code>x &gt; 0 and x &lt; 10</code></td></tr>
         <tr><td><code>true</code> / <code>false</code></td><td>Boolean values</td><td><code>make flag = true</code></td></tr>
-        <tr><td><code>null</code></td><td>Represents no value</td><td><code>make val = null</code></td></tr>
+        <tr><td><code>null</code> / <code>nothing</code> <span class="tag tag-green">NEW</span></td><td>Represents no value (<code>nothing</code> reads more naturally)</td><td><code>make val = nothing</code></td></tr>
         <tr><td><code>#</code></td><td>Comment (ignored by compiler)</td><td><code># this is a comment</code></td></tr>
       </tbody>
     </table>
-    <div class="tip"><strong>Remember:</strong> Keywords are case-insensitive (<code>SAY</code> = <code>say</code>). Variable names are case-sensitive (<code>Score</code> ≠ <code>score</code>). Strings use single or double quotes. Code blocks always use <code>{ }</code>.</div>
+    <div class="tip"><strong>Remember:</strong> Keywords are case-insensitive (<code>SAY</code> = <code>say</code> = <code>show</code>). Variable names are case-sensitive (<code>Score</code> ≠ <code>score</code>). Strings use single or double quotes. Use <code>{varName}</code> inside strings to interpolate. Code blocks always use <code>{ }</code>.</div>
   </div>
 </div>
 
-<div class="footer">SYLESS Language Reference &nbsp;·&nbsp; v1.0.0 &nbsp;·&nbsp; Code Like You Think</div>
+<div class="footer">SYLESS Language Reference &nbsp;·&nbsp; v1.1.0 &nbsp;·&nbsp; Code Like You Think</div>
 
 </div>
 </body>

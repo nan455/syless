@@ -6,13 +6,13 @@ export const SYLESS_LANGUAGE_ID = 'syless';
 
 export const SYLESS_TOKENS = {
   keywords: [
-    'say', 'make', 'ask', 'check', 'otherwise', 'loop', 'times',
+    'say', 'show', 'make', 'ask', 'check', 'otherwise', 'also', 'loop', 'times',
     'repeat', 'while', 'task', 'give', 'for', 'each', 'in',
     'push', 'into', 'pop', 'from', 'insert', 'remove', 'add',
     'sort', 'ascending', 'descending', 'binary', 'search',
-    'connect', 'to', 'and', 'or', 'not', 'true', 'false', 'null',
+    'connect', 'to', 'and', 'or', 'not', 'true', 'false', 'null', 'nothing',
   ],
-  operators: ['->', '=', '+', '-', '*', '/', '%', '**', '==', '!=', '<', '>', '<=', '>='],
+  operators: ['->', '=', '+', '-', '*', '/', '%', '**', '==', '!=', '<', '>', '<=', '>=', '+=', '-=', '*=', '/='],
 };
 
 export function registerSylessLanguage(monaco) {
@@ -34,8 +34,9 @@ export function registerSylessLanguage(monaco) {
 
         // Operators
         [/->/, 'operator'],
-        [/[=+\-*/%<>!]=?/, 'operator'],
+        [/[+\-*\/]=/, 'operator'],  // +=, -=, *=, /=
         [/\*\*/, 'operator'],
+        [/[=+\-*/%<>!]=?/, 'operator'],
 
         // Brackets
         [/[{}()\[\]]/, 'delimiter'],
@@ -128,6 +129,14 @@ export function registerSylessLanguage(monaco) {
           range,
         },
         {
+          label: 'show',
+          kind: monaco.languages.CompletionItemKind.Keyword,
+          insertText: 'show "${1:Hello World}"',
+          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          documentation: 'Print output (no arrow needed)',
+          range,
+        },
+        {
           label: 'make',
           kind: monaco.languages.CompletionItemKind.Keyword,
           insertText: 'make ${1:varName} = ${2:value}',
@@ -152,11 +161,27 @@ export function registerSylessLanguage(monaco) {
           range,
         },
         {
+          label: 'also check',
+          kind: monaco.languages.CompletionItemKind.Keyword,
+          insertText: 'also check ${1:condition} {\n    ${2:say -> "branch"}\n}',
+          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          documentation: 'Else-if branch (chained after check)',
+          range,
+        },
+        {
           label: 'loop',
           kind: monaco.languages.CompletionItemKind.Keyword,
           insertText: 'loop ${1:5} times {\n    ${2:say -> "Hello"}\n}',
           insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
           documentation: 'Repeat N times',
+          range,
+        },
+        {
+          label: 'repeat N times',
+          kind: monaco.languages.CompletionItemKind.Keyword,
+          insertText: 'repeat ${1:5} times {\n    ${2:say -> "Hello"}\n}',
+          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          documentation: 'Repeat N times (alternate syntax)',
           range,
         },
         {

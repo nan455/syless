@@ -1,10 +1,11 @@
 {
   "name": "syless-language",
   "displayName": "SYLESS Language",
-  "description": "Syntax highlighting and snippets for the SYLESS programming language",
-  "version": "0.2.0",
+  "description": "Syntax highlighting, snippets, and run support for the SYLESS programming language",
+  "version": "0.5.0",
   "publisher": "syless",
   "icon": "icon.png",
+  "main": "./extension.js",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -16,17 +17,16 @@
     "type": "git",
     "url": "https://github.com/syless/syless-vscode"
   },
+  "activationEvents": [
+    "onLanguage:syless"
+  ],
   "contributes": {
     "languages": [
       {
         "id": "syless",
         "aliases": ["SYLESS", "syless", "Syless"],
         "extensions": [".sy"],
-        "configuration": "./language-configuration.json",
-        "icon": {
-          "light": "./icons/syless-file.svg",
-          "dark": "./icons/syless-file.svg"
-        }
+        "configuration": "./language-configuration.json"
       }
     ],
     "grammars": [
@@ -42,12 +42,36 @@
         "path": "./snippets/syless.json"
       }
     ],
-    "iconThemes": [
+    "commands": [
       {
-        "id": "syless-icons",
-        "label": "SYLESS File Icons",
-        "path": "./syless-icon-theme.json"
+        "command": "syless.runFile",
+        "title": "Run SYLESS File",
+        "icon": "$(play)",
+        "category": "SYLESS"
       }
-    ]
+    ],
+    "keybindings": [
+      {
+        "command": "syless.runFile",
+        "key": "f5",
+        "when": "editorLangId == syless"
+      }
+    ],
+    "menus": {
+      "editor/title/run": [
+        {
+          "command": "syless.runFile",
+          "when": "editorLangId == syless",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "syless.runFile",
+          "when": "editorLangId == syless",
+          "group": "navigation"
+        }
+      ]
+    }
   }
 }

@@ -38,6 +38,8 @@ const Node = {
   Literal: (value) => ({ type: 'Literal', value }),
   ArrayLiteral: (elements) => ({ type: 'ArrayLiteral', elements }),
   Assign: (name, value) => ({ type: 'Assign', name, value }),
+  TemplateLiteral: (raw) => ({ type: 'TemplateLiteral', raw }),
+  CompoundAssign: (name, op, value) => ({ type: 'CompoundAssign', name, op, value }),
   // DSA
   DSAMake: (name, dataType) => ({ type: 'DSAMake', name, dataType }),
   DSAPush: (value, target) => ({ type: 'DSAPush', value, target }),
@@ -151,14 +153,10 @@ class Parser {
     }
   }
 
-  // say -> <expr>
+  // say -> <expr>  OR  say <expr>  OR  show <expr>
   parseSay() {
     this.expect(TokenType.SAY, "'say'");
-    if (!this.check(TokenType.ARROW)) {
-      const next = this.peek();
-      this.error(`Missing '->' after 'say'. Write it like this:\n  say -> "your message"\n  say -> myVariable`, next);
-    }
-    this.advance();
+    if (this.check(TokenType.ARROW)) this.advance(); // -> is optional
     const value = this.parseExpression();
     return Node.Print(value);
   }
@@ -196,7 +194,7 @@ class Parser {
     return Node.Input(name, prompt);
   }
 
-  // check <condition> { ... }
+  // check <condition> { ... } [also check ...] [otherwise { ... }]
   parseCheck() {
     this.expect(TokenType.CHECK, "'check'");
     const condition = this.parseCondition();
@@ -205,7 +203,11 @@ class Parser {
     }
     const body = this.parseBlock();
     let elseBody = null;
-    if (this.check(TokenType.OTHERWISE) || this.check(TokenType.ELSE)) {
+    if (this.check(TokenType.ALSO) && this.peek(1).type === TokenType.CHECK) {
+      // "also check" = else-if chain
+      this.advance(); // consume ALSO
+      elseBody = [this.parseCheck()]; // recursive: returns IfStmt node
+    } else if (this.check(TokenType.OTHERWISE) || this.check(TokenType.ELSE)) {
       this.advance();
       elseBody = this.parseBlock();
     }
@@ -230,16 +232,23 @@ class Parser {
     return Node.ForLoop(count, body);
   }
 
-  // repeat while <condition> { ... }
+  // repeat while <condition> { ... }  OR  repeat N times { ... }
   parseRepeat() {
     this.expect(TokenType.REPEAT, "'repeat'");
-    if (!this.check(TokenType.WHILE)) {
-      this.error(`Missing 'while' after 'repeat'. Write it like this:\n  repeat while x < 10 {\n    x = x + 1\n  }`, this.peek());
+    if (this.check(TokenType.WHILE)) {
+      this.advance();
+      const condition = this.parseCondition();
+      const body = this.parseBlock();
+      return Node.WhileLoop(condition, body);
+    }
+    // repeat N times { } — alias for loop N times
+    const count = this.parseExpression();
+    if (!this.check(TokenType.TIMES)) {
+      this.error(`Missing 'times' after count. Write it as:\n  repeat 3 times { }\nOr for a while loop:\n  repeat while x < 10 { }`, this.peek());
     }
     this.advance();
-    const condition = this.parseCondition();
     const body = this.parseBlock();
-    return Node.WhileLoop(condition, body);
+    return Node.ForLoop(count, body);
   }
 
   // task <name>(<params>) { ... }
@@ -389,7 +398,7 @@ class Parser {
     return Node.MLEvaluate(modelName, data, labels);
   }
 
-  // Identifier statement: either assignment or function call
+  // Identifier statement: assignment, compound assignment, or function call
   parseIdentifierStatement() {
     const name = this.advance().value;
 
@@ -397,6 +406,20 @@ class Parser {
       this.advance();
       const value = this.parseExpression();
       return Node.Assign(name, value);
+    }
+
+    const compoundOps = {
+      [TokenType.PLUS_ASSIGN]: '+',
+      [TokenType.MINUS_ASSIGN]: '-',
+      [TokenType.MULT_ASSIGN]: '*',
+      [TokenType.DIV_ASSIGN]: '/',
+    };
+    if (compoundOps[this.peek().type]) {
+      const opTok = this.advance();
+      const op = compoundOps[opTok.type];
+      const value = this.parseExpression();
+      // Desugar: score += 5  →  Assign('score', BinaryOp('+', Identifier('score'), 5))
+      return Node.Assign(name, Node.BinaryOp(op, Node.Identifier(name), value));
     }
 
     if (this.check(TokenType.LPAREN)) {
@@ -508,7 +531,7 @@ class Parser {
 
     if (tok.type === TokenType.STRING) {
       this.advance();
-      return Node.Literal(tok.value);
+      return tok.isTemplate ? Node.TemplateLiteral(tok.value) : Node.Literal(tok.value);
     }
 
     if (tok.type === TokenType.TRUE) {
