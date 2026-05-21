@@ -40,6 +40,8 @@ const Node = {
   Assign: (name, value) => ({ type: 'Assign', name, value }),
   TemplateLiteral: (raw) => ({ type: 'TemplateLiteral', raw }),
   CompoundAssign: (name, op, value) => ({ type: 'CompoundAssign', name, op, value }),
+  RangeLoop: (counter, start, end, body) => ({ type: 'RangeLoop', counter, start, end, body }),
+  BuiltinCall: (fn, arg) => ({ type: 'BuiltinCall', fn, arg }),
   // DSA
   DSAMake: (name, dataType) => ({ type: 'DSAMake', name, dataType }),
   DSAPush: (value, target) => ({ type: 'DSAPush', value, target }),
@@ -220,12 +222,22 @@ class Parser {
     return Node.OtherwiseStmt(body);
   }
 
-  // loop <n> times { ... }
+  // loop <n> times { ... }  OR  loop counter from X to Y { ... }
   parseLoop() {
     this.expect(TokenType.LOOP, "'loop'");
+    // Range loop: loop i from 1 to 10 { }
+    if (this.check(TokenType.IDENTIFIER) && this.peek(1).type === TokenType.FROM) {
+      const counter = this.advance().value;
+      this.advance(); // FROM
+      const start = this.parseExpression();
+      this.expect(TokenType.TO, "'to'");
+      const end = this.parseExpression();
+      const body = this.parseBlock();
+      return Node.RangeLoop(counter, start, end, body);
+    }
     const count = this.parseExpression();
     if (!this.check(TokenType.TIMES)) {
-      this.error(`Missing 'times' after the count. Write it like this:\n  loop 3 times {\n    say -> "hello"\n  }`, this.peek());
+      this.error(`Missing 'times' after the count. Write it like this:\n  loop 3 times {\n    say -> "hello"\n  }\nOr for a range:\n  loop i from 1 to 10 { }`, this.peek());
     }
     this.advance();
     const body = this.parseBlock();
@@ -265,7 +277,13 @@ class Parser {
   parseParams() {
     const params = [];
     while (!this.check(TokenType.RPAREN) && !this.isAtEnd()) {
-      params.push(this.expect(TokenType.IDENTIFIER, "a parameter name").value);
+      const name = this.expect(TokenType.IDENTIFIER, "a parameter name").value;
+      let defaultVal = null;
+      if (this.check(TokenType.ASSIGN)) {
+        this.advance();
+        defaultVal = this.parseExpression();
+      }
+      params.push({ name, defaultVal });
       if (!this.match(TokenType.COMMA)) break;
     }
     return params;
@@ -558,6 +576,21 @@ class Parser {
       const expr = this.parseExpression();
       this.expect(TokenType.RPAREN, "')'");
       return expr;
+    }
+
+    // Builtin calls: length of x, upper of x, lower of x, round of x, absolute of x
+    const BUILTINS = {
+      [TokenType.LENGTH]: 'len',
+      [TokenType.UPPER]: 'upper',
+      [TokenType.LOWER]: 'lower',
+      [TokenType.ROUND]: 'round',
+      [TokenType.ABSOLUTE]: 'abs',
+    };
+    if (BUILTINS[tok.type] !== undefined) {
+      const fn = BUILTINS[this.advance().type];
+      this.expect(TokenType.OF, `'of' after '${tok.value}' — e.g. length of myList`);
+      const arg = this.parseExpression();
+      return Node.BuiltinCall(fn, arg);
     }
 
     if (tok.type === TokenType.IDENTIFIER) {

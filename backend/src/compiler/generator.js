@@ -121,6 +121,7 @@ class Generator {
       case 'WhileLoop':       return this.genWhileLoop(node);
       case 'ForEach':         return this.genForEach(node);
       case 'FuncDef':         return this.genFuncDef(node);
+      case 'RangeLoop':       return this.genRangeLoop(node);
       case 'Return':          return this.genReturn(node);
       case 'FuncCall':        return this.emit(this.genExpr(node));
       case 'DSAMake':         return this.genDSAMake(node);
@@ -237,7 +238,22 @@ class Generator {
 
   // task name(params) { }  →  def name(params):
   genFuncDef(node) {
-    this.emit(`def ${node.name}(${node.params.join(', ')}):`);
+    const paramStr = node.params.map(p => {
+      if (typeof p === 'string') return p; // backwards compat
+      return p.defaultVal ? `${p.name}=${this.genExpr(p.defaultVal)}` : p.name;
+    }).join(', ');
+    this.emit(`def ${node.name}(${paramStr}):`);
+    this.indentLevel++;
+    if (node.body.length === 0) this.emit('pass');
+    for (const stmt of node.body) this.genStatement(stmt);
+    this.indentLevel--;
+  }
+
+  // loop i from 1 to 10 { }  →  for i in range(1, 11):
+  genRangeLoop(node) {
+    const start = this.genExpr(node.start);
+    const end = this.genExpr(node.end);
+    this.emit(`for ${node.counter} in range(${start}, ${end} + 1):`);
     this.indentLevel++;
     if (node.body.length === 0) this.emit('pass');
     for (const stmt of node.body) this.genStatement(stmt);
@@ -378,8 +394,18 @@ class Generator {
 
     switch (node.type) {
       case 'TemplateLiteral':
-        // "Hello {name}!" → f"Hello {name}!"
         return 'f' + JSON.stringify(node.raw);
+      case 'BuiltinCall': {
+        const a = this.genExpr(node.arg);
+        switch (node.fn) {
+          case 'len':   return `len(${a})`;
+          case 'upper': return `(${a}).upper()`;
+          case 'lower': return `(${a}).lower()`;
+          case 'round': return `round(${a})`;
+          case 'abs':   return `abs(${a})`;
+          default:      return `${node.fn}(${a})`;
+        }
+      }
       case 'Literal': {
         const val = node.value;
         if (val === null) return 'None';

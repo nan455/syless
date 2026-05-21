@@ -88,24 +88,28 @@ tr:last-child td{border-bottom:none}
     <span class="cover-pill">Compiles to Python</span>
     <span class="cover-pill">Built-in DSA Support</span>
     <span class="cover-pill">AI-Powered IDE</span>
-    <span class="cover-pill">v1.1.0</span>
+    <span class="cover-pill">v1.2.0</span>
   </div>
+  <div style="margin-top:18px;color:#64748b;font-size:11px">Developed by <strong style="color:#a78bfa">NANDACUMAAR</strong> &nbsp;·&nbsp; <em>"just make it"</em> startup</div>
 </div>
 
-<!-- NEW IN v1.1 -->
+<!-- NEW IN v1.1 + v1.2 -->
 <div class="section">
-  <div class="section-header"><span class="icon">🆕</span><h2>What's New in v1.1</h2><span class="num">6 improvements</span></div>
+  <div class="section-header"><span class="icon">🆕</span><h2>What's New</h2><span class="num">10 improvements</span></div>
   <div class="section-body">
     <table>
-      <thead><tr><th>Feature</th><th>Before</th><th>Now (also works)</th></tr></thead>
+      <thead><tr><th>Version</th><th>Feature</th><th>Example</th></tr></thead>
       <tbody>
-        <tr><td><span class="tag tag-green">New</span> String interpolation</td><td><code>say -> "Hi " + name</code></td><td><code>say -> "Hi {name}"</code></td></tr>
-        <tr><td><span class="tag tag-green">New</span> <code>show</code> keyword</td><td><code>say -> "Hello"</code></td><td><code>show "Hello"</code> (no arrow!)</td></tr>
-        <tr><td><span class="tag tag-green">New</span> Optional arrow in <code>say</code></td><td><code>say -> value</code> required</td><td><code>say value</code> also works</td></tr>
-        <tr><td><span class="tag tag-green">New</span> <code>also check</code> (else-if)</td><td>No else-if support</td><td><code>} also check score >= 80 {</code></td></tr>
-        <tr><td><span class="tag tag-green">New</span> Compound assignment</td><td><code>score = score + 10</code></td><td><code>score += 10</code></td></tr>
-        <tr><td><span class="tag tag-green">New</span> <code>repeat N times</code></td><td>Only <code>loop N times</code></td><td><code>repeat 5 times { }</code></td></tr>
-        <tr><td><span class="tag tag-green">New</span> <code>nothing</code> keyword</td><td><code>null</code></td><td><code>nothing</code> (reads more naturally)</td></tr>
+        <tr><td><span class="tag tag-cyan">v1.1</span></td><td>String interpolation</td><td><code>say -> "Hi {name}!"</code></td></tr>
+        <tr><td><span class="tag tag-cyan">v1.1</span></td><td><code>show</code> — print without arrow</td><td><code>show "Hello"</code></td></tr>
+        <tr><td><span class="tag tag-cyan">v1.1</span></td><td><code>also check</code> — else-if chain</td><td><code>} also check score >= 80 {</code></td></tr>
+        <tr><td><span class="tag tag-cyan">v1.1</span></td><td>Compound assignment <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code></td><td><code>score += 10</code></td></tr>
+        <tr><td><span class="tag tag-cyan">v1.1</span></td><td><code>repeat N times</code> — loop alias</td><td><code>repeat 5 times { }</code></td></tr>
+        <tr><td><span class="tag tag-cyan">v1.1</span></td><td><code>nothing</code> — readable null</td><td><code>make x = nothing</code></td></tr>
+        <tr><td><span class="tag tag-green">v1.2</span></td><td>Range loop with counter</td><td><code>loop i from 1 to 10 { show i }</code></td></tr>
+        <tr><td><span class="tag tag-green">v1.2</span></td><td>Built-in functions (<code>length</code> <code>upper</code> <code>lower</code> <code>round</code> <code>absolute</code>)</td><td><code>show length of name</code></td></tr>
+        <tr><td><span class="tag tag-green">v1.2</span></td><td>Default parameters in tasks</td><td><code>task greet(name, msg = "Hi") { }</code></td></tr>
+        <tr><td><span class="tag tag-green">v1.2</span></td><td>Auto-save in web IDE</td><td>Code saved automatically as you type</td></tr>
       </tbody>
     </table>
   </div>
@@ -243,8 +247,12 @@ tr:last-child td{border-bottom:none}
   <div class="section-header"><span class="icon">🔄</span><h2>7 — Loops</h2><span class="num">loop / repeat / for each</span></div>
   <div class="section-body">
     <div class="syntax-item">
-      <div><div class="syntax-label">Repeat N times</div><div class="syntax-desc">Run a block an exact number of times. Both <code>loop</code> and <code>repeat</code> work.</div></div>
-      <div class="code-block"><span class="keyword">loop</span> <span class="number">5</span> <span class="keyword">times</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"Hello!"</span><br>}<br><br><span class="comment"># repeat is an alias — pick whichever reads better</span><br><span class="keyword">repeat</span> <span class="number">5</span> <span class="keyword">times</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"Hello!"</span><br>}</div>
+      <div><div class="syntax-label">Repeat N times</div><div class="syntax-desc">Run a block an exact number of times. Both <code>loop</code> and <code>repeat</code> work — pick whichever reads better.</div></div>
+      <div class="code-block"><span class="keyword">loop</span> <span class="number">5</span> <span class="keyword">times</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"Hello!"</span><br>}<br><br><span class="keyword">repeat</span> <span class="number">5</span> <span class="keyword">times</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"Hello!"</span><br>}</div>
+    </div>
+    <div class="syntax-item">
+      <div><div class="syntax-label">Range loop <span class="tag tag-green">NEW</span></div><div class="syntax-desc">Loop from a start number to an end number (inclusive), with a named counter variable you can use inside the block.</div></div>
+      <div class="code-block"><span class="comment"># loop i from 1 to 5 → runs with i = 1, 2, 3, 4, 5</span><br><span class="keyword">loop</span> <span class="var">i</span> <span class="keyword">from</span> <span class="number">1</span> <span class="keyword">to</span> <span class="number">5</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"Step {i}"</span><br>}<br><br><span class="comment"># countdown: loop from 10 to 1</span><br><span class="keyword">loop</span> <span class="var">n</span> <span class="keyword">from</span> <span class="number">1</span> <span class="keyword">to</span> <span class="number">10</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"Number: {n}, Squared: {n * n}"</span><br>}</div>
     </div>
     <div class="syntax-item">
       <div><div class="syntax-label">While loop</div><div class="syntax-desc">Keep running while a condition stays true. Now you can use compound assignment to update the counter cleanly.</div></div>
@@ -275,7 +283,11 @@ tr:last-child td{border-bottom:none}
     </div>
     <div class="syntax-item">
       <div><div class="syntax-label">Multiple parameters</div><div class="syntax-desc">Functions can take multiple inputs, separated by commas.</div></div>
-      <div class="code-block"><span class="keyword">task</span> <span class="fn">power</span>(<span class="var">base</span>, <span class="var">exp</span>) {<br>&nbsp;&nbsp;<span class="keyword">give</span> <span class="var">base</span> <span class="op">**</span> <span class="var">exp</span><br>}<br><span class="keyword">say</span> <span class="op">-&gt;</span> <span class="fn">power</span>(<span class="number">2</span>, <span class="number">10</span>)&nbsp;&nbsp;<span class="comment"># 1024</span></div>
+      <div class="code-block"><span class="keyword">task</span> <span class="fn">power</span>(<span class="var">base</span>, <span class="var">exp</span>) {<br>&nbsp;&nbsp;<span class="keyword">give</span> <span class="var">base</span> <span class="op">**</span> <span class="var">exp</span><br>}<br><span class="keyword">show</span> <span class="fn">power</span>(<span class="number">2</span>, <span class="number">10</span>)&nbsp;&nbsp;<span class="comment"># 1024</span></div>
+    </div>
+    <div class="syntax-item">
+      <div><div class="syntax-label">Default parameters <span class="tag tag-green">NEW</span></div><div class="syntax-desc">Give a parameter a fallback value. If the caller doesn't pass it, the default is used. Perfect for optional settings.</div></div>
+      <div class="code-block"><span class="keyword">task</span> <span class="fn">greet</span>(<span class="var">name</span>, <span class="var">msg</span> <span class="op">=</span> <span class="string">"Hello"</span>) {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"{msg}, {name}!"</span><br>}<br><br><span class="fn">greet</span>(<span class="string">"Alice"</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># Hello, Alice!</span><br><span class="fn">greet</span>(<span class="string">"Bob"</span>, <span class="string">"Welcome"</span>)&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># Welcome, Bob!</span></div>
     </div>
   </div>
 </div>
@@ -299,9 +311,34 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
-<!-- 10. DATA STRUCTURES -->
+<!-- 10. BUILT-IN FUNCTIONS -->
 <div class="section">
-  <div class="section-header"><span class="icon">🏗️</span><h2>10 — Data Structures</h2><span class="num">Stack · Queue · Linked List · Tree · Graph</span></div>
+  <div class="section-header"><span class="icon">🔧</span><h2>10 — Built-in Functions</h2><span class="num">length · upper · lower · round · absolute</span></div>
+  <div class="section-body">
+    <div class="syntax-item">
+      <div><div class="syntax-label">Syntax</div><div class="syntax-desc">Write <code>function of expression</code>. The result can be used anywhere — inside <code>show</code>, <code>make</code>, a condition, or a string template.</div></div>
+      <div class="code-block"><span class="keyword">make</span> <span class="var">word</span> <span class="op">=</span> <span class="string">"hello"</span><br><span class="keyword">show</span> <span class="keyword">length</span> <span class="keyword">of</span> <span class="var">word</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># 5</span><br><span class="keyword">show</span> <span class="keyword">upper</span> <span class="keyword">of</span> <span class="var">word</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># HELLO</span><br><span class="keyword">show</span> <span class="keyword">lower</span> <span class="keyword">of</span> <span class="string">"WORLD"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># world</span><br><span class="keyword">show</span> <span class="keyword">round</span> <span class="keyword">of</span> <span class="number">3.7</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># 4</span><br><span class="keyword">show</span> <span class="keyword">absolute</span> <span class="keyword">of</span> <span class="op">-</span><span class="number">42</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># 42</span></div>
+    </div>
+    <table style="margin-top:10px">
+      <thead><tr><th>SYLESS</th><th>Python</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>length of x</code></td><td><code>len(x)</code></td><td>Number of characters or array items</td></tr>
+        <tr><td><code>upper of x</code></td><td><code>x.upper()</code></td><td>Convert string to UPPERCASE</td></tr>
+        <tr><td><code>lower of x</code></td><td><code>x.lower()</code></td><td>Convert string to lowercase</td></tr>
+        <tr><td><code>round of x</code></td><td><code>round(x)</code></td><td>Round number to nearest integer</td></tr>
+        <tr><td><code>absolute of x</code></td><td><code>abs(x)</code></td><td>Absolute value — removes the negative sign</td></tr>
+      </tbody>
+    </table>
+    <div class="syntax-item" style="margin-top:10px">
+      <div><div class="syntax-label">Used inside strings & conditions</div><div class="syntax-desc">Builtins work anywhere an expression is valid.</div></div>
+      <div class="code-block"><span class="keyword">make</span> <span class="var">name</span> <span class="op">=</span> <span class="string">"alice"</span><br><span class="keyword">show</span> <span class="string">"Hello, {upper of name}!"</span>&nbsp;&nbsp;&nbsp;<span class="comment"># Hello, ALICE!</span><br><br><span class="keyword">make</span> <span class="var">arr</span> <span class="op">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]<br><span class="keyword">check</span> <span class="keyword">length</span> <span class="keyword">of</span> <span class="var">arr</span> <span class="op">></span> <span class="number">3</span> {<br>&nbsp;&nbsp;<span class="keyword">show</span> <span class="string">"Array has {length of arr} items"</span><br>}</div>
+    </div>
+  </div>
+</div>
+
+<!-- 11. DATA STRUCTURES -->
+<div class="section">
+  <div class="section-header"><span class="icon">🏗️</span><h2>11 — Data Structures</h2><span class="num">Stack · Queue · Linked List · Tree · Graph</span></div>
   <div class="section-body">
     <table style="margin-bottom:14px">
       <thead><tr><th>Structure</th><th>How to Create</th><th>Add Item</th><th>Remove Item</th></tr></thead>
@@ -331,7 +368,7 @@ tr:last-child td{border-bottom:none}
 
 <!-- 11. SORTING & SEARCHING -->
 <div class="section">
-  <div class="section-header"><span class="icon">🔍</span><h2>11 — Sorting &amp; Searching</h2><span class="num">sort / binary search</span></div>
+  <div class="section-header"><span class="icon">🔍</span><h2>12 — Sorting &amp; Searching</h2><span class="num">sort / binary search</span></div>
   <div class="section-body">
     <div class="syntax-item">
       <div><div class="syntax-label">Sort ascending</div><div class="syntax-desc">Sorts an array in place, smallest to largest.</div></div>
@@ -350,7 +387,7 @@ tr:last-child td{border-bottom:none}
 
 <!-- 12. COMPLETE EXAMPLE -->
 <div class="section">
-  <div class="section-header"><span class="icon">🚀</span><h2>12 — Complete Example Program</h2><span class="num">uses all new features</span></div>
+  <div class="section-header"><span class="icon">🚀</span><h2>13 — Complete Example Program</h2><span class="num">uses all new features</span></div>
   <div class="section-body">
     <div class="example-block">
       <span class="line"><span class="comment"># ── SYLESS v1.1 Demo ──────────────────────────────────</span></span>
@@ -404,7 +441,7 @@ tr:last-child td{border-bottom:none}
 
 <!-- 13. KEYWORDS TABLE -->
 <div class="section">
-  <div class="section-header"><span class="icon">📋</span><h2>13 — All Keywords at a Glance</h2></div>
+  <div class="section-header"><span class="icon">📋</span><h2>14 — All Keywords at a Glance</h2></div>
   <div class="section-body">
     <table>
       <thead><tr><th>Keyword</th><th>Purpose</th><th>Quick Example</th></tr></thead>
@@ -417,7 +454,8 @@ tr:last-child td{border-bottom:none}
         <tr><td><code>also check</code> <span class="tag tag-green">NEW</span></td><td>Else-if branch (chained after <code>check</code>)</td><td><code>} also check x &gt; 5 { }</code></td></tr>
         <tr><td><code>otherwise</code> / <code>else</code></td><td>Else branch</td><td><code>} otherwise { }</code></td></tr>
         <tr><td><code>loop N times</code></td><td>Repeat exactly N times</td><td><code>loop 5 times { }</code></td></tr>
-        <tr><td><code>repeat N times</code> <span class="tag tag-green">NEW</span></td><td>Same as <code>loop N times</code> — alternate phrasing</td><td><code>repeat 5 times { }</code></td></tr>
+        <tr><td><code>repeat N times</code></td><td>Same as <code>loop N times</code></td><td><code>repeat 5 times { }</code></td></tr>
+        <tr><td><code>loop i from X to Y</code> <span class="tag tag-green">NEW</span></td><td>Range loop — counter goes from X to Y inclusive</td><td><code>loop i from 1 to 10 { show i }</code></td></tr>
         <tr><td><code>repeat while</code></td><td>While loop</td><td><code>repeat while x &lt; 10 { }</code></td></tr>
         <tr><td><code>for each … in</code></td><td>Iterate over array</td><td><code>for each item in arr { }</code></td></tr>
         <tr><td><code>task</code></td><td>Define a function</td><td><code>task add(a, b) { }</code></td></tr>
@@ -435,7 +473,13 @@ tr:last-child td{border-bottom:none}
         <tr><td><code>binary search … in</code></td><td>Find index in sorted array</td><td><code>binary search 15 in arr</code></td></tr>
         <tr><td><code>and</code> / <code>or</code> / <code>not</code></td><td>Logical operators</td><td><code>x &gt; 0 and x &lt; 10</code></td></tr>
         <tr><td><code>true</code> / <code>false</code></td><td>Boolean values</td><td><code>make flag = true</code></td></tr>
-        <tr><td><code>null</code> / <code>nothing</code> <span class="tag tag-green">NEW</span></td><td>Represents no value (<code>nothing</code> reads more naturally)</td><td><code>make val = nothing</code></td></tr>
+        <tr><td><code>task name(p, opt = val)</code> <span class="tag tag-green">NEW</span></td><td>Function with default parameter value</td><td><code>task greet(name, msg = "Hi") { }</code></td></tr>
+        <tr><td><code>length of x</code> <span class="tag tag-green">NEW</span></td><td>Length of string or array</td><td><code>show length of name</code></td></tr>
+        <tr><td><code>upper of x</code> <span class="tag tag-green">NEW</span></td><td>Uppercase string</td><td><code>show upper of name</code></td></tr>
+        <tr><td><code>lower of x</code> <span class="tag tag-green">NEW</span></td><td>Lowercase string</td><td><code>show lower of name</code></td></tr>
+        <tr><td><code>round of x</code> <span class="tag tag-green">NEW</span></td><td>Round a number to nearest integer</td><td><code>show round of 3.7</code></td></tr>
+        <tr><td><code>absolute of x</code> <span class="tag tag-green">NEW</span></td><td>Absolute value</td><td><code>show absolute of -5</code></td></tr>
+        <tr><td><code>null</code> / <code>nothing</code></td><td>Represents no value</td><td><code>make val = nothing</code></td></tr>
         <tr><td><code>#</code></td><td>Comment (ignored by compiler)</td><td><code># this is a comment</code></td></tr>
       </tbody>
     </table>
@@ -443,7 +487,7 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
-<div class="footer">SYLESS Language Reference &nbsp;·&nbsp; v1.1.0 &nbsp;·&nbsp; Code Like You Think</div>
+<div class="footer">SYLESS Language Reference &nbsp;·&nbsp; v1.2.0 &nbsp;·&nbsp; Code Like You Think<br><span style="font-size:10px;opacity:.6">Developed by <strong>NANDACUMAAR</strong> &nbsp;·&nbsp; "just make it" startup</span></div>
 
 </div>
 </body>

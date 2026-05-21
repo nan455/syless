@@ -17,59 +17,69 @@ import Sidebar from '@components/Sidebar/Sidebar';
 const SAMPLE_PROGRAMS = [
   {
     label: 'Hello World',
-    code: 'say -> "Hello, World!"',
+    code: `show "Hello, World!"
+
+make name = "SYLESS"
+show "Welcome to {name}!"`,
   },
   {
     label: 'Variables',
     code: `make name = "SYLESS"
 make age = 20
-make pi = 3.14
-say -> name
-say -> age
-say -> pi`,
+make score = 0
+
+# compound assignment
+score += 50
+score += 25
+show "Name: {name}, Age: {age}, Score: {score}"`,
   },
   {
     label: 'If / Else',
-    code: `make score = 85
+    code: `make score = 75
 
 check score >= 90 {
-    say -> "Grade: A"
-}
-otherwise {
-    check score >= 75 {
-        say -> "Grade: B"
-    }
-    otherwise {
-        say -> "Grade: C or below"
-    }
+    show "Grade: A"
+} also check score >= 80 {
+    show "Grade: B"
+} also check score >= 70 {
+    show "Grade: C"
+} otherwise {
+    show "Grade: F"
 }`,
   },
   {
     label: 'Loop',
-    code: `loop 5 times {
-    say -> "SYLESS is awesome!"
+    code: `# repeat N times
+repeat 5 times {
+    show "SYLESS is awesome!"
 }
 
+# range loop with counter
+loop i from 1 to 5 {
+    show "Count: {i}"
+}
+
+# while loop with compound assignment
 make total = 0
 make i = 1
 repeat while i <= 10 {
-    total = total + i
-    i = i + 1
+    total += i
+    i += 1
 }
-say -> total`,
+show "Sum 1 to 10 = {total}"`,
   },
   {
     label: 'For Each',
     code: `make fruits = ["apple", "mango", "banana", "cherry"]
 
 for each fruit in fruits {
-    say -> fruit
+    show "Fruit: {fruit} (length: {length of fruit})"
 }`,
   },
   {
     label: 'Function',
-    code: `task greet(name) {
-    say -> "Hello, " + name + "!"
+    code: `task greet(name, msg = "Hello") {
+    show "{msg}, {name}!"
 }
 
 task add(a, b) {
@@ -77,8 +87,8 @@ task add(a, b) {
 }
 
 greet("World")
-greet("SYLESS")
-say -> add(10, 20)`,
+greet("SYLESS", "Welcome to")
+show add(10, 20)`,
   },
   {
     label: 'Stack DSA',
@@ -182,6 +192,25 @@ export default function IDE() {
   const [compileError, setCompileError] = useState('');
   const [compiling, setCompiling] = useState(false);
   const debounceRef = useRef(null);
+  const autoSaveRef = useRef(null);
+  const didRestoreRef = useRef(false);
+
+  // Restore auto-saved code on first mount
+  useEffect(() => {
+    if (didRestoreRef.current) return;
+    didRestoreRef.current = true;
+    const saved = localStorage.getItem('syless_autosave');
+    if (saved) setEditorCode(saved);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Auto-save code to localStorage (debounced 1.5 s)
+  useEffect(() => {
+    clearTimeout(autoSaveRef.current);
+    autoSaveRef.current = setTimeout(() => {
+      localStorage.setItem('syless_autosave', editorCode);
+    }, 1500);
+    return () => clearTimeout(autoSaveRef.current);
+  }, [editorCode]);
 
   // Close examples dropdown on outside click
   useEffect(() => {
@@ -567,9 +596,10 @@ export default function IDE() {
 
         {/* Status bar */}
         <div className="flex items-center gap-4 px-4 py-1.5 border-t border-white/5 bg-dark-400/50 shrink-0">
-          <span className="text-[10px] text-gray-600">SYLESS v1.0</span>
+          <span className="text-[10px] text-gray-600">SYLESS v1.1</span>
           <span className="text-[10px] text-syless-500/70">Language: SYLESS</span>
           <span className="text-[10px] text-gray-600">UTF-8</span>
+          <span className="text-[10px] text-green-600/70">● auto-save on</span>
           <div className="flex-1" />
           {pythonPreview && <span className="text-[10px] text-yellow-500/70">Python preview ON</span>}
           <span className="text-[10px] text-gray-600">Ctrl+Enter to Run</span>

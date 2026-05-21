@@ -47,6 +47,13 @@ const TokenType = {
   ON: 'ON', WITH: 'WITH', AS: 'AS',
   // New keywords
   ALSO: 'ALSO',
+  // Builtin function keywords
+  LENGTH: 'LENGTH',
+  UPPER: 'UPPER',
+  LOWER: 'LOWER',
+  ROUND: 'ROUND',
+  ABSOLUTE: 'ABSOLUTE',
+  OF: 'OF',
 
   // Operators
   ARROW: 'ARROW',           // ->
@@ -131,9 +138,16 @@ const KEYWORDS = {
   train: TokenType.TRAIN, predict: TokenType.PREDICT, evaluate: TokenType.EVALUATE,
   load: TokenType.LOAD, on: TokenType.ON, with: TokenType.WITH, as: TokenType.AS,
   // Aliases & new keywords
-  nothing: TokenType.NULL,   // "nothing" = null
-  show: TokenType.SAY,       // "show expr" = "say -> expr" (no arrow needed)
-  also: TokenType.ALSO,      // "also check" = else-if
+  nothing: TokenType.NULL,
+  show: TokenType.SAY,
+  also: TokenType.ALSO,
+  // Builtin functions (used as "length of x", "upper of x", etc.)
+  length: TokenType.LENGTH,
+  upper: TokenType.UPPER,
+  lower: TokenType.LOWER,
+  round: TokenType.ROUND,
+  absolute: TokenType.ABSOLUTE,
+  of: TokenType.OF,
 };
 
 class Token {

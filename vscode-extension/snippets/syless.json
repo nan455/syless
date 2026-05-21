@@ -61,6 +61,15 @@
     ],
     "description": "Repeat a block N times"
   },
+  "Loop Range (from/to)": {
+    "prefix": "loopfrom",
+    "body": [
+      "loop ${1:i} from ${2:1} to ${3:10} {",
+      "\tshow ${1:i}",
+      "}"
+    ],
+    "description": "Loop with a counter from X to Y"
+  },
   "Repeat N Times": {
     "prefix": "repeat",
     "body": [
@@ -91,12 +100,36 @@
   "Task (Function)": {
     "prefix": "task",
     "body": [
-      "task ${1:name}(${2:params}) {",
+      "task ${1:name}(${2:param}) {",
       "\t$3",
       "\tgive $4",
       "}"
     ],
     "description": "Define a function"
+  },
+  "Task with Default Param": {
+    "prefix": "taskdefault",
+    "body": [
+      "task ${1:name}(${2:param}, ${3:optional} = ${4:\"default\"}) {",
+      "\t$5",
+      "}"
+    ],
+    "description": "Function with a default parameter value"
+  },
+  "Length of": {
+    "prefix": "length",
+    "body": ["length of ${1:myList}"],
+    "description": "Get the length of a string or array"
+  },
+  "Upper of": {
+    "prefix": "upper",
+    "body": ["upper of ${1:myString}"],
+    "description": "Convert string to uppercase"
+  },
+  "Lower of": {
+    "prefix": "lower",
+    "body": ["lower of ${1:myString}"],
+    "description": "Convert string to lowercase"
   },
   "Return": {
     "prefix": "give",
