@@ -1,0 +1,53 @@
+{
+  "name": "syless-language",
+  "displayName": "SYLESS Language",
+  "description": "Syntax highlighting and snippets for the SYLESS programming language",
+  "version": "0.2.0",
+  "publisher": "syless",
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": ["syless", "language", "syntax", "highlighting"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/syless/syless-vscode"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "syless",
+        "aliases": ["SYLESS", "syless", "Syless"],
+        "extensions": [".sy"],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icons/syless-file.svg",
+          "dark": "./icons/syless-file.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "syless",
+        "scopeName": "source.syless",
+        "path": "./syntaxes/syless.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "syless",
+        "path": "./snippets/syless.json"
+      }
+    ],
+    "iconThemes": [
+      {
+        "id": "syless-icons",
+        "label": "SYLESS File Icons",
+        "path": "./syless-icon-theme.json"
+      }
+    ]
+  }
+}

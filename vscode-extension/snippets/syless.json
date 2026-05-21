@@ -1,0 +1,139 @@
+{
+  "Print": {
+    "prefix": "say",
+    "body": ["say -> $1"],
+    "description": "Print a value to output"
+  },
+  "Variable": {
+    "prefix": "make",
+    "body": ["make ${1:name} = $2"],
+    "description": "Declare a variable"
+  },
+  "Input": {
+    "prefix": "ask",
+    "body": ["ask ${1:name} -> \"${2:Enter value: }\""],
+    "description": "Ask user for input"
+  },
+  "If Check": {
+    "prefix": "check",
+    "body": [
+      "check ${1:condition} {",
+      "\t$2",
+      "}"
+    ],
+    "description": "If statement"
+  },
+  "If-Else": {
+    "prefix": "checkelse",
+    "body": [
+      "check ${1:condition} {",
+      "\t$2",
+      "} otherwise {",
+      "\t$3",
+      "}"
+    ],
+    "description": "If-else statement"
+  },
+  "Loop N Times": {
+    "prefix": "loop",
+    "body": [
+      "loop ${1:3} times {",
+      "\t$2",
+      "}"
+    ],
+    "description": "Repeat a block N times"
+  },
+  "Repeat While": {
+    "prefix": "repeat",
+    "body": [
+      "repeat while ${1:condition} {",
+      "\t$2",
+      "}"
+    ],
+    "description": "While loop"
+  },
+  "For Each": {
+    "prefix": "foreach",
+    "body": [
+      "for each ${1:item} in ${2:list} {",
+      "\t$3",
+      "}"
+    ],
+    "description": "For-each loop"
+  },
+  "Task (Function)": {
+    "prefix": "task",
+    "body": [
+      "task ${1:name}(${2:params}) {",
+      "\t$3",
+      "\tgive $4",
+      "}"
+    ],
+    "description": "Define a function"
+  },
+  "Return": {
+    "prefix": "give",
+    "body": ["give $1"],
+    "description": "Return a value from a task"
+  },
+  "Make Stack": {
+    "prefix": "makestack",
+    "body": ["make ${1:myStack}"],
+    "description": "Create a stack"
+  },
+  "Push to Stack": {
+    "prefix": "push",
+    "body": ["push ${1:value} into ${2:stack}"],
+    "description": "Push value onto a stack"
+  },
+  "Pop from Stack": {
+    "prefix": "pop",
+    "body": ["pop from ${1:stack}"],
+    "description": "Pop value from a stack"
+  },
+  "Insert into Queue": {
+    "prefix": "insert",
+    "body": ["insert ${1:value} into ${2:queue}"],
+    "description": "Insert value into a queue"
+  },
+  "Remove from Queue": {
+    "prefix": "remove",
+    "body": ["remove from ${1:queue}"],
+    "description": "Remove value from a queue"
+  },
+  "Sort Array": {
+    "prefix": "sort",
+    "body": ["sort ${1:array} ${2|ascending,descending|}"],
+    "description": "Sort an array"
+  },
+  "Binary Search": {
+    "prefix": "bsearch",
+    "body": ["binary search ${1:value} in ${2:array}"],
+    "description": "Binary search in an array"
+  },
+  "Graph Connect": {
+    "prefix": "connect",
+    "body": ["connect ${1:nodeA} to ${2:nodeB}"],
+    "description": "Connect two graph nodes"
+  },
+  "ML Load Dataset": {
+    "prefix": "load",
+    "body": ["load \"${1:iris}\" as ${2:data}"],
+    "description": "Load a dataset"
+  },
+  "ML Train": {
+    "prefix": "train",
+    "body": ["train \"${1:knn}\" on ${2:data} with ${3:labels} as ${4:model}"],
+    "description": "Train an ML model"
+  },
+  "ML Predict": {
+    "prefix": "predict",
+    "body": ["predict ${1:model} -> ${2:input}"],
+    "description": "Make a prediction"
+  },
+  "ML Evaluate": {
+    "prefix": "evaluate",
+    "body": ["evaluate ${1:model} on ${2:data} with ${3:labels}"],
+    "description": "Evaluate an ML model"
+  }
+}
