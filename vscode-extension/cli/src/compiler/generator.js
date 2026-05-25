@@ -56,6 +56,9 @@ def _syless_binary_search(arr, target):
     return -1
 `;
 
+// Matches {varName} interpolation patterns in strings
+const INTERP_RE = /\{[a-zA-Z_][a-zA-Z0-9_]*\}/;
+
 class Generator {
   constructor() {
     this.indentLevel = 0;
@@ -67,9 +70,9 @@ class Generator {
     this.mlImports = new Set();
   }
 
-  indent()       { return '    '.repeat(this.indentLevel); }
-  emit(line)     { this.output.push(this.indent() + line); }
-  emitRaw(line)  { this.output.push(line); }
+  indent()      { return '    '.repeat(this.indentLevel); }
+  emit(line)    { this.output.push(this.indent() + line); }
+  emitRaw(line) { this.output.push(line); }
 
   generate(ast) {
     if (ast.type !== 'Program') throw new GeneratorError('Expected a Program node');
@@ -87,32 +90,33 @@ class Generator {
   genStatement(node) {
     if (!node) return;
     switch (node.type) {
-      case 'Print':         return this.genPrint(node);
-      case 'VarDecl':       return this.emit(`${node.name} = ${this.genExpr(node.value)}`);
-      case 'Assign':        return this.emit(`${node.name} = ${this.genExpr(node.value)}`);
-      case 'Input':         return this.genInput(node);
-      case 'IfStmt':        return this.genIf(node);
-      case 'OtherwiseStmt': return this.genOtherwise(node);
-      case 'ForLoop':       return this.genForLoop(node);
-      case 'WhileLoop':     return this.genWhileLoop(node);
-      case 'ForEach':       return this.genForEach(node);
-      case 'FuncDef':       return this.genFuncDef(node);
-      case 'Return':        return this.emit(`return ${this.genExpr(node.value)}`);
-      case 'FuncCall':      return this.emit(this.genExpr(node));
-      case 'DSAMake':       return this.genDSAMake(node);
-      case 'DSAPush':       return this.emit(`${node.target}.append(${this.genExpr(node.value)})`);
-      case 'DSAPop':        return this.emit(`${node.target}.pop()`);
-      case 'DSAInsert':     return this.genDSAInsert(node);
-      case 'DSARemove':     return this.emit(`${node.target}.popleft()`);
-      case 'DSAAdd':        return this.emit(`${node.target}.append(${this.genExpr(node.value)})`);
-      case 'GraphConnect':  return this.genGraphConnect(node);
-      case 'Sort':          return this.emit(`${node.arr}.sort(reverse=${node.order === 'descending' ? 'True' : 'False'})`);
-      case 'BinarySearch':  return this.genBinarySearch(node);
-      case 'MLLoad':        return this.genMLLoad(node);
-      case 'MLTrain':       return this.genMLTrain(node);
-      case 'MLPredict':     return this.genMLPredict(node);
-      case 'MLEvaluate':    return this.genMLEvaluate(node);
-      case 'Identifier':    return;
+      case 'Print':          return this.genPrint(node);
+      case 'VarDecl':        return this.emit(`${node.name} = ${this.genExpr(node.value)}`);
+      case 'Assign':         return this.emit(`${node.name} = ${this.genExpr(node.value)}`);
+      case 'CompoundAssign': return this.emit(`${node.name} ${node.op} ${this.genExpr(node.value)}`);
+      case 'Input':          return this.genInput(node);
+      case 'IfStmt':         return this.genIf(node);
+      case 'OtherwiseStmt':  return this.genOtherwise(node);
+      case 'ForLoop':        return this.genForLoop(node);
+      case 'WhileLoop':      return this.genWhileLoop(node);
+      case 'ForEach':        return this.genForEach(node);
+      case 'FuncDef':        return this.genFuncDef(node);
+      case 'Return':         return this.emit(`return ${this.genExpr(node.value)}`);
+      case 'FuncCall':       return this.emit(this.genExpr(node));
+      case 'DSAMake':        return this.genDSAMake(node);
+      case 'DSAPush':        return this.emit(`${node.target}.append(${this.genExpr(node.value)})`);
+      case 'DSAPop':         return this.emit(`${node.target}.pop()`);
+      case 'DSAInsert':      return this.genDSAInsert(node);
+      case 'DSARemove':      return this.emit(`${node.target}.popleft()`);
+      case 'DSAAdd':         return this.emit(`${node.target}.append(${this.genExpr(node.value)})`);
+      case 'GraphConnect':   return this.genGraphConnect(node);
+      case 'Sort':           return this.emit(`${node.arr}.sort(reverse=${node.order === 'descending' ? 'True' : 'False'})`);
+      case 'BinarySearch':   return this.genBinarySearch(node);
+      case 'MLLoad':         return this.genMLLoad(node);
+      case 'MLTrain':        return this.genMLTrain(node);
+      case 'MLPredict':      return this.genMLPredict(node);
+      case 'MLEvaluate':     return this.genMLEvaluate(node);
+      case 'Identifier':     return;
       default: throw new GeneratorError(`Unknown AST node: ${node.type}`, node);
     }
   }
@@ -136,11 +140,35 @@ class Generator {
     for (const s of node.body) this.genStatement(s);
     this.indentLevel--;
     if (node.elseBody) {
-      this.emit('else:');
-      this.indentLevel++;
-      if (!node.elseBody.length) this.emit('pass');
-      for (const s of node.elseBody) this.genStatement(s);
-      this.indentLevel--;
+      // Single IfStmt child means it's an 'also check' elif chain
+      if (node.elseBody.length === 1 && node.elseBody[0].type === 'IfStmt') {
+        this.genElif(node.elseBody[0]);
+      } else {
+        this.emit('else:');
+        this.indentLevel++;
+        if (!node.elseBody.length) this.emit('pass');
+        for (const s of node.elseBody) this.genStatement(s);
+        this.indentLevel--;
+      }
+    }
+  }
+
+  genElif(node) {
+    this.emit(`elif ${this.genExpr(node.condition)}:`);
+    this.indentLevel++;
+    if (!node.body.length) this.emit('pass');
+    for (const s of node.body) this.genStatement(s);
+    this.indentLevel--;
+    if (node.elseBody) {
+      if (node.elseBody.length === 1 && node.elseBody[0].type === 'IfStmt') {
+        this.genElif(node.elseBody[0]);
+      } else {
+        this.emit('else:');
+        this.indentLevel++;
+        if (!node.elseBody.length) this.emit('pass');
+        for (const s of node.elseBody) this.genStatement(s);
+        this.indentLevel--;
+      }
     }
   }
 
@@ -269,10 +297,17 @@ class Generator {
     switch (node.type) {
       case 'Literal': {
         const v = node.value;
-        if (v === null) return 'None';
-        if (v === true) return 'True';
+        if (v === null)  return 'None';
+        if (v === true)  return 'True';
         if (v === false) return 'False';
-        if (typeof v === 'string') return JSON.stringify(v);
+        if (typeof v === 'string') {
+          // Convert {varName} interpolation to Python f-strings
+          if (INTERP_RE.test(v)) {
+            const escaped = v.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+            return `f"${escaped}"`;
+          }
+          return JSON.stringify(v);
+        }
         return String(v);
       }
       case 'Identifier':   return node.name;
@@ -285,6 +320,15 @@ class Generator {
       case 'FuncCall':     return `${node.name}(${node.args.map(a => this.genExpr(a)).join(', ')})`;
       case 'MemberAccess': return `${this.genExpr(node.object)}[${this.genExpr(node.property)}]`;
       case 'DotAccess':    return `${this.genExpr(node.object)}.${node.property}`;
+      case 'BuiltinCall': {
+        const arg = this.genExpr(node.arg);
+        if (node.fn === 'upper')  return `(${arg}).upper()`;
+        if (node.fn === 'lower')  return `(${arg}).lower()`;
+        if (node.fn === 'len')    return `len(${arg})`;
+        if (node.fn === 'round')  return `round(${arg})`;
+        if (node.fn === 'abs')    return `abs(${arg})`;
+        return `${node.fn}(${arg})`;
+      }
       default: throw new GeneratorError(`Cannot generate expression for: ${node.type}`, node);
     }
   }

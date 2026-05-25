@@ -10,6 +10,7 @@
     { "include": "#constants" },
     { "include": "#keywords-control" },
     { "include": "#keywords-statement" },
+    { "include": "#keywords-builtin" },
     { "include": "#keywords-dsa" },
     { "include": "#keywords-ml" },
     { "include": "#keywords-logical" },
@@ -58,7 +59,11 @@
     },
     "keywords-statement": {
       "name": "keyword.other.declaration.syless",
-      "match": "\\b(say|show|make|ask|task|give|length|upper|lower|round|absolute|of)\\b"
+      "match": "\\b(say|show|make|ask|task|give)\\b"
+    },
+    "keywords-builtin": {
+      "name": "support.function.builtin.syless",
+      "match": "\\b(length|upper|lower|round|absolute|of)\\b"
     },
     "keywords-dsa": {
       "name": "keyword.other.dsa.syless",
@@ -83,12 +88,12 @@
           "match": "(==|!=|<=|>=|<|>)"
         },
         {
-          "name": "keyword.operator.assignment.syless",
-          "match": "(?<![=!<>])=(?!=)"
-        },
-        {
           "name": "keyword.operator.assignment.compound.syless",
           "match": "(\\+=|-=|\\*=|/=)"
+        },
+        {
+          "name": "keyword.operator.assignment.syless",
+          "match": "(?<![=!<>+\\-*\\/])=(?!=)"
         },
         {
           "name": "keyword.operator.arithmetic.syless",

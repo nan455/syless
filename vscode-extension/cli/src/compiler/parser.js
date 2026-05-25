@@ -13,45 +13,55 @@ class ParseError extends Error {
 }
 
 const Node = {
-  Program:      (body)                => ({ type: 'Program', body }),
-  Print:        (value)               => ({ type: 'Print', value }),
-  VarDecl:      (name, value)         => ({ type: 'VarDecl', name, value }),
-  Input:        (name, prompt)        => ({ type: 'Input', name, prompt }),
-  IfStmt:       (condition, body, elseBody) => ({ type: 'IfStmt', condition, body, elseBody }),
-  ForLoop:      (count, body)         => ({ type: 'ForLoop', count, body }),
-  WhileLoop:    (condition, body)     => ({ type: 'WhileLoop', condition, body }),
-  ForEach:      (item, iterable, body)=> ({ type: 'ForEach', item, iterable, body }),
-  FuncDef:      (name, params, body)  => ({ type: 'FuncDef', name, params, body }),
-  Return:       (value)               => ({ type: 'Return', value }),
-  FuncCall:     (name, args)          => ({ type: 'FuncCall', name, args }),
-  BinaryOp:     (op, left, right)     => ({ type: 'BinaryOp', op, left, right }),
-  UnaryOp:      (op, operand)         => ({ type: 'UnaryOp', op, operand }),
-  Identifier:   (name)               => ({ type: 'Identifier', name }),
-  Literal:      (value)              => ({ type: 'Literal', value }),
-  ArrayLiteral: (elements)           => ({ type: 'ArrayLiteral', elements }),
-  Assign:       (name, value)        => ({ type: 'Assign', name, value }),
-  DSAMake:      (name, dataType)     => ({ type: 'DSAMake', name, dataType }),
-  DSAPush:      (value, target)      => ({ type: 'DSAPush', value, target }),
-  DSAPop:       (target)             => ({ type: 'DSAPop', target }),
-  DSAInsert:    (value, target)      => ({ type: 'DSAInsert', value, target }),
-  DSARemove:    (target)             => ({ type: 'DSARemove', target }),
-  DSAAdd:       (value, target)      => ({ type: 'DSAAdd', value, target }),
-  DSAInsertTree:(value, target)      => ({ type: 'DSAInsertTree', value, target }),
-  DSASearchTree:(value, target)      => ({ type: 'DSASearchTree', value, target }),
-  GraphConnect: (nodeA, nodeB)       => ({ type: 'GraphConnect', nodeA, nodeB }),
-  Sort:         (arr, order)         => ({ type: 'Sort', arr, order }),
-  BinarySearch: (value, arr)         => ({ type: 'BinarySearch', value, arr }),
-  OtherwiseStmt:(body)               => ({ type: 'OtherwiseStmt', body }),
-  MemberAccess: (object, property)   => ({ type: 'MemberAccess', object, property }),
-  DotAccess:    (object, property)   => ({ type: 'DotAccess', object, property }),
+  Program:       (body)                              => ({ type: 'Program', body }),
+  Print:         (value)                             => ({ type: 'Print', value }),
+  VarDecl:       (name, value)                       => ({ type: 'VarDecl', name, value }),
+  Input:         (name, prompt)                      => ({ type: 'Input', name, prompt }),
+  IfStmt:        (condition, body, elseBody)         => ({ type: 'IfStmt', condition, body, elseBody }),
+  ForLoop:       (count, body)                       => ({ type: 'ForLoop', count, body }),
+  WhileLoop:     (condition, body)                   => ({ type: 'WhileLoop', condition, body }),
+  ForEach:       (item, iterable, body)              => ({ type: 'ForEach', item, iterable, body }),
+  FuncDef:       (name, params, body)                => ({ type: 'FuncDef', name, params, body }),
+  Return:        (value)                             => ({ type: 'Return', value }),
+  FuncCall:      (name, args)                        => ({ type: 'FuncCall', name, args }),
+  BinaryOp:      (op, left, right)                   => ({ type: 'BinaryOp', op, left, right }),
+  UnaryOp:       (op, operand)                       => ({ type: 'UnaryOp', op, operand }),
+  Identifier:    (name)                              => ({ type: 'Identifier', name }),
+  Literal:       (value)                             => ({ type: 'Literal', value }),
+  ArrayLiteral:  (elements)                          => ({ type: 'ArrayLiteral', elements }),
+  Assign:        (name, value)                       => ({ type: 'Assign', name, value }),
+  CompoundAssign:(name, op, value)                   => ({ type: 'CompoundAssign', name, op, value }),
+  BuiltinCall:   (fn, arg)                           => ({ type: 'BuiltinCall', fn, arg }),
+  DSAMake:       (name, dataType)                    => ({ type: 'DSAMake', name, dataType }),
+  DSAPush:       (value, target)                     => ({ type: 'DSAPush', value, target }),
+  DSAPop:        (target)                            => ({ type: 'DSAPop', target }),
+  DSAInsert:     (value, target)                     => ({ type: 'DSAInsert', value, target }),
+  DSARemove:     (target)                            => ({ type: 'DSARemove', target }),
+  DSAAdd:        (value, target)                     => ({ type: 'DSAAdd', value, target }),
+  DSAInsertTree: (value, target)                     => ({ type: 'DSAInsertTree', value, target }),
+  DSASearchTree: (value, target)                     => ({ type: 'DSASearchTree', value, target }),
+  GraphConnect:  (nodeA, nodeB)                      => ({ type: 'GraphConnect', nodeA, nodeB }),
+  Sort:          (arr, order)                        => ({ type: 'Sort', arr, order }),
+  BinarySearch:  (value, arr)                        => ({ type: 'BinarySearch', value, arr }),
+  OtherwiseStmt: (body)                              => ({ type: 'OtherwiseStmt', body }),
+  MemberAccess:  (object, property)                  => ({ type: 'MemberAccess', object, property }),
+  DotAccess:     (object, property)                  => ({ type: 'DotAccess', object, property }),
   // ML nodes
-  MLLoad:       (name, dataset)                        => ({ type: 'MLLoad', name, dataset }),
-  MLTrain:      (modelType, data, labels, modelName)   => ({ type: 'MLTrain', modelType, data, labels, modelName }),
-  MLPredict:    (modelName, input)                     => ({ type: 'MLPredict', modelName, input }),
-  MLEvaluate:   (modelName, data, labels)              => ({ type: 'MLEvaluate', modelName, data, labels }),
+  MLLoad:        (name, dataset)                     => ({ type: 'MLLoad', name, dataset }),
+  MLTrain:       (modelType, data, labels, modelName)=> ({ type: 'MLTrain', modelType, data, labels, modelName }),
+  MLPredict:     (modelName, input)                  => ({ type: 'MLPredict', modelName, input }),
+  MLEvaluate:    (modelName, data, labels)           => ({ type: 'MLEvaluate', modelName, data, labels }),
 };
 
 const DSA_TYPES = ['stack', 'queue', 'linkedlist', 'tree', 'graph'];
+
+const BUILTIN_FN_MAP = {
+  [TokenType.LENGTH]:   'len',
+  [TokenType.UPPER]:    'upper',
+  [TokenType.LOWER]:    'lower',
+  [TokenType.ROUND]:    'round',
+  [TokenType.ABSOLUTE]: 'abs',
+};
 
 class Parser {
   constructor(tokens) {
@@ -82,6 +92,7 @@ class Parser {
     const tok = this.peek();
     switch (tok.type) {
       case TokenType.SAY:        return this.parseSay();
+      case TokenType.SHOW:       return this.parseShow();
       case TokenType.MAKE:       return this.parseMake();
       case TokenType.ASK:        return this.parseAsk();
       case TokenType.CHECK:      return this.parseCheck();
@@ -117,6 +128,12 @@ class Parser {
     this.advance();
     return Node.Print(this.parseExpression());
   }
+
+  parseShow() {
+    this.expect(TokenType.SHOW, "'show'");
+    return Node.Print(this.parseExpression());
+  }
+
   parseMake() {
     this.expect(TokenType.MAKE, "'make'");
     const name = this.expect(TokenType.IDENTIFIER, "a variable name after 'make'").value;
@@ -133,6 +150,7 @@ class Parser {
     this.expect(TokenType.ASSIGN, "'='");
     return Node.VarDecl(name, this.parseExpression());
   }
+
   parseAsk() {
     this.expect(TokenType.ASK);
     const name = this.expect(TokenType.IDENTIFIER, "a variable name after 'ask'").value;
@@ -142,6 +160,7 @@ class Parser {
     this.advance();
     return Node.Input(name, this.parseExpression());
   }
+
   parseCheck() {
     this.expect(TokenType.CHECK);
     const cond = this.parseCondition();
@@ -150,13 +169,21 @@ class Parser {
     }
     const body = this.parseBlock();
     let elseBody = null;
-    if (this.check(TokenType.OTHERWISE) || this.check(TokenType.ELSE)) {
+    if (this.check(TokenType.ALSO)) {
+      this.advance(); // consume 'also'
+      if (!this.check(TokenType.CHECK)) {
+        this.error(`Expected 'check' after 'also'. Write it like:\n  } also check x == 0 {`, this.peek());
+      }
+      elseBody = [this.parseCheck()]; // wrap in array — genIf detects single IfStmt as elif
+    } else if (this.check(TokenType.OTHERWISE) || this.check(TokenType.ELSE)) {
       this.advance();
       elseBody = this.parseBlock();
     }
     return Node.IfStmt(cond, body, elseBody);
   }
-  parseOtherwise()  { this.expect(TokenType.OTHERWISE); return Node.OtherwiseStmt(this.parseBlock()); }
+
+  parseOtherwise() { this.expect(TokenType.OTHERWISE); return Node.OtherwiseStmt(this.parseBlock()); }
+
   parseLoop() {
     this.expect(TokenType.LOOP);
     const count = this.parseExpression();
@@ -166,33 +193,39 @@ class Parser {
     this.advance();
     return Node.ForLoop(count, this.parseBlock());
   }
+
   parseRepeat() {
     this.expect(TokenType.REPEAT);
     if (!this.check(TokenType.WHILE)) {
-      this.error(`Missing 'while' after 'repeat'. Write it like this:\n  repeat while x < 10 {\n    x = x + 1\n  }`, this.peek());
+      this.error(`Missing 'while' after 'repeat'. Write it like this:\n  repeat while x < 10 {\n    x += 1\n  }`, this.peek());
     }
     this.advance();
     return Node.WhileLoop(this.parseCondition(), this.parseBlock());
   }
+
   parseTask() {
     this.expect(TokenType.TASK);
     const name = this.expect(TokenType.IDENTIFIER).value;
     this.expect(TokenType.LPAREN);
     const params = [];
-    while (!this.check(TokenType.RPAREN) && !this.isAtEnd()) { params.push(this.expect(TokenType.IDENTIFIER).value); if (!this.match(TokenType.COMMA)) break; }
+    while (!this.check(TokenType.RPAREN) && !this.isAtEnd()) {
+      params.push(this.expect(TokenType.IDENTIFIER).value);
+      if (!this.match(TokenType.COMMA)) break;
+    }
     this.expect(TokenType.RPAREN);
     return Node.FuncDef(name, params, this.parseBlock());
   }
-  parseGive()       { this.expect(TokenType.GIVE); return Node.Return(this.parseExpression()); }
-  parseForEach()    { this.expect(TokenType.FOR); this.expect(TokenType.EACH, "'each'"); const item = this.expect(TokenType.IDENTIFIER).value; this.expect(TokenType.IN, "'in'"); return Node.ForEach(item, this.parseExpression(), this.parseBlock()); }
-  parsePush()       { this.expect(TokenType.PUSH); const val = this.parseExpression(); this.expect(TokenType.INTO, "'into'"); return Node.DSAPush(val, this.expect(TokenType.IDENTIFIER).value); }
-  parsePop()        { this.expect(TokenType.POP); this.expect(TokenType.FROM, "'from'"); return Node.DSAPop(this.expect(TokenType.IDENTIFIER).value); }
-  parseInsert()     { this.expect(TokenType.INSERT); const val = this.parseExpression(); this.expect(TokenType.INTO, "'into'"); return Node.DSAInsert(val, this.expect(TokenType.IDENTIFIER).value); }
-  parseRemoveOp()   { this.expect(TokenType.REMOVE); this.expect(TokenType.FROM, "'from'"); return Node.DSARemove(this.expect(TokenType.IDENTIFIER).value); }
-  parseAddOp()      { this.expect(TokenType.ADD); const val = this.parseExpression(); this.expect(TokenType.INTO, "'into'"); return Node.DSAAdd(val, this.expect(TokenType.IDENTIFIER).value); }
-  parseSort()       { this.expect(TokenType.SORT); const arr = this.expect(TokenType.IDENTIFIER).value; let order = 'ascending'; if (this.check(TokenType.ASCENDING)) { this.advance(); } else if (this.check(TokenType.DESCENDING)) { this.advance(); order = 'descending'; } return Node.Sort(arr, order); }
-  parseBinarySearch(){ this.expect(TokenType.BINARY); this.expect(TokenType.SEARCH, "'search'"); const val = this.parseExpression(); this.expect(TokenType.IN, "'in'"); return Node.BinarySearch(val, this.expect(TokenType.IDENTIFIER).value); }
-  parseConnect()    { this.expect(TokenType.CONNECT); const a = this.expect(TokenType.IDENTIFIER).value; this.expect(TokenType.TO, "'to'"); return Node.GraphConnect(a, this.expect(TokenType.IDENTIFIER).value); }
+
+  parseGive()    { this.expect(TokenType.GIVE); return Node.Return(this.parseExpression()); }
+  parseForEach() { this.expect(TokenType.FOR); this.expect(TokenType.EACH, "'each'"); const item = this.expect(TokenType.IDENTIFIER).value; this.expect(TokenType.IN, "'in'"); return Node.ForEach(item, this.parseExpression(), this.parseBlock()); }
+  parsePush()    { this.expect(TokenType.PUSH); const val = this.parseExpression(); this.expect(TokenType.INTO, "'into'"); return Node.DSAPush(val, this.expect(TokenType.IDENTIFIER).value); }
+  parsePop()     { this.expect(TokenType.POP); this.expect(TokenType.FROM, "'from'"); return Node.DSAPop(this.expect(TokenType.IDENTIFIER).value); }
+  parseInsert()  { this.expect(TokenType.INSERT); const val = this.parseExpression(); this.expect(TokenType.INTO, "'into'"); return Node.DSAInsert(val, this.expect(TokenType.IDENTIFIER).value); }
+  parseRemoveOp(){ this.expect(TokenType.REMOVE); this.expect(TokenType.FROM, "'from'"); return Node.DSARemove(this.expect(TokenType.IDENTIFIER).value); }
+  parseAddOp()   { this.expect(TokenType.ADD); const val = this.parseExpression(); this.expect(TokenType.INTO, "'into'"); return Node.DSAAdd(val, this.expect(TokenType.IDENTIFIER).value); }
+  parseSort()    { this.expect(TokenType.SORT); const arr = this.expect(TokenType.IDENTIFIER).value; let order = 'ascending'; if (this.check(TokenType.ASCENDING)) { this.advance(); } else if (this.check(TokenType.DESCENDING)) { this.advance(); order = 'descending'; } return Node.Sort(arr, order); }
+  parseBinarySearch() { this.expect(TokenType.BINARY); this.expect(TokenType.SEARCH, "'search'"); const val = this.parseExpression(); this.expect(TokenType.IN, "'in'"); return Node.BinarySearch(val, this.expect(TokenType.IDENTIFIER).value); }
+  parseConnect() { this.expect(TokenType.CONNECT); const a = this.expect(TokenType.IDENTIFIER).value; this.expect(TokenType.TO, "'to'"); return Node.GraphConnect(a, this.expect(TokenType.IDENTIFIER).value); }
 
   parseMLLoad() {
     this.expect(TokenType.LOAD, "'load'");
@@ -231,8 +264,12 @@ class Parser {
 
   parseIdentifierStatement() {
     const name = this.advance().value;
-    if (this.check(TokenType.ASSIGN)) { this.advance(); return Node.Assign(name, this.parseExpression()); }
-    if (this.check(TokenType.LPAREN)) { this.advance(); const args = this.parseArgs(); this.expect(TokenType.RPAREN); return Node.FuncCall(name, args); }
+    if (this.check(TokenType.ASSIGN))      { this.advance(); return Node.Assign(name, this.parseExpression()); }
+    if (this.check(TokenType.PLUSASSIGN))  { this.advance(); return Node.CompoundAssign(name, '+=', this.parseExpression()); }
+    if (this.check(TokenType.MINUSASSIGN)) { this.advance(); return Node.CompoundAssign(name, '-=', this.parseExpression()); }
+    if (this.check(TokenType.MULASSIGN))   { this.advance(); return Node.CompoundAssign(name, '*=', this.parseExpression()); }
+    if (this.check(TokenType.DIVASSIGN))   { this.advance(); return Node.CompoundAssign(name, '/=', this.parseExpression()); }
+    if (this.check(TokenType.LPAREN))      { this.advance(); const args = this.parseArgs(); this.expect(TokenType.RPAREN); return Node.FuncCall(name, args); }
     return Node.Identifier(name);
   }
 
@@ -280,18 +317,26 @@ class Parser {
   }
   parsePrimary() {
     const tok = this.peek();
-    if (tok.type === TokenType.NUMBER)  { this.advance(); return Node.Literal(tok.value); }
-    if (tok.type === TokenType.STRING)  { this.advance(); return Node.Literal(tok.value); }
-    if (tok.type === TokenType.TRUE)    { this.advance(); return Node.Literal(true); }
-    if (tok.type === TokenType.FALSE)   { this.advance(); return Node.Literal(false); }
-    if (tok.type === TokenType.NULL)    { this.advance(); return Node.Literal(null); }
-    if (tok.type === TokenType.LBRACKET) { return this.parseArrayLiteral(); }
-    if (tok.type === TokenType.LPAREN)  { this.advance(); const e = this.parseExpression(); this.expect(TokenType.RPAREN); return e; }
+
+    // Built-in: length/upper/lower/round/absolute of <expr>
+    if (BUILTIN_FN_MAP[tok.type] !== undefined) {
+      this.advance();
+      this.expect(TokenType.OF, `'of' after '${tok.value}' — e.g.: ${tok.value} of myVariable`);
+      return Node.BuiltinCall(BUILTIN_FN_MAP[tok.type], this.parseExpression());
+    }
+
+    if (tok.type === TokenType.NUMBER)    { this.advance(); return Node.Literal(tok.value); }
+    if (tok.type === TokenType.STRING)    { this.advance(); return Node.Literal(tok.value); }
+    if (tok.type === TokenType.TRUE)      { this.advance(); return Node.Literal(true); }
+    if (tok.type === TokenType.FALSE)     { this.advance(); return Node.Literal(false); }
+    if (tok.type === TokenType.NULL)      { this.advance(); return Node.Literal(null); }
+    if (tok.type === TokenType.LBRACKET)  { return this.parseArrayLiteral(); }
+    if (tok.type === TokenType.LPAREN)    { this.advance(); const e = this.parseExpression(); this.expect(TokenType.RPAREN); return e; }
     if (tok.type === TokenType.IDENTIFIER) {
       this.advance();
-      if (this.check(TokenType.LPAREN)) { this.advance(); const args = this.parseArgs(); this.expect(TokenType.RPAREN); return Node.FuncCall(tok.value, args); }
+      if (this.check(TokenType.LPAREN))   { this.advance(); const args = this.parseArgs(); this.expect(TokenType.RPAREN); return Node.FuncCall(tok.value, args); }
       if (this.check(TokenType.LBRACKET)) { this.advance(); const idx = this.parseExpression(); this.expect(TokenType.RBRACKET); return Node.MemberAccess(Node.Identifier(tok.value), idx); }
-      if (this.check(TokenType.DOT)) { this.advance(); const prop = this.expect(TokenType.IDENTIFIER, "a property name after '.'").value; return Node.DotAccess(Node.Identifier(tok.value), prop); }
+      if (this.check(TokenType.DOT))      { this.advance(); const prop = this.expect(TokenType.IDENTIFIER, "a property name after '.'").value; return Node.DotAccess(Node.Identifier(tok.value), prop); }
       return Node.Identifier(tok.value);
     }
     this.error(`Unexpected '${tok.value || tok.type}' — not a valid value`, tok);

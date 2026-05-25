@@ -2,7 +2,7 @@
   "name": "syless-language",
   "displayName": "SYLESS Language",
   "description": "Syntax highlighting, snippets, and run support for the SYLESS programming language",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "publisher": "syless",
   "icon": "icon.png",
   "main": "./extension.js",

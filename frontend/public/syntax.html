@@ -88,14 +88,14 @@ tr:last-child td{border-bottom:none}
     <span class="cover-pill">Compiles to Python</span>
     <span class="cover-pill">Built-in DSA Support</span>
     <span class="cover-pill">AI-Powered IDE</span>
-    <span class="cover-pill">v1.2.0</span>
+    <span class="cover-pill">v1.3.0</span>
   </div>
   <div style="margin-top:18px;color:#64748b;font-size:11px">Developed by <strong style="color:#a78bfa">NANDACUMAAR</strong> &nbsp;·&nbsp; <em>"just make it"</em> startup</div>
 </div>
 
-<!-- NEW IN v1.1 + v1.2 -->
+<!-- WHAT'S NEW -->
 <div class="section">
-  <div class="section-header"><span class="icon">🆕</span><h2>What's New</h2><span class="num">10 improvements</span></div>
+  <div class="section-header"><span class="icon">🆕</span><h2>What's New</h2><span class="num">14 improvements</span></div>
   <div class="section-body">
     <table>
       <thead><tr><th>Version</th><th>Feature</th><th>Example</th></tr></thead>
@@ -110,6 +110,10 @@ tr:last-child td{border-bottom:none}
         <tr><td><span class="tag tag-green">v1.2</span></td><td>Built-in functions (<code>length</code> <code>upper</code> <code>lower</code> <code>round</code> <code>absolute</code>)</td><td><code>show length of name</code></td></tr>
         <tr><td><span class="tag tag-green">v1.2</span></td><td>Default parameters in tasks</td><td><code>task greet(name, msg = "Hi") { }</code></td></tr>
         <tr><td><span class="tag tag-green">v1.2</span></td><td>Auto-save in web IDE</td><td>Code saved automatically as you type</td></tr>
+        <tr><td><span class="tag tag-purple">v1.3</span></td><td>REPL — live interactive mode in terminal</td><td><code>syless repl</code></td></tr>
+        <tr><td><span class="tag tag-purple">v1.3</span></td><td>VS Code inline error diagnostics (red squiggles)</td><td>Errors highlighted as you type — no need to run</td></tr>
+        <tr><td><span class="tag tag-purple">v1.3</span></td><td>VS Code hover docs — hover any keyword to see its syntax</td><td>Hover over <code>check</code>, <code>task</code>, <code>loop</code>…</td></tr>
+        <tr><td><span class="tag tag-purple">v1.3</span></td><td>VS Code IntelliSense — auto-complete keywords, tasks &amp; variables</td><td>Start typing → suggestions appear</td></tr>
       </tbody>
     </table>
   </div>
@@ -439,9 +443,44 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
-<!-- 13. KEYWORDS TABLE -->
+<!-- 14. REPL -->
 <div class="section">
-  <div class="section-header"><span class="icon">📋</span><h2>14 — All Keywords at a Glance</h2></div>
+  <div class="section-header"><span class="icon">💻</span><h2>14 — Interactive REPL</h2><span class="num tag-purple" style="background:rgba(124,58,237,.2);color:#a78bfa;border:1px solid rgba(124,58,237,.3);padding:2px 10px;border-radius:20px;font-size:11px">NEW in v1.3</span></div>
+  <div class="section-body">
+    <div class="syntax-item">
+      <div><div class="syntax-label">Start the REPL</div><div class="syntax-desc">Run <code>syless repl</code> in your terminal to enter interactive mode. Type SYLESS code one line at a time and see the result instantly. State (variables, tasks) persists between lines.</div></div>
+      <div class="code-block"><span class="comment"># Start the REPL</span><br><span class="keyword">syless repl</span><br><br><span class="comment">&gt; make x = 10</span><br><span class="comment">&gt; x += 5</span><br><span class="comment">&gt; show x</span><br><span class="number">15</span><br><span class="comment">&gt; show upper of "hello"</span><br><span class="string">HELLO</span><br><span class="comment">&gt; exit</span></div>
+    </div>
+    <div class="syntax-item">
+      <div><div class="syntax-label">Multi-line blocks in REPL</div><div class="syntax-desc">When you open a block with <code>{</code>, the prompt changes to <code>...</code> while collecting lines. The block runs when you close it with <code>}</code>.</div></div>
+      <div class="code-block"><span class="comment">&gt; task double(n) {</span><br><span class="comment">...   give n * 2</span><br><span class="comment">... }</span><br><span class="comment">&gt; show double(7)</span><br><span class="number">14</span><br><span class="comment">&gt; make nums = [3, 1, 4]</span><br><span class="comment">&gt; sort nums ascending</span><br><span class="comment">&gt; show nums</span><br><span class="number">[1, 3, 4]</span></div>
+    </div>
+    <div class="tip"><strong>Tip:</strong> The REPL is perfect for experimenting — try a line, see the result, keep going. Type <code>exit</code> or <code>quit</code> to leave. Variables you create in the REPL stay available for the rest of the session.</div>
+  </div>
+</div>
+
+<!-- 15. VS CODE EXTENSION -->
+<div class="section">
+  <div class="section-header"><span class="icon">🔌</span><h2>15 — VS Code Extension</h2><span class="num" style="background:rgba(255,255,255,.15);color:white;border-radius:20px;padding:2px 10px;font-size:11px">v0.7.0</span></div>
+  <div class="section-body">
+    <table>
+      <thead><tr><th>Feature</th><th>How to Use</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Run file</strong></td><td>Press <code>F5</code> or click the <code>▶ Run SYLESS</code> button in the status bar (bottom left). Runs the current <code>.sy</code> file in the built-in terminal.</td></tr>
+        <tr><td><strong>Inline errors</strong> <span class="tag tag-purple">NEW</span></td><td>Red squiggles appear on the error line as you type — no need to run the file to find mistakes. Hover the squiggle to read the error.</td></tr>
+        <tr><td><strong>Hover docs</strong> <span class="tag tag-purple">NEW</span></td><td>Hover your mouse over any keyword (<code>check</code>, <code>loop</code>, <code>task</code>…) to see its syntax, description, and a live example pop up.</td></tr>
+        <tr><td><strong>IntelliSense</strong> <span class="tag tag-purple">NEW</span></td><td>Start typing any keyword and a suggestion list appears. Also suggests your own <code>task</code> names and <code>make</code> variable names from the current file.</td></tr>
+        <tr><td><strong>Syntax highlighting</strong></td><td>All SYLESS keywords, strings, numbers, comments, and interpolated variables <code>{name}</code> are colour-coded automatically.</td></tr>
+        <tr><td><strong>Auto-closing brackets</strong></td><td>Type <code>{</code> and the matching <code>}</code> is inserted. Same for <code>()</code>, <code>[]</code>, and quotes.</td></tr>
+      </tbody>
+    </table>
+    <div class="tip"><strong>Install:</strong> Download <code>syless-language-0.7.0.vsix</code> → open VS Code → press <code>Ctrl+Shift+P</code> → <em>Extensions: Install from VSIX…</em> → select the file.</div>
+  </div>
+</div>
+
+<!-- 16. KEYWORDS TABLE -->
+<div class="section">
+  <div class="section-header"><span class="icon">📋</span><h2>16 — All Keywords at a Glance</h2></div>
   <div class="section-body">
     <table>
       <thead><tr><th>Keyword</th><th>Purpose</th><th>Quick Example</th></tr></thead>
@@ -487,7 +526,7 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
-<div class="footer">SYLESS Language Reference &nbsp;·&nbsp; v1.2.0 &nbsp;·&nbsp; Code Like You Think<br><span style="font-size:10px;opacity:.6">Developed by <strong>NANDACUMAAR</strong> &nbsp;·&nbsp; "just make it" startup</span></div>
+<div class="footer">SYLESS Language Reference &nbsp;·&nbsp; v1.3.0 &nbsp;·&nbsp; Code Like You Think<br><span style="font-size:10px;opacity:.6">Developed by <strong>NANDACUMAAR</strong> &nbsp;·&nbsp; "just make it" startup</span></div>
 
 </div>
 </body>
