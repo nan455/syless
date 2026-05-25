@@ -1,23 +1,19 @@
 'use strict';
 
 const TokenType = {
-  SAY: 'SAY', SHOW: 'SHOW', MAKE: 'MAKE', ASK: 'ASK', CHECK: 'CHECK', OTHERWISE: 'OTHERWISE',
-  ALSO: 'ALSO', LOOP: 'LOOP', TIMES: 'TIMES', REPEAT: 'REPEAT', WHILE: 'WHILE', TASK: 'TASK',
+  SAY: 'SAY', MAKE: 'MAKE', ASK: 'ASK', CHECK: 'CHECK', OTHERWISE: 'OTHERWISE',
+  LOOP: 'LOOP', TIMES: 'TIMES', REPEAT: 'REPEAT', WHILE: 'WHILE', TASK: 'TASK',
   GIVE: 'GIVE', FOR: 'FOR', EACH: 'EACH', IN: 'IN', PUSH: 'PUSH', INTO: 'INTO',
   POP: 'POP', FROM: 'FROM', INSERT: 'INSERT', REMOVE: 'REMOVE', ADD: 'ADD',
   SORT: 'SORT', ASCENDING: 'ASCENDING', DESCENDING: 'DESCENDING',
   BINARY: 'BINARY', SEARCH: 'SEARCH', CONNECT: 'CONNECT', TO: 'TO',
   ELSE: 'ELSE', AND: 'AND', OR: 'OR', NOT: 'NOT',
   TRUE: 'TRUE', FALSE: 'FALSE', NULL: 'NULL',
-  // Built-in expression keywords
-  LENGTH: 'LENGTH', UPPER: 'UPPER', LOWER: 'LOWER', ROUND: 'ROUND', ABSOLUTE: 'ABSOLUTE', OF: 'OF',
   // ML keywords
   TRAIN: 'TRAIN', PREDICT: 'PREDICT', EVALUATE: 'EVALUATE', LOAD: 'LOAD',
   ON: 'ON', WITH: 'WITH', AS: 'AS',
-  // Operators
-  ARROW: 'ARROW', ASSIGN: 'ASSIGN',
-  PLUSASSIGN: 'PLUSASSIGN', MINUSASSIGN: 'MINUSASSIGN', MULASSIGN: 'MULASSIGN', DIVASSIGN: 'DIVASSIGN',
-  PLUS: 'PLUS', MINUS: 'MINUS', MULTIPLY: 'MULTIPLY', DIVIDE: 'DIVIDE', MODULO: 'MODULO', POWER: 'POWER',
+  ARROW: 'ARROW', ASSIGN: 'ASSIGN', PLUS: 'PLUS', MINUS: 'MINUS',
+  MULTIPLY: 'MULTIPLY', DIVIDE: 'DIVIDE', MODULO: 'MODULO', POWER: 'POWER',
   EQ: 'EQ', NEQ: 'NEQ', LT: 'LT', GT: 'GT', LTE: 'LTE', GTE: 'GTE',
   LBRACE: 'LBRACE', RBRACE: 'RBRACE', LPAREN: 'LPAREN', RPAREN: 'RPAREN',
   LBRACKET: 'LBRACKET', RBRACKET: 'RBRACKET', COMMA: 'COMMA', DOT: 'DOT', COLON: 'COLON',
@@ -26,9 +22,9 @@ const TokenType = {
 };
 
 const KEYWORDS = {
-  say: TokenType.SAY, show: TokenType.SHOW, make: TokenType.MAKE, ask: TokenType.ASK,
-  check: TokenType.CHECK, otherwise: TokenType.OTHERWISE, also: TokenType.ALSO,
-  loop: TokenType.LOOP, times: TokenType.TIMES, repeat: TokenType.REPEAT, while: TokenType.WHILE,
+  say: TokenType.SAY, make: TokenType.MAKE, ask: TokenType.ASK,
+  check: TokenType.CHECK, otherwise: TokenType.OTHERWISE, loop: TokenType.LOOP,
+  times: TokenType.TIMES, repeat: TokenType.REPEAT, while: TokenType.WHILE,
   task: TokenType.TASK, give: TokenType.GIVE, for: TokenType.FOR,
   each: TokenType.EACH, in: TokenType.IN, push: TokenType.PUSH,
   into: TokenType.INTO, pop: TokenType.POP, from: TokenType.FROM,
@@ -37,9 +33,6 @@ const KEYWORDS = {
   binary: TokenType.BINARY, search: TokenType.SEARCH, connect: TokenType.CONNECT,
   to: TokenType.TO, else: TokenType.ELSE, and: TokenType.AND, or: TokenType.OR,
   not: TokenType.NOT, true: TokenType.TRUE, false: TokenType.FALSE, null: TokenType.NULL,
-  // Built-in expression keywords
-  length: TokenType.LENGTH, upper: TokenType.UPPER, lower: TokenType.LOWER,
-  round: TokenType.ROUND, absolute: TokenType.ABSOLUTE, of: TokenType.OF,
   // ML keywords
   train: TokenType.TRAIN, predict: TokenType.PREDICT, evaluate: TokenType.EVALUATE,
   load: TokenType.LOAD, on: TokenType.ON, with: TokenType.WITH, as: TokenType.AS,
@@ -134,28 +127,14 @@ class Lexer {
       }
 
       switch (ch) {
-        case '-':
-          if (this.match('>')) this.addToken(TokenType.ARROW, '->');
-          else if (this.match('=')) this.addToken(TokenType.MINUSASSIGN, '-=');
-          else this.addToken(TokenType.MINUS, '-');
-          break;
-        case '+':
-          if (this.match('=')) this.addToken(TokenType.PLUSASSIGN, '+=');
-          else this.addToken(TokenType.PLUS, '+');
-          break;
-        case '*':
-          if (this.match('*')) this.addToken(TokenType.POWER, '**');
-          else if (this.match('=')) this.addToken(TokenType.MULASSIGN, '*=');
-          else this.addToken(TokenType.MULTIPLY, '*');
-          break;
-        case '/':
-          if (this.match('=')) this.addToken(TokenType.DIVASSIGN, '/=');
-          else this.addToken(TokenType.DIVIDE, '/');
-          break;
+        case '-': this.match('>') ? this.addToken(TokenType.ARROW, '->') : this.addToken(TokenType.MINUS, '-'); break;
         case '=': this.match('=') ? this.addToken(TokenType.EQ, '==') : this.addToken(TokenType.ASSIGN, '='); break;
         case '!': this.match('=') ? this.addToken(TokenType.NEQ, '!=') : this.error("Unexpected '!' — did you mean '!='?"); break;
         case '<': this.match('=') ? this.addToken(TokenType.LTE, '<=') : this.addToken(TokenType.LT, '<'); break;
         case '>': this.match('=') ? this.addToken(TokenType.GTE, '>=') : this.addToken(TokenType.GT, '>'); break;
+        case '*': this.match('*') ? this.addToken(TokenType.POWER, '**') : this.addToken(TokenType.MULTIPLY, '*'); break;
+        case '+': this.addToken(TokenType.PLUS, '+'); break;
+        case '/': this.addToken(TokenType.DIVIDE, '/'); break;
         case '%': this.addToken(TokenType.MODULO, '%'); break;
         case '{': this.addToken(TokenType.LBRACE, '{'); break;
         case '}': this.addToken(TokenType.RBRACE, '}'); break;
