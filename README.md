@@ -2,7 +2,7 @@
 
 **SYLESS** is an English-like programming language. Write code the way you speak — no semicolons, no brackets, no confusing syntax. It compiles to Python and runs instantly.
 
-> **Try it live → [syless-frontend.vercel.app](https://syless.vercel.app/)**
+> **Try it live → https://syless.vercel.app/
 
 ---
 
