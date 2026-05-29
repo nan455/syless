@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SYLESS — Technical Overview</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0f0f1a;
+    color: #e2e8f0;
+    line-height: 1.7;
+    font-size: 14px;
+  }
+
+  @media print {
+    body { background: #fff; color: #111; }
+    .page-break { page-break-before: always; }
+    .no-print { display: none; }
+    pre, code { background: #f1f5f9 !important; color: #1e293b !important; }
+    .card { background: #f8fafc !important; border: 1px solid #e2e8f0 !important; }
+    h1, h2, h3, h4 { color: #1e293b !important; }
+    .badge { background: #e2e8f0 !important; color: #1e293b !important; }
+    .hero { background: #1e293b !important; }
+    .hero h1 { color: #fff !important; }
+    .hero p { color: #94a3b8 !important; }
+    .section-label { color: #6366f1 !important; }
+    .arrow { color: #6366f1 !important; }
+    .flow-box { background: #f1f5f9 !important; border: 2px solid #6366f1 !important; color: #1e293b !important; }
+    .flow-arrow { color: #6366f1 !important; }
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ─── HERO ─────────────────────────────────────────── */
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 60px 24px 50px;
+    text-align: center;
+    border-bottom: 1px solid #6366f130;
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, #6366f120 0%, transparent 70%);
+  }
+  .hero .logo {
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, #818cf8, #c084fc, #38bdf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .hero .tagline {
+    font-size: 20px;
+    color: #94a3b8;
+    font-weight: 300;
+    margin-bottom: 24px;
+  }
+  .hero .meta-badges {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .badge {
+    background: #ffffff12;
+    border: 1px solid #ffffff20;
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #94a3b8;
+    letter-spacing: 0.3px;
+  }
+  .badge.purple { border-color: #6366f160; color: #a5b4fc; }
+  .badge.blue   { border-color: #38bdf860; color: #7dd3fc; }
+  .badge.green  { border-color: #22c55e60; color: #86efac; }
+  .badge.orange { border-color: #f9731660; color: #fdba74; }
+
+  /* ─── SECTION ──────────────────────────────────────── */
+  .section { margin-bottom: 48px; }
+  .section-label {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #6366f1;
+    margin-bottom: 6px;
+  }
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ffffff10;
+  }
+  h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: #cbd5e1;
+    margin: 24px 0 10px;
+  }
+  h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #94a3b8;
+    margin: 16px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  p { margin-bottom: 12px; color: #94a3b8; }
+  strong { color: #e2e8f0; }
+
+  /* ─── CARD ─────────────────────────────────────────── */
+  .card {
+    background: #1e1e2e;
+    border: 1px solid #ffffff10;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .card-small {
+    background: #1e1e2e;
+    border: 1px solid #ffffff10;
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .card-small .icon { font-size: 22px; margin-bottom: 6px; }
+  .card-small .label { font-size: 12px; font-weight: 600; color: #6366f1; margin-bottom: 4px; }
+  .card-small .value { font-size: 13px; color: #e2e8f0; font-weight: 500; }
+  .card-small .sub { font-size: 11px; color: #64748b; margin-top: 2px; }
+
+  /* ─── CODE ─────────────────────────────────────────── */
+  pre {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  pre .lang-label {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 10px;
+    color: #6366f1;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Inter', sans-serif;
+  }
+  code {
+    font-family: 'Fira Code', monospace;
+    background: #ffffff10;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #a5b4fc;
+  }
+  .kw  { color: #c084fc; }
+  .str { color: #86efac; }
+  .num { color: #fbbf24; }
+  .cmt { color: #475569; font-style: italic; }
+  .fn  { color: #38bdf8; }
+  .var { color: #f1f5f9; }
+  .op  { color: #e2e8f0; }
+  .py-kw { color: #c084fc; }
+  .py-fn { color: #60a5fa; }
+  .py-str { color: #4ade80; }
+  .py-cmt { color: #475569; font-style: italic; }
+
+  /* ─── PIPELINE FLOW ────────────────────────────────── */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    padding: 8px 0;
+    margin: 20px 0;
+    flex-wrap: nowrap;
+  }
+  .flow-box {
+    background: #1e1e2e;
+    border: 2px solid #6366f140;
+    border-radius: 10px;
+    padding: 14px 18px;
+    min-width: 120px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .flow-box .fb-icon { font-size: 20px; margin-bottom: 4px; }
+  .flow-box .fb-title { font-size: 12px; font-weight: 700; color: #818cf8; }
+  .flow-box .fb-sub { font-size: 10px; color: #64748b; margin-top: 2px; }
+  .flow-arrow {
+    font-size: 24px;
+    color: #6366f1;
+    padding: 0 6px;
+    flex-shrink: 0;
+  }
+
+  /* ─── TWO-COL ───────────────────────────────────────── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* ─── TABLE ────────────────────────────────────────── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 13px;
+  }
+  th {
+    background: #1e1e2e;
+    color: #818cf8;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: 1px solid #ffffff10;
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #ffffff08;
+    color: #94a3b8;
+  }
+  tr:hover td { background: #ffffff04; }
+  td code { background: #6366f120; color: #a5b4fc; }
+
+  /* ─── HIGHLIGHT BOX ─────────────────────────────────── */
+  .highlight-box {
+    border-left: 3px solid #6366f1;
+    background: #6366f110;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 16px 0;
+  }
+  .highlight-box.green { border-color: #22c55e; background: #22c55e10; }
+  .highlight-box.orange { border-color: #f97316; background: #f9731610; }
+  .highlight-box.blue { border-color: #38bdf8; background: #38bdf810; }
+
+  /* ─── STEP LIST ─────────────────────────────────────── */
+  .step-list { list-style: none; }
+  .step-list li {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 14px;
+    align-items: flex-start;
+  }
+  .step-num {
+    background: #6366f1;
+    color: #fff;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-content { flex: 1; }
+  .step-content strong { color: #e2e8f0; display: block; margin-bottom: 3px; }
+
+  /* ─── HR ────────────────────────────────────────────── */
+  hr { border: none; border-top: 1px solid #ffffff10; margin: 36px 0; }
+
+  /* ─── TOC ───────────────────────────────────────────── */
+  .toc {
+    background: #1e1e2e;
+    border: 1px solid #ffffff10;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 48px;
+  }
+  .toc h3 { margin-top: 0; color: #818cf8; }
+  .toc ol { padding-left: 20px; }
+  .toc li { color: #94a3b8; margin-bottom: 6px; font-size: 13px; }
+  .toc li a { color: #7dd3fc; text-decoration: none; }
+  .toc li a:hover { color: #38bdf8; }
+
+  /* ─── FOOTER ─────────────────────────────────────────── */
+  .footer {
+    text-align: center;
+    padding: 32px;
+    color: #475569;
+    font-size: 12px;
+    border-top: 1px solid #ffffff08;
+    margin-top: 48px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<div class="hero">
+  <div class="logo">SYLESS</div>
+  <div class="tagline">AI-Powered English-Like Programming IDE</div>
+  <div class="meta-badges">
+    <span class="badge purple">Full-Stack Web App</span>
+    <span class="badge blue">Custom Compiler</span>
+    <span class="badge green">Runs Python</span>
+    <span class="badge orange">AI Tutoring</span>
+    <span class="badge">React + Node.js</span>
+    <span class="badge">May 2026</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ═══════════════════ TABLE OF CONTENTS ═══════════════════ -->
+<div class="toc">
+  <h3>Table of Contents</h3>
+  <ol>
+    <li><a href="#what-is">What is SYLESS?</a></li>
+    <li><a href="#architecture">System Architecture</a></li>
+    <li><a href="#frontend">Frontend — React + Vite</a></li>
+    <li><a href="#backend">Backend — Node.js + Express</a></li>
+    <li><a href="#compiler">The Compiler — How SYLESS Becomes Python</a></li>
+    <li><a href="#lexer">Phase 1: Lexer (Tokenizer)</a></li>
+    <li><a href="#parser">Phase 2: Parser → AST</a></li>
+    <li><a href="#generator">Phase 3: Code Generator → Python</a></li>
+    <li><a href="#executor">Python Execution — Sandbox &amp; Security</a></li>
+    <li><a href="#ai">AI Tutoring — ARIA</a></li>
+    <li><a href="#dsa">DSA Visualization</a></li>
+    <li><a href="#special">What Makes SYLESS Special</a></li>
+    <li><a href="#tech-stack">Full Tech Stack Summary</a></li>
+  </ol>
+</div>
+
+<!-- ═══════════════════ 1. WHAT IS SYLESS ═══════════════════ -->
+<div class="section" id="what-is">
+  <div class="section-label">Section 01</div>
+  <h2>What is SYLESS?</h2>
+
+  <p>
+    <strong>SYLESS</strong> is a full-stack, AI-powered, browser-based programming IDE that lets users
+    write code in <strong>plain English sentences</strong>. Instead of learning complex syntax like Python
+    or JavaScript, beginners write naturally worded statements that are compiled into real Python code and
+    executed live inside the browser.
+  </p>
+
+  <div class="highlight-box blue">
+    <strong>Core Idea:</strong> Write English → SYLESS compiler converts it to Python → Python runs on
+    the server → Output appears in the browser terminal — all in under a second.
+  </div>
+
+  <h3>A Simple Example</h3>
+  <div class="two-col">
+    <div>
+      <h4>SYLESS Code (what the user writes)</h4>
+      <pre><span class="lang-label">SYLESS</span><span class="kw">make</span> <span class="var">name</span> <span class="op">=</span> <span class="str">"Alice"</span>
+<span class="kw">make</span> <span class="var">age</span> <span class="op">=</span> <span class="num">25</span>
+<span class="kw">say</span> <span class="str">"Hello {name}, you are {age}!"</span>
+<span class="kw">check</span> <span class="var">age</span> <span class="op">>=</span> <span class="num">18</span> {
+    <span class="kw">say</span> <span class="str">"You are an adult"</span>
+}
+<span class="kw">otherwise</span> {
+    <span class="kw">say</span> <span class="str">"You are a minor"</span>
+}</pre>
+    </div>
+    <div>
+      <h4>Generated Python (auto-compiled)</h4>
+      <pre><span class="lang-label">PYTHON</span><span class="var">name</span> <span class="op">=</span> <span class="py-str">"Alice"</span>
+<span class="var">age</span> <span class="op">=</span> <span class="num">25</span>
+<span class="py-fn">print</span>(<span class="py-str">f"Hello {name}, you are {age}!"</span>)
+<span class="py-kw">if</span> (age >= 18):
+    <span class="py-fn">print</span>(<span class="py-str">"You are an adult"</span>)
+<span class="py-kw">else</span>:
+    <span class="py-fn">print</span>(<span class="py-str">"You are a minor"</span>)</pre>
+    </div>
+  </div>
+
+  <p>The user never sees the Python. They just see their output. The entire compilation happens transparently.</p>
+</div>
+
+<hr />
+
+<!-- ═══════════════════ 2. ARCHITECTURE ═══════════════════ -->
+<div class="section" id="architecture">
+  <div class="section-label">Section 02</div>
+  <h2>System Architecture</h2>
+
+  <p>SYLESS is split into two main applications that communicate over HTTP and WebSocket:</p>
+
+  <div class="pipeline">
+    <div class="flow-box">
+      <div class="fb-icon">🖥️</div>
+      <div class="fb-title">Browser</div>
+      <div class="fb-sub">React App<br/>localhost:5173</div>
+    </div>
+    <div class="flow-arrow">⇄</div>
+    <div class="flow-box">
+      <div class="fb-icon">⚙️</div>
+      <div class="fb-title">Node.js API</div>
+      <div class="fb-sub">Express Server<br/>localhost:5000</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">
+      <div class="fb-icon">🔧</div>
+      <div class="fb-title">Compiler</div>
+      <div class="fb-sub">Lexer→Parser<br/>→Generator</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">
+      <div class="fb-icon">🐍</div>
+      <div class="fb-title">Python</div>
+      <div class="fb-sub">Sandboxed<br/>subprocess</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">
+      <div class="fb-icon">📤</div>
+      <div class="fb-title">Output</div>
+      <div class="fb-sub">Back to<br/>browser</div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card-small">
+      <div class="icon">🌐</div>
+      <div class="label">Frontend</div>
+      <div class="value">React 18 + Vite</div>
+      <div class="sub">Tailwind CSS, Monaco Editor, Framer Motion</div>
+    </div>
+    <div class="card-small">
+      <div class="icon">🖧</div>
+      <div class="label">Backend</div>
+      <div class="value">Node.js + Express</div>
+      <div class="sub">REST API + WebSocket (ws library)</div>
+    </div>
+    <div class="card-small">
+      <div class="icon">🗄️</div>
+      <div class="label">Database</div>
+      <div class="value">MySQL via Sequelize</div>
+      <div class="sub">ORM with auto-sync and validation</div>
+    </div>
+    <div class="card-small">
+      <div class="icon">🤖</div>
+      <div class="label">AI Service</div>
+      <div class="value">Groq + Gemini</div>
+      <div class="sub">Llama 3.3-70B + Gemini 2.0 Flash (free APIs)</div>
+    </div>
+  </div>
+</div>
+
+<hr />
+
+<!-- ═══════════════════ 3. FRONTEND ═══════════════════ -->
+<div class="section" id="frontend">
+  <div class="section-label">Section 03</div>
+  <h2>Frontend — React + Vite</h2>
+
+  <p>
+    The frontend is a <strong>React 18 single-page application</strong> bundled with Vite. It runs entirely
+    in the browser at <code>http://localhost:5173</code> and communicates with the backend via REST API calls.
+  </p>
+
+  <h3>Key Technologies</h3>
+  <table>
+    <thead>
+      <tr><th>Technology</th><th>Purpose</th><th>Why Chosen</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>React 18</strong></td><td>UI framework</td><td>Component-based, fast re-rendering</td></tr>
+      <tr><td><strong>Vite</strong></td><td>Build tool &amp; dev server</td><td>10x faster than Webpack, instant HMR</td></tr>
+      <tr><td><strong>Tailwind CSS</strong></td><td>Styling</td><td>Utility-first, no CSS files needed</td></tr>
+      <tr><td><strong>Monaco Editor</strong></td><td>Code editor in browser</td><td>Same engine as VS Code</td></tr>
+      <tr><td><strong>Framer Motion</strong></td><td>Animations</td><td>Smooth transitions and panel animations</td></tr>
+      <tr><td><strong>Zustand</strong></td><td>State management</td><td>Lightweight alternative to Redux</td></tr>
+      <tr><td><strong>React Hot Toast</strong></td><td>Notifications</td><td>Non-intrusive toast messages</td></tr>
+      <tr><td><strong>Lucide React</strong></td><td>Icons</td><td>Consistent SVG icon set</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Key Pages &amp; Components</h3>
+  <div class="card">
+    <ul style="color:#94a3b8; padding-left:18px; line-height:2.2;">
+      <li><strong style="color:#e2e8f0;">IDE Editor</strong> — Monaco-based code editor with SYLESS syntax, Run button, output terminal</li>
+      <li><strong style="color:#e2e8f0;">AI Tutor (ARIA)</strong> — Chat interface with course lessons, DSA topic explainers</li>
+      <li><strong style="color:#e2e8f0;">DSA Visualizer</strong> — Stack, Queue, Binary Tree, Sort visualizations (SVG/Canvas-based)</li>
+      <li><strong style="color:#e2e8f0;">Auth Pages</strong> — Login / Register with JWT-based session management</li>
+      <li><strong style="color:#e2e8f0;">Community</strong> — Share code snippets, like/comment posts</li>
+      <li><strong style="color:#e2e8f0;">Learn Modules</strong> — Structured curriculum with progress tracking</li>
+    </ul>
+  </div>
+
+  <h3>How the Editor Sends Code to the Server</h3>
+  <pre><span class="lang-label">JAVASCRIPT (Frontend)</span><span class="py-cmt">// User clicks "Run" button in the IDE</span>
+<span class="py-kw">const</span> response = <span class="py-kw">await</span> <span class="py-fn">fetch</span>(<span class="py-str">'/api/compile/run'</span>, {
+  method: <span class="py-str">'POST'</span>,
+  headers: { <span class="py-str">'Content-Type'</span>: <span class="py-str">'application/json'</span> },
+  body: <span class="py-fn">JSON.stringify</span>({
+    code: editorContent,   <span class="py-cmt">// raw SYLESS source code</span>
+    stdin: userInput       <span class="py-cmt">// optional input for ask -> prompts</span>
+  })
+});
+<span class="py-kw">const</span> { output, error, executionTime } = <span class="py-kw">await</span> response.json();</pre>
+</div>
+
+<hr />
+
+<!-- ═══════════════════ 4. BACKEND ═══════════════════ -->
+<div class="section" id="backend">
+  <div class="section-label">Section 04</div>
+  <h2>Backend — Node.js + Express</h2>
+
+  <p>
+    The backend is a <strong>Node.js REST API</strong> built with Express. It handles authentication,
+    code compilation, AI requests, database operations, and real-time WebSocket collaboration.
+  </p>
+
+  <h3>API Routes</h3>
+  <table>
+    <thead>
+      <tr><th>Route</th><th>Method</th><th>What It Does</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>/api/compile/run</code></td><td>POST</td><td>Compile SYLESS → Python → execute → return output</td></tr>
+      <tr><td><code>/api/compile/check</code></td><td>POST</td><td>Compile only (no execution) — syntax check</td></tr>
+      <tr><td><code>/api/ai/explain</code></td><td>POST</td><td>Send code to AI for explanation</td></tr>
+      <tr><td><code>/api/ai/debug</code></td><td>POST</td><td>Send error + code to AI for debugging help</td></tr>
+      <tr><td><code>/api/ai/chat</code></td><td>POST</td><td>General ARIA AI chat conversation</td></tr>
+      <tr><td><code>/api/auth/register</code></td><td>POST</td><td>Create new user account</td></tr>
+      <tr><td><code>/api/auth/login</code></td><td>POST</td><td>Login, returns JWT token</td></tr>
+      <tr><td><code>/api/dsa/*</code></td><td>GET/POST</td><td>DSA problems, solutions, visualization data</td></tr>
+      <tr><td><code>/api/learn/*</code></td><td>GET</td><td>Course modules, lessons, user progress</td></tr>
+      <tr><td><code>/api/community/*</code></td><td>GET/POST</td><td>Shared snippets, likes, comments</td></tr>
+      <tr><td><code>/ws</code></td><td>WebSocket</td><td>Live collaboration — broadcast code changes to room members</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Security &amp; Performance Middleware</h3>
+  <div class="card">
+    <ul style="color:#94a3b8; padding-left:18px; line-height:2.2;">
+      <li><strong style="color:#e2e8f0;">Helmet.js</strong> — Sets HTTP security headers (prevents XSS, clickjacking, etc.)</li>
+      <li><strong style="color:#e2e8f0;">CORS</strong> — Only allows requests from whitelisted frontend origins</li>
+      <li><strong style="color:#e2e8f0;">Rate Limiting</strong> — 30 compile requests/min, 20 AI requests/min per IP</li>
+      <li><strong style="color:#e2e8f0;">Compression</strong> — Gzip responses for faster data transfer</li>
+      <li><strong style="color:#e2e8f0;">Morgan</strong> — HTTP request logging for monitoring</li>
+      <li><strong style="color:#e2e8f0;">JWT Auth</strong> — JSON Web Tokens protect all authenticated routes</li>
+    </ul>
+  </div>
+</div>
+
+<hr />
+
+<!-- ═══════════════════ 5. COMPILER OVERVIEW ═══════════════════ -->
+<div class="section" id="compiler">
+  <div class="section-label">Section 05 — Core Innovation</div>
+  <h2>The Compiler — How SYLESS Becomes Python</h2>
+
+  <p>
+    This is the <strong>heart of SYLESS</strong>. A custom-built, three-phase compiler written in
+    pure Node.js that transforms English-like SYLESS code into valid, executable Python 3 code.
+  </p>
+
+  <div class="highlight-box">
+    <strong>The compiler pipeline has three phases, each a separate module:</strong><br/>
+    Lexer (tokenizer) → Parser (AST builder) → Generator (Python code emitter)
+  </div>
+
+  <div class="pipeline">
+    <div class="flow-box">
+      <div class="fb-icon">📝</div>
+      <div class="fb-title">SYLESS Source</div>
+      <div class="fb-sub">Raw text from editor</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">
+      <div class="fb-icon">🔡</div>
+      <div class="fb-title">Lexer</div>
+      <div class="fb-sub">lexer.js<br/>Text → Tokens</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">
+      <div class="fb-icon">🌲</div>
+      <div class="fb-title">Parser</div>
+      <div class="fb-sub">parser.js<br/>Tokens → AST</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">
+      <div class="fb-icon">⚙️</div>
+      <div class="fb-title">Generator</div>
+      <div class="fb-sub">generator.js<br/>AST → Python</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">
+      <div class="fb-icon">🐍</div>
+      <div class="fb-title">Python Code</div>
+      <div class="fb-sub">Valid .py source</div>
+    </div>
+  </div>
+
+  <p>
+    Each phase can independently throw a friendly, user-readable error message pointing to the exact
+    line number where the problem occurred — just like a professional IDE.
+  </p>
+</div>
+
+<hr />
+
+<!-- ═══════════════════ 6. LEXER ═══════════════════ -->
+<div class="section" id="lexer">
+  <div class="section-label">Section 06</div>
+  <h2>Phase 1: Lexer — Turning Text into Tokens</h2>
+
+  <p>
+    The <strong>Lexer</strong> (also called a tokenizer or scanner) reads the raw SYLESS source code
+    character-by-character and groups characters into meaningful units called <strong>tokens</strong>.
+  </p>
+
+  <div class="highlight-box green">
+    <strong>Analogy:</strong> Like reading a sentence word-by-word. The lexer splits
+    <code>say "hello"</code> into: <code>[SAY] ["hello"]</code>. It doesn't understand grammar yet —
+    it just identifies the individual "words" of the language.
+  </div>
+
+  <h3>Token Types Recognized</h3>
+  <div class="two-col">
+    <div class="card">
+      <h4>Keywords (map to language constructs)</h4>
+      <table>
+        <thead><tr><th>SYLESS Word</th><th>Token Type</th></tr></thead>
+        <tbody>
+          <tr><td><code>say</code> / <code>show</code></td><td>SAY</td></tr>
+          <tr><td><code>make</code></td><td>MAKE</td></tr>
+          <tr><td><code>ask</code></td><td>ASK</td></tr>
+          <tr><td><code>check</code></td><td>CHECK</td></tr>
+          <tr><td><code>otherwise</code></td><td>OTHERWISE</td></tr>
+          <tr><td><code>loop</code></td><td>LOOP</td></tr>
+          <tr><td><code>task</code></td><td>TASK</td></tr>
+          <tr><td><code>give</code></td><td>GIVE</td></tr>
+          <tr><td><code>push / pop / insert</code></td><td>DSA operations</td></tr>
+          <tr><td><code>train / predict</code></td><td>ML operations</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h4>Other Token Categories</h4>
+      <ul style="color:#94a3b8; padding-left:18px; line-height:2.4; font-size:13px;">
+        <li><strong style="color:#e2e8f0;">Literals:</strong> NUMBER, STRING, BOOLEAN</li>
+        <li><strong style="color:#e2e8f0;">Operators:</strong> +, -, *, /, %, **, ==, !=, &lt;, &gt;, &lt;=, &gt;=</li>
+        <li><strong style="color:#e2e8f0;">Assignment:</strong> =, +=, -=, *=, /=</li>
+        <li><strong style="color:#e2e8f0;">Delimiters:</strong> { } ( ) [ ] , . :</li>
+        <li><strong style="color:#e2e8f0;">Arrow:</strong> -&gt; (used in <code>say -> "text"</code>)</li>
+        <li><strong style="color:#e2e8f0;">Identifiers:</strong> variable/function names</li>
+        <li><strong style="color:#e2e8f0;">Comments:</strong> lines starting with <code>#</code></li>
+        <li><strong style="color:#e2e8f0;">Special:</strong> NEWLINE, EOF</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Lexer in Action</h3>
+  <pre><span class="lang-label">INPUT → TOKENS</span><span class="py-cmt">Input:  make age = 25</span>
+
+<span class="py-cmt">Output tokens:</span>
+[MAKE, "make"]   [IDENTIFIER, "age"]   [ASSIGN, "="]   [NUMBER, 25]   [EOF]
+
+
+<span class="py-cmt">Input:  check x > 5 { say "big" }</span>
+
+<span class="py-cmt">Output tokens:</span>
+[CHECK] [IDENTIFIER, "x"] [GT, ">"] [NUMBER, 5] [LBRACE] [SAY] [STRING, "big"] [RBRACE]</pre>
+
+  <div class="highlight-box orange">
+    <strong>Smart Feature:</strong> The lexer detects template strings (strings containing <code>{variable}</code>)
+    and marks them with <code>isTemplate = true</code> so the generator can emit Python f-strings.
+  </div>
+</div>
+
+<hr />
+
+<!-- ═══════════════════ 7. PARSER ═══════════════════ -->
+<div class="section page-break" id="parser">
+  <div class="section-label">Section 07</div>
+  <h2>Phase 2: Parser — Building the AST</h2>
+
+  <p>
+    The <strong>Parser</strong> takes the flat list of tokens from the Lexer and builds an
+    <strong>Abstract Syntax Tree (AST)</strong> — a hierarchical tree structure that represents the
+    logical meaning of the code.
+  </p>
+
+  <div class="highlight-box blue">
+    <strong>Analogy:</strong> If the Lexer reads individual words, the Parser understands grammar.
+    It knows that <code>check</code> must be followed by a condition and a block <code>{ }</code>.
+    The AST is like a diagram of how the sentences are structured.
+  </div>
+
+  <h3>AST Node Types</h3>
+  <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));">
+    <div class="card-small"><div class="label">Print</div><div class="value">say → expression</div></div>
+    <div class="card-small"><div class="label">VarDecl</div><div class="value">make x = value</div></div>
+    <div class="card-small"><div class="label">Input</div><div class="value">ask name → prompt</div></div>
+    <div class="card-small"><div class="label">IfStmt</div><div class="value">check cond { }</div></div>
+    <div class="card-small"><div class="label">ForLoop</div><div class="value">loop N times { }</div></div>
+    <div class="card-small"><div class="label">WhileLoop</div><div class="value">repeat while { }</div></div>
+    <div class="card-small"><div class="label">ForEach</div><div class="value">for each x in arr { }</div></div>
+    <div class="card-small"><div class="label">FuncDef</div><div class="value">task name(params) { }</div></div>
+    <div class="card-small"><div class="label">FuncCall</div><div class="value">name(args)</div></div>
+    <div class="card-small"><div class="label">Return</div><div class="value">give value</div></div>
+    <div class="card-small"><div class="label">BinaryOp</div><div class="value">left op right</div></div>
+    <div class="card-small"><div class="label">DSAMake</div><div class="value">make stack/queue</div></div>
+    <div class="card-small"><div class="label">DSAPush</div><div class="value">push val into stack</div></div>
+    <div class="card-small"><div class="label">Sort</div><div class="value">sort arr ascending</div></div>
+    <div class="card-small"><div class="label">MLTrain</div><div class="value">train knn on data</div></div>
+    <div class="card-small"><div class="label">MLPredict</div><div class="value">predict using model</div></div>
+  </div>
+
+  <h3>Visual Example: AST for <code>check x > 5 { say "big" }</code></h3>
+  <pre><span class="lang-label">AST TREE</span>Program
+└── IfStmt
+    ├── condition: BinaryOp
+    │   ├── op: ">"
+    │   ├── left: Identifier { name: "x" }
+    │   └── right: Literal { value: 5 }
+    ├── body:
+    │   └── Print
+    │       └── value: Literal { value: "big" }
+    └── elseBody: null</pre>
+
+  <h3>How also check Chains into elif</h3>
+  <pre><span class="lang-label">SYLESS</span><span class="kw">check</span> <span class="var">score</span> >= <span class="num">90</span> { <span class="kw">say</span> <span class="str">"A"</span> }
+<span class="kw">also check</span> <span class="var">score</span> >= <span class="num">80</span> { <span class="kw">say</span> <span class="str">"B"</span> }
+<span class="kw">otherwise</span> { <span class="kw">say</span> <span class="str">"C"</span> }</pre>
+  <pre><span class="lang-label">PYTHON (generated)</span><span class="py-kw">if</span> (score >= 90):
+    <span class="py-fn">print</span>(<span class="py-str">"A"</span>)
+<span class="py-kw">elif</span> (score >= 80):
+    <span class="py-fn">print</span>(<span class="py-str">"B"</span>)
+<span class="py-kw">else</span>:
+    <span class="py-fn">print</span>(<span class="py-str">"C"</span>)</pre>
+</div>
+
+<hr />
+
+<!-- ═══════════════════ 8. GENERATOR ═══════════════════ -->
+<div class="section" id="generator">
+  <div class="section-label">Section 08</div>
+  <h2>Phase 3: Code Generator — AST to Python</h2>
+
+  <p>
+    The <strong>Generator</strong> walks the AST tree node-by-node and emits valid <strong>Python 3</strong>
+    source code. It tracks indentation level so the generated code is always correctly formatted.
+  </p>
+
+  <h3>Complete SYLESS → Python Mapping</h3>
+  <table>
+    <thead>
+      <tr><th>SYLESS Syntax</th><th>Generated Python</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>say "Hello {name}"</code></td><td><code>print(f"Hello {name}")</code></td></tr>
+      <tr><td><code>make x = 10</code></td><td><code>x = 10</code></td></tr>
+      <tr><td><code>ask name -> "Enter name: "</code></td><td><code>name = _syless_input("Enter name: ")</code></td></tr>
+      <tr><td><code>check x > 5 { }</code></td><td><code>if (x > 5):</code></td></tr>
+      <tr><td><code>otherwise { }</code></td><td><code>else:</code></td></tr>
+      <tr><td><code>also check y == 0 { }</code></td><td><code>elif (y == 0):</code></td></tr>
+      <tr><td><code>loop 5 times { }</code></td><td><code>for _i in range(5):</code></td></tr>
+      <tr><td><code>loop i from 1 to 10 { }</code></td><td><code>for i in range(1, 10 + 1):</code></td></tr>
+      <tr><td><code>repeat while x > 0 { }</code></td><td><code>while (x > 0):</code></td></tr>
+      <tr><td><code>for each item in fruits { }</code></td><td><code>for item in fruits:</code></td></tr>
+      <tr><td><code>task add(a, b) { give a + b }</code></td><td><code>def add(a, b):<br/>&nbsp;&nbsp;&nbsp;&nbsp;return (a + b)</code></td></tr>
+      <tr><td><code>make mystack</code></td><td><code>mystack = []  # SYLESS Stack</code></td></tr>
+      <tr><td><code>push 10 into mystack</code></td><td><code>mystack.append(10)</code></td></tr>
+      <tr><td><code>pop from mystack</code></td><td><code>mystack.pop()</code></td></tr>
+      <tr><td><code>sort nums ascending</code></td><td><code>nums.sort(reverse=False)</code></td></tr>
+      <tr><td><code>binary search 5 in nums</code></td><td><code>_bs_result = _syless_binary_search(nums, 5)<br/>if _bs_result &gt;= 0: print(...)</code></td></tr>
+      <tr><td><code>length of name</code></td><td><code>len(name)</code></td></tr>
+      <tr><td><code>upper of name</code></td><td><code>(name).upper()</code></td></tr>
+      <tr><td><code>train knn on data with labels as myModel</code></td><td><code>myModel = KNeighborsClassifier()<br/>myModel.fit(data, labels)</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Auto-injected Helper Code</h3>
+  <p>The generator automatically prepends helper functions to the Python output when needed:</p>
+
+  <div class="two-col">
+    <div class="card">
+      <h4>Input Helper (when <code>ask</code> is used)</h4>
+      <pre style="font-size:11px;"><span class="py-kw">def</span> <span class="py-fn">_syless_input</span>(prompt=<span class="py-str">""</span>):
+    s = <span class="py-fn">input</span>(prompt)
+    <span class="py-kw">try</span>: <span class="py-kw">return</span> <span class="py-fn">int</span>(s)
+    <span class="py-kw">except</span> ValueError: <span class="py-kw">pass</span>
+    <span class="py-kw">try</span>: <span class="py-kw">return</span> <span class="py-fn">float</span>(s)
+    <span class="py-kw">except</span> ValueError: <span class="py-kw">return</span> s</pre>
+      <p style="font-size:11px;">Automatically converts typed input to int or float if possible — so users don't need to think about types.</p>
+    </div>
+    <div class="card">
+      <h4>DSA Helpers (when tree/search is used)</h4>
+      <pre style="font-size:11px;"><span class="py-kw">def</span> <span class="py-fn">_syless_bst_insert</span>(root_ref, val):
+    <span class="py-cmt"># Full BST insert logic</span>
+    ...
+
+<span class="py-kw">def</span> <span class="py-fn">_syless_binary_search</span>(arr, target):
+    lo, hi = 0, <span class="py-fn">len</span>(arr) - 1
+    <span class="py-kw">while</span> lo &lt;= hi:
+        mid = (lo + hi) // 2
+        ...</pre>
+    </div>
+  </div>
+</div>
+
+<hr />
+
+<!-- ═══════════════════ 9. EXECUTOR ═══════════════════ -->
+<div class="section page-break" id="executor">
+  <div class="section-label">Section 09</div>
+  <h2>Python Execution — Sandboxed &amp; Secure</h2>
+
+  <p>
+    After code generation, the Python source code is executed securely on the server. This is one of
+    the most technically critical parts of SYLESS — running user-submitted code safely without exposing
+    the server.
+  </p>
+
+  <div class="highlight-box orange">
+    <strong>Security Risk:</strong> If a user writes <code>import os; os.system("rm -rf /")</code> and
+    it runs on the server — catastrophic. SYLESS has multiple layers to prevent this.
+  </div>
+
+  <h3>Security Layer 1 — Static Code Analysis</h3>
+  <p>Before execution, the generated Python is scanned with regex patterns that block dangerous operations:</p>
+
+  <pre><span class="lang-label">BLOCKED PATTERNS (executor.js)</span><span class="cmt">// Automatically rejected before Python even starts:</span>
+<span class="var">BLOCKED_PATTERNS</span> = [
+  <span class="op">/</span><span class="kw">import</span>\s+<span class="var">os</span><span class="op">/</span>,         <span class="cmt">// no filesystem access</span>
+  <span class="op">/</span><span class="kw">import</span>\s+<span class="var">subprocess</span><span class="op">/</span>,  <span class="cmt">// no spawning child processes</span>
+  <span class="op">/</span><span class="kw">import</span>\s+<span class="var">sys</span><span class="op">/</span>,        <span class="cmt">// no system manipulation</span>
+  <span class="op">/</span><span class="fn">open</span>\s*\(<span class="op">/</span>,           <span class="cmt">// no file reading/writing</span>
+  <span class="op">/</span><span class="fn">exec</span>\s*\(<span class="op">/</span>,           <span class="cmt">// no dynamic code execution</span>
+  <span class="op">/</span><span class="fn">eval</span>\s*\(<span class="op">/</span>,           <span class="cmt">// no eval</span>
+  <span class="op">/</span><span class="fn">globals</span>\s*\(\s*\)<span class="op">/</span>,  <span class="cmt">// no globals() introspection</span>
+  <span class="op">/</span><span class="fn">getattr</span>\s*\(<span class="op">/</span>,       <span class="cmt">// no dynamic attribute access</span>
+]</pre>
+
+  <h3>Security Layer 2 — Restricted Builtins Sandbox</h3>
+  <p>A Python "sandbox prefix" is injected before every program that restricts which built-in functions are available:</p>
+
+  <pre><span class="lang-label">SANDBOX PREFIX (prepended to every execution)</span><span class="py-cmt"># Only these safe built-ins are exposed to user code:</span>
+_safe_builtins = {
+    <span class="py-str">'print'</span>: print,  <span class="py-str">'range'</span>: range,  <span class="py-str">'len'</span>: len,
+    <span class="py-str">'int'</span>: int,  <span class="py-str">'float'</span>: float,  <span class="py-str">'str'</span>: str,
+    <span class="py-str">'list'</span>: list,  <span class="py-str">'dict'</span>: dict,  <span class="py-str">'set'</span>: set,
+    <span class="py-str">'abs'</span>: abs,  <span class="py-str">'max'</span>: max,  <span class="py-str">'min'</span>: min,
+    <span class="py-str">'sorted'</span>: sorted,  <span class="py-str">'enumerate'</span>: enumerate,
+    <span class="py-cmt"># ... ~25 total safe functions. No os, no sys, no file I/O.</span>
+}</pre>
+
+  <h3>Security Layer 3 — Process Isolation</h3>
+  <p>
+    The code runs in a <strong>completely separate child process</strong> (not in the main Node.js
+    server process), with strict resource limits:
+  </p>
+
+  <div class="card-grid">
+    <div class="card-small">
+      <div class="icon">⏱️</div>
+      <div class="label">Timeout</div>
+      <div class="value">10 seconds max</div>
+      <div class="sub">Infinite loops are killed automatically</div>
+    </div>
+    <div class="card-small">
+      <div class="icon">📦</div>
+      <div class="label">Output limit</div>
+      <div class="value">100 KB max output</div>
+      <div class="sub">Prevents output flooding attacks</div>
+    </div>
+    <div class="card-small">
+      <div class="icon">📁</div>
+      <div class="label">Temp file</div>
+      <div class="value">Random hex filename</div>
+      <div class="sub">Unique per run, deleted immediately after</div>
+    </div>
+    <div class="card-small">
+      <div class="icon">🌍</div>
+      <div class="label">Environment</div>
+      <div class="value">Stripped env vars</div>
+      <div class="sub">Only PATH and Python encoding flags passed</div>
+    </div>
+  </div>
+
+  <h3>User-Friendly Error Translation</h3>
+  <p>Python errors are translated into beginner-friendly messages before being shown to the user:</p>
+
+  <table>
+    <thead>
+      <tr><th>Python Error</th><th>SYLESS Message</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>NameError: name 'x' is not defined</code></td><td>'x' is not defined — did you use 'make' to create it first?</td></tr>
+      <tr><td><code>ZeroDivisionError</code></td><td>You tried to divide by zero — check your math!</td></tr>
+      <tr><td><code>IndexError: list index out of range</code></td><td>You tried to access an item that does not exist in the array</td></tr>
+      <tr><td><code>RecursionError</code></td><td>Your recursive function went too deep — check the base case in your task</td></tr>
+      <tr><td><code>Timeout (SIGTERM)</code></td><td>Your program took too long (10s limit). Check for infinite loops!</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<hr />
+
+<!-- ═══════════════════ 10. AI ═══════════════════ -->
+<div class="section" id="ai">
+  <div class="section-label">Section 10</div>
+  <h2>AI Tutoring — ARIA</h2>
+
+  <p>
+    <strong>ARIA</strong> (AI Reasoning &amp; Instruction Assistant) is the built-in AI tutor that explains
+    code, debugs errors, and teaches concepts — all in the context of the SYLESS language.
+  </p>
+
+  <h3>AI Provider Chain (Free APIs, No Credit Card)</h3>
+
+  <div class="pipeline">
+    <div class="flow-box">
+      <div class="fb-icon">⚡</div>
+      <div class="fb-title">Try Groq First</div>
+      <div class="fb-sub">Llama 3.3-70B<br/>14,400 req/day free</div>
+    </div>
+    <div class="flow-arrow">→ fail →</div>
+    <div class="flow-box">
+      <div class="fb-icon">💎</div>
+      <div class="fb-title">Try Gemini</div>
+      <div class="fb-sub">Gemini 2.0 Flash<br/>1,500 req/day free</div>
+    </div>
+    <div class="flow-arrow">→ fail →</div>
+    <div class="flow-box">
+      <div class="fb-icon">📚</div>
+      <div class="fb-title">Local Fallback</div>
+      <div class="fb-sub">Pre-written responses<br/>Always works</div>
+    </div>
+  </div>
+
+  <h3>ARIA's System Prompt (what makes it SYLESS-aware)</h3>
+  <pre><span class="lang-label">SYSTEM PROMPT</span><span class="py-str">You are ARIA (AI Reasoning & Instruction Assistant), the built-in
+AI tutor for SYLESS — a beginner-friendly programming IDE where
+users write code in simple English-like sentences.
+
+SYLESS Quick Reference:
+- say -> "text"           → print text
+- make x = 10             → variable declaration
+- check x > 5 { }         → if statement
+- task name(param) { }    → function definition
+
+Your personality: encouraging, patient, simple analogies, avoid
+jargon. Always explain WHY. When showing code, always use SYLESS
+syntax first, then Python equivalent.</span></pre>
+
+  <h3>AI Features</h3>
+  <div class="card">
+    <ul style="color:#94a3b8; padding-left:18px; line-height:2.4;">
+      <li><strong style="color:#e2e8f0;">Explain Code</strong> — Sends the current editor code to AI for a step-by-step breakdown</li>
+      <li><strong style="color:#e2e8f0;">Debug Error</strong> — Sends the error message + code for targeted debugging help</li>
+      <li><strong style="color:#e2e8f0;">Chat</strong> — General programming conversation, always in SYLESS context</li>
+      <li><strong style="color:#e2e8f0;">DSA Explain</strong> — Ask ARIA to explain Stack, Queue, Binary Tree, Graph, etc.</li>
+      <li><strong style="color:#e2e8f0;">Course Lessons</strong> — Built-in curriculum with code examples that run in the IDE</li>
+    </ul>
+  </div>
+</div>
+
+<hr />
+
+<!-- ═══════════════════ 11. DSA ═══════════════════ -->
+<div class="section" id="dsa">
+  <div class="section-label">Section 11</div>
+  <h2>DSA Visualization</h2>
+
+  <p>
+    SYLESS supports <strong>Data Structures and Algorithms</strong> directly in the language. Users can
+    create stacks, queues, linked lists, binary trees, and graphs using natural English commands — and
+    the IDE includes animated visual representations.
+  </p>
+
+  <div class="two-col">
+    <div>
+      <h4>SYLESS DSA Code</h4>
+      <pre><span class="lang-label">SYLESS</span><span class="cmt"># Stack operations</span>
+<span class="kw">make</span> <span class="var">mystack</span>
+<span class="kw">push</span> <span class="num">10</span> <span class="kw">into</span> <span class="var">mystack</span>
+<span class="kw">push</span> <span class="num">20</span> <span class="kw">into</span> <span class="var">mystack</span>
+<span class="kw">push</span> <span class="num">30</span> <span class="kw">into</span> <span class="var">mystack</span>
+<span class="kw">pop</span> <span class="kw">from</span> <span class="var">mystack</span>
+<span class="kw">say</span> <span class="var">mystack</span>
+
+<span class="cmt"># Binary search</span>
+<span class="kw">make</span> <span class="var">nums</span> = [<span class="num">1</span>, <span class="num">3</span>, <span class="num">5</span>, <span class="num">7</span>, <span class="num">9</span>]
+<span class="kw">sort</span> <span class="var">nums</span> <span class="kw">ascending</span>
+<span class="kw">binary search</span> <span class="num">7</span> <span class="kw">in</span> <span class="var">nums</span></pre>
+    </div>
+    <div>
+      <h4>Generated Python</h4>
+      <pre><span class="lang-label">PYTHON</span><span class="py-cmt"># Stack operations</span>
+mystack = []
+mystack.append(10)
+mystack.append(20)
+mystack.append(30)
+mystack.pop()
+print(mystack)
+
+<span class="py-cmt"># Binary search</span>
+nums = [1, 3, 5, 7, 9]
+nums.sort(reverse=False)
+_bs_result = _syless_binary_search(nums, 7)
+<span class="py-kw">if</span> _bs_result >= 0:
+    <span class="py-fn">print</span>(<span class="py-str">"Found 7 at index"</span>, _bs_result)</pre>
+    </div>
+  </div>
+
+  <h3>Supported Data Structures</h3>
+  <table>
+    <thead>
+      <tr><th>Structure</th><th>SYLESS Make Command</th><th>Python Implementation</th><th>Operations</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Stack</td><td><code>make mystack</code></td><td>Python <code>list</code></td><td>push, pop, say</td></tr>
+      <tr><td>Queue</td><td><code>make myqueue</code></td><td>Python <code>collections.deque</code></td><td>insert, remove, say</td></tr>
+      <tr><td>Linked List</td><td><code>make mylinkedlist</code></td><td>Python <code>list</code></td><td>add, say</td></tr>
+      <tr><td>Binary Tree (BST)</td><td><code>make mytree</code></td><td>Custom <code>_Node</code> class</td><td>insert, search</td></tr>
+      <tr><td>Graph</td><td><code>connect A to B</code></td><td>Python <code>dict</code> of adjacency lists</td><td>connect</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<hr />
+
+<!-- ═══════════════════ 12. WHAT'S SPECIAL ═══════════════════ -->
+<div class="section page-break" id="special">
+  <div class="section-label">Section 12</div>
+  <h2>What Makes SYLESS Special</h2>
+
+  <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+    <div class="card-small">
+      <div class="icon">🏗️</div>
+      <div class="label">Custom Compiler</div>
+      <div class="value">Built from scratch</div>
+      <div class="sub">No parser generators (ANTLR, PEG) used — hand-written recursive descent parser in Node.js</div>
+    </div>
+    <div class="card-small">
+      <div class="icon">🔐</div>
+      <div class="label">Sandboxed Execution</div>
+      <div class="value">Multi-layer security</div>
+      <div class="sub">Static analysis + restricted builtins + process isolation + 10s timeout</div>
+    </div>
+    <div class="card-small">
+      <div class="icon">🌍</div>
+      <div class="label">English Syntax</div>
+      <div class="value">Natural language coding</div>
+      <div class="sub">No semicolons, no colons, no indentation rules — just say, make, check, loop</div>
+    </div>
+    <div class="card-small">
+      <div class="icon">🤖</div>
+      <div class="label">AI Integration</div>
+      <div class="value">Groq + Gemini fallback</div>
+      <div class="sub">Always works — 3-tier fallback chain ensures AI is always available</div>
+    </div>
+    <div class="card-small">
+      <div class="icon">📊</div>
+      <div class="label">DSA in English</div>
+      <div class="value">Data structures built-in</div>
+      <div class="sub">Stack, Queue, Tree, Graph with natural English commands — no OOP needed</div>
+    </div>
+    <div class="card-small">
+      <div class="icon">🧠</div>
+      <div class="label">ML Support</div>
+      <div class="value">scikit-learn in English</div>
+      <div class="sub">train knn on data — generates real sklearn code for KNN, SVM, Random Forest, etc.</div>
+    </div>
+    <div class="card-small">
+      <div class="icon">⚡</div>
+      <div class="label">Real-time</div>
+      <div class="value">WebSocket collaboration</div>
+      <div class="sub">Multiple users can code in the same room — changes broadcast live</div>
+    </div>
+    <div class="card-small">
+      <div class="icon">📖</div>
+      <div class="label">Beginner-First</div>
+      <div class="value">Errors in plain English</div>
+      <div class="sub">Python errors translated into human-readable messages with hints</div>
+    </div>
+  </div>
+
+  <h3>The Big Technical Achievement</h3>
+  <div class="highlight-box">
+    <p>
+      Most "learn to code" platforms wrap existing languages with tutorials.
+      <strong>SYLESS built an entirely new programming language from scratch</strong> —
+      with its own tokenizer, grammar, AST, and code generator — that compiles to Python.
+      This is the same fundamental architecture used by real languages like TypeScript (compiles to JS),
+      Kotlin (compiles to JVM bytecode), and CoffeeScript (compiles to JS).
+    </p>
+    <p style="margin-bottom:0;">
+      The difference is SYLESS chose <strong>Python as the compilation target</strong> because Python
+      has the richest ecosystem of libraries (NumPy, scikit-learn, etc.), making SYLESS programs
+      capable of serious computation despite looking like English.
+    </p>
+  </div>
+</div>
+
+<hr />
+
+<!-- ═══════════════════ 13. FULL STACK SUMMARY ═══════════════════ -->
+<div class="section" id="tech-stack">
+  <div class="section-label">Section 13</div>
+  <h2>Full Technology Stack Summary</h2>
+
+  <table>
+    <thead>
+      <tr><th>Layer</th><th>Technology</th><th>Version/Details</th><th>Role</th></tr>
+    </thead>
+    <tbody>
+      <tr><td rowspan="6" style="color:#818cf8; font-weight:600;">Frontend</td><td>React</td><td>18</td><td>UI framework</td></tr>
+      <tr><td>Vite</td><td>5.x</td><td>Build tool &amp; HMR dev server</td></tr>
+      <tr><td>Tailwind CSS</td><td>3.x</td><td>Utility-first styling</td></tr>
+      <tr><td>Monaco Editor</td><td>latest</td><td>VS Code engine in browser</td></tr>
+      <tr><td>Framer Motion</td><td>latest</td><td>UI animations</td></tr>
+      <tr><td>Zustand</td><td>latest</td><td>Global state management</td></tr>
+      <tr><td rowspan="7" style="color:#22c55e; font-weight:600;">Backend</td><td>Node.js</td><td>18+</td><td>Server runtime</td></tr>
+      <tr><td>Express.js</td><td>4.x</td><td>HTTP API framework</td></tr>
+      <tr><td>ws (WebSocket)</td><td>latest</td><td>Real-time collaboration</td></tr>
+      <tr><td>Sequelize ORM</td><td>6.x</td><td>MySQL database access</td></tr>
+      <tr><td>Helmet.js</td><td>latest</td><td>HTTP security headers</td></tr>
+      <tr><td>express-rate-limit</td><td>latest</td><td>API rate limiting</td></tr>
+      <tr><td>jsonwebtoken</td><td>latest</td><td>JWT authentication</td></tr>
+      <tr><td rowspan="3" style="color:#f97316; font-weight:600;">Compiler</td><td>lexer.js</td><td>Custom</td><td>Tokenizer (text → tokens)</td></tr>
+      <tr><td>parser.js</td><td>Custom</td><td>AST builder (tokens → tree)</td></tr>
+      <tr><td>generator.js</td><td>Custom</td><td>Code emitter (tree → Python)</td></tr>
+      <tr><td rowspan="2" style="color:#38bdf8; font-weight:600;">Execution</td><td>Python 3</td><td>3.8+</td><td>Runtime for SYLESS programs</td></tr>
+      <tr><td>child_process</td><td>Node built-in</td><td>Sandboxed subprocess execution</td></tr>
+      <tr><td rowspan="2" style="color:#c084fc; font-weight:600;">AI</td><td>Groq API</td><td>Llama 3.3-70B</td><td>Primary AI (free, 14,400 req/day)</td></tr>
+      <tr><td>Gemini API</td><td>Gemini 2.0 Flash</td><td>Fallback AI (free, 1,500 req/day)</td></tr>
+      <tr><td rowspan="1" style="color:#94a3b8; font-weight:600;">Database</td><td>MySQL</td><td>via Sequelize</td><td>Users, progress, community posts</td></tr>
+    </tbody>
+  </table>
+
+  <h3>How a Single Run Request Flows Through the Entire System</h3>
+  <ul class="step-list">
+    <li>
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <strong>User types SYLESS code in the Monaco editor and clicks "Run"</strong>
+        The React frontend sends a POST request to <code>/api/compile/run</code> with the code as JSON.
+      </div>
+    </li>
+    <li>
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <strong>Express rate limiter checks the IP</strong>
+        Maximum 30 compile requests per minute. If exceeded, returns a friendly error.
+      </div>
+    </li>
+    <li>
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <strong>Compiler Phase 1: Lexer scans the source</strong>
+        Converts raw text into a flat list of typed tokens (SAY, IDENTIFIER, NUMBER, etc.).
+      </div>
+    </li>
+    <li>
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <strong>Compiler Phase 2: Parser builds the AST</strong>
+        Groups tokens into a tree of nodes (IfStmt, FuncDef, Print, etc.) following SYLESS grammar rules.
+      </div>
+    </li>
+    <li>
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <strong>Compiler Phase 3: Generator emits Python</strong>
+        Walks the AST and produces valid Python 3 source code with correct indentation.
+      </div>
+    </li>
+    <li>
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <strong>Security check on generated Python</strong>
+        Regex patterns scan for <code>import os</code>, <code>eval()</code>, <code>open()</code>, etc. Blocked if detected.
+      </div>
+    </li>
+    <li>
+      <div class="step-num">7</div>
+      <div class="step-content">
+        <strong>Python written to a temp file and executed as a child process</strong>
+        The sandbox prefix is prepended. A 10-second timeout is applied. Output is capped at 100 KB.
+      </div>
+    </li>
+    <li>
+      <div class="step-num">8</div>
+      <div class="step-content">
+        <strong>Temp file deleted immediately after execution</strong>
+        The Node.js backend reads stdout/stderr from the completed process.
+      </div>
+    </li>
+    <li>
+      <div class="step-num">9</div>
+      <div class="step-content">
+        <strong>Python errors translated to user-friendly messages</strong>
+        NameError → "did you use 'make' to create it?", ZeroDivisionError → "check your math!", etc.
+      </div>
+    </li>
+    <li>
+      <div class="step-num">10</div>
+      <div class="step-content">
+        <strong>JSON response returned to frontend</strong>
+        <code>{ output, error, executionTime, pythonCode, tokens, ast }</code> — displayed in the terminal panel.
+      </div>
+    </li>
+  </ul>
+</div>
+
+<hr />
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<div class="footer">
+  <strong style="color:#818cf8;">SYLESS</strong> — AI-Powered English-Like Programming IDE<br/>
+  Built with React · Node.js · Custom Compiler · Python · Groq AI<br/>
+  <br/>
+  <span style="color:#334155;">Technical Document · May 2026</span>
+</div>
+
+</div><!-- end container -->
+
+<!-- Print button (hidden in print) -->
+<div class="no-print" style="
+  position: fixed; bottom: 30px; right: 30px; z-index: 999;
+  background: #6366f1; color: white; padding: 14px 20px;
+  border-radius: 10px; cursor: pointer; font-weight: 600;
+  box-shadow: 0 8px 32px #6366f140; font-family: Inter, sans-serif;
+  font-size: 14px; display: flex; align-items: center; gap: 8px;
+" onclick="window.print()">
+  🖨️ Save as PDF
+</div>
+
+</body>
+</html>

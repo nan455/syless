@@ -2,7 +2,7 @@
 
 **SYLESS** is an English-like programming language — write code the way you speak, no complex syntax required.
 
-> **Try it live → [syless-frontend.vercel.app](https://syless-frontend.vercel.app/)**  
+> **Try it live → [syless-frontend.vercel.app](https://syless.vercel.app/)**  
 > Practice SYLESS directly in your browser with the online IDE, no setup needed.
 
 ---
@@ -201,7 +201,7 @@ Type any of these prefixes and press `Tab`:
 
 Practice SYLESS in your browser — no installation needed:
 
-**[https://syless-frontend.vercel.app/](https://syless-frontend.vercel.app/)**
+**[https://syless.vercel.app/](https://syless.vercel.app/)**
 
 ---
 

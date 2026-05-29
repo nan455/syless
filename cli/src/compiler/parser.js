@@ -110,11 +110,7 @@ class Parser {
 
   parseSay() {
     this.expect(TokenType.SAY, "'say'");
-    if (!this.check(TokenType.ARROW)) {
-      const next = this.peek();
-      this.error(`Missing '->' after 'say'. Write it like this:\n  say -> "your message"\n  say -> myVariable`, next);
-    }
-    this.advance();
+    if (this.check(TokenType.ARROW)) this.advance();
     return Node.Print(this.parseExpression());
   }
   parseMake() {

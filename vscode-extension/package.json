@@ -2,7 +2,7 @@
   "name": "syless-language",
   "displayName": "SYLESS Language",
   "description": "Syntax highlighting, snippets, and run support for the SYLESS programming language",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "publisher": "syless",
   "icon": "icon.png",
   "main": "./extension.js",
@@ -26,7 +26,11 @@
         "id": "syless",
         "aliases": ["SYLESS", "syless", "Syless"],
         "extensions": [".sy"],
-        "configuration": "./language-configuration.json"
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icons/syless-file.svg",
+          "dark": "./icons/syless-file.svg"
+        }
       }
     ],
     "grammars": [
